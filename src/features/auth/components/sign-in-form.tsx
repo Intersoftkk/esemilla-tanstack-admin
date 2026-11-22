@@ -20,8 +20,15 @@ interface SignInFormProps extends ComponentProps<'div'> {
 }
 
 function getSafeRedirectPath(redirect?: string) {
-  if (!redirect || !redirect.startsWith('/') || redirect.startsWith('//'))
+  if (
+    !redirect ||
+    !redirect.startsWith('/') ||
+    redirect.startsWith('//') ||
+    redirect.includes('\\')
+  ) {
     return '/dashboard'
+  }
+
   return redirect
 }
 
@@ -44,9 +51,13 @@ export function SignInForm({ search }: SignInFormProps) {
     validators: { onSubmit: signInSchema },
     onSubmit: async ({ value }) => {
       try {
-        await login({ data: value })
+        const user = await login({ data: value })
+        if (!user) {
+          throw new Error('Login succeeded, but no user session was returned.')
+        }
+
+        queryClient.setQueryData(['auth', 'session'], user)
         toast.success('Welcome back!')
-        await queryClient.invalidateQueries({ queryKey: ['auth', 'session'] })
         await router.invalidate()
         await navigate({ to: getSafeRedirectPath(search?.redirect) })
       } catch (error: unknown) {

@@ -28,8 +28,8 @@ export function SignOutDialog({
 
     try {
       await signOut()
-      await queryClient.invalidateQueries({ queryKey: ['auth', 'session'] })
     } finally {
+      queryClient.setQueryData(['auth', 'session'], null)
       onOpenChange(false)
       await router.invalidate()
       await navigate({ to: '/sign-in', search: { redirect }, replace: true })
