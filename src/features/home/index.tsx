@@ -14,10 +14,13 @@ export default function HomePage() {
     const signOut = useServerFn(signOutFn)
 
     const handleLogout = async () => {
-        await signOut()
-        await queryClient.invalidateQueries({ queryKey: ["auth", "session"] })
-        await router.invalidate()
-        await navigate({ to: "/" })
+        try {
+            await signOut()
+        } finally {
+            queryClient.setQueryData(["auth", "session"], null)
+            await router.invalidate()
+            await navigate({ to: "/" })
+        }
     }
 
     return (

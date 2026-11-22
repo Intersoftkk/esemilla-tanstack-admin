@@ -1,5 +1,6 @@
 import {
   Link,
+  useLocation,
   useNavigate,
   useRouteContext,
   useRouter,
@@ -24,6 +25,7 @@ import { signOutFn } from '#/features/auth/server/auth.functions'
 export function ProfileDropdown() {
   const { user } = useRouteContext({ from: '__root__' })
   const profile = user
+  const location = useLocation()
   const navigate = useNavigate()
   const router = useRouter()
   const queryClient = useQueryClient()
@@ -31,10 +33,19 @@ export function ProfileDropdown() {
   const initials = profile?.name.slice(0, 2).toUpperCase() ?? ''
 
   async function logout() {
-    await signOut()
-    await queryClient.invalidateQueries({ queryKey: ['auth', 'session'] })
-    await router.invalidate()
-    await navigate({ to: '/sign-in', replace: true })
+    const redirect = location.href
+
+    try {
+      await signOut()
+    } finally {
+      queryClient.setQueryData(['auth', 'session'], null)
+      await router.invalidate()
+      await navigate({
+        to: '/sign-in',
+        search: { redirect },
+        replace: true,
+      })
+    }
   }
 
   return (

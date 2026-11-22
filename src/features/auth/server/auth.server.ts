@@ -213,13 +213,15 @@ export async function logoutRequest() {
   const session = await getAppSession()
   try {
     if (session.token) {
+      // Revoke the backend token when reachable, but always clear the local
+      // session even if the API is unavailable.
       await fetch(`${API_URL}/user/logout`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${session.token}`,
         },
-      })
+      }).catch(() => undefined)
     }
   } finally {
     await session.destroy()
