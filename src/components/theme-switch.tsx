@@ -8,6 +8,8 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 export function ThemeSwitch() {
   const { theme, setTheme } = useTheme()
 
+  /* Update theme-color meta tag
+   * when theme is updated */
   useEffect(() => {
     const themeColor = theme === 'dark' ? '#020817' : '#fff'
     const metaThemeColor = document.querySelector("meta[name='theme-color']")
@@ -17,9 +19,9 @@ export function ThemeSwitch() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-9 w-9 border border-primary-300">
-              <Sun className="size-[1.2rem] scale-100 rotate-0 transition-all"/>
-              <Moon className="absolute size-[1.2rem] scale-0 rotate-90 transition-all"/>
+          <Button variant="outline" size="icon">
+              <Sun className="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"/>
+              <Moon className="absolute size-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"/>
               <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

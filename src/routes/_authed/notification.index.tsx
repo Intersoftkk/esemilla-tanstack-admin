@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authed/notification/')({
-  component: RouteComponent,
-})
+import { NotificationPage } from "#/features/notification/notification-page";
+import { pageHead } from "#/lib/head";
 
-function RouteComponent() {
-  return <div>Hello "/_authed/notification/"!</div>
-}
+export const Route = createFileRoute("/_authed/notification/")({
+	head: () => pageHead("Notifications"),
+	component: NotificationPage,
+});

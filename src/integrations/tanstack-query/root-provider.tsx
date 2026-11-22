@@ -1,19 +1,40 @@
-import {QueryClient} from '@tanstack/react-query'
+// src/integrations/tanstack-query/root-provider.tsx
+import * as React from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-export function getContext() {
+export interface RouterContext {
+  queryClient: QueryClient
+}
 
-  const queryClient = new QueryClient({
+export function createQueryClient(): QueryClient {
+  return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        retry: false, // Turn off aggressive retries for auth/401 checks
+        staleTime: 1000 * 60, // 1 minute stale time
+        refetchOnWindowFocus: false,
+      },
+      dehydrate: {
+        shouldDehydrateQuery: (query) => query.state.status === 'success',
+        shouldDehydrateMutation: () => false,
       },
     },
   })
+}
 
+export function getContext(): RouterContext {
   return {
-    queryClient,
-    auth: undefined!
+    queryClient: createQueryClient(),
   }
 }
-export default function TanstackQueryProvider() {}
+
+export default function TanstackQueryProvider({
+                                                children,
+                                                queryClient,
+                                              }: {
+  children?: React.ReactNode
+  queryClient?: QueryClient
+}) {
+  const [client] = React.useState(() => queryClient ?? createQueryClient())
+
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+}

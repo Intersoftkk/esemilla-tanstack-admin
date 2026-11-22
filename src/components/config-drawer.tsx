@@ -1,10 +1,10 @@
 import {Item, Root as Radio} from '@radix-ui/react-radio-group'
 import {CircleCheck, RotateCcw, Settings} from 'lucide-react'
 import {useTheme} from 'tanstack-theme-kit'
-import {useSidebar} from '#/components/ui/sidebar'
+import {useSidebar} from './ui/sidebar'
 import type {SVGProps} from 'react';
-import type {Collapsible} from '#/context/layout-context';
-import {useLayout} from '#/context/layout-context'
+import type {Collapsible} from '#/context/layout.context';
+import {useLayout} from '#/context/layout.context'
 import {IconLayoutCompact} from '#/assets/custom/icon-layout-compact'
 import {IconLayoutDefault} from '#/assets/custom/icon-layout-default'
 import {IconLayoutFull} from '#/assets/custom/icon-layout-full'
@@ -38,7 +38,12 @@ export function ConfigDrawer() {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 border border-primary-300">
+                <Button
+                    size="icon"
+                    variant="outline"
+                    aria-label="Open theme settings"
+                    aria-describedby="config-drawer-description"
+                >
                     <Settings aria-hidden="true"/>
                 </Button>
             </SheetTrigger>
@@ -140,7 +145,7 @@ function RadioGroupItem({
                 <item.icon
                     className={cn(
                         !isTheme &&
-                        'fill-primary stroke-primary',
+                        'fill-primary stroke-primary group-data-[state=unchecked]:fill-muted-foreground group-data-[state=unchecked]:stroke-muted-foreground',
                     )}
                     aria-hidden="true"
                 />

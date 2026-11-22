@@ -1,96 +1,115 @@
 // src/routes/__root.tsx
-
-import React from 'react'
+import * as React from 'react'
 import {
-    createRootRouteWithContext,
     HeadContent,
     Scripts,
-    Link,
+    createRootRouteWithContext,
+    Outlet,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { FileQuestion, ArrowLeft } from 'lucide-react'
-import type { QueryClient } from '@tanstack/react-query'
-
+import {TanStackRouterDevtoolsPanel} from '@tanstack/react-router-devtools'
+import {TanStackDevtools} from '@tanstack/react-devtools'
 import TanStackQueryDevtools from '#/integrations/tanstack-query/devtools'
-import { getLocale } from '#/paraglide/runtime'
+import {getSessionFn} from '#/features/auth/server/auth.functions.ts'
+import {NavigationProgress} from '#/components/navigation-progress.tsx'
+import {getLocale} from '#/paraglide/runtime'
 import appCss from '#/styles.css?url'
-import { AuthProvider } from '#/features/auth/context/auth.context'
-import type { AuthUser } from '#/features/auth/types/auth.types'
-import { authQueryOptions } from '#/features/auth/queries/auth.queries'
-import { NavigationProgress } from '#/components/navigation-progress'
-import { Button } from '#/components/ui/button'
+import type {RouterContext} from "#/integrations/tanstack-query/root-provider.tsx";
 
-export interface MyRouterContext {
-    queryClient: QueryClient
-    user?: AuthUser | null
-}
-
-export const Route = createRootRouteWithContext<MyRouterContext>()({
-    beforeLoad: async ({ context }) => {
+export const Route = createRootRouteWithContext<RouterContext>()({
+    beforeLoad: async ({context}) => {
         if (typeof document !== 'undefined') {
             document.documentElement.setAttribute('lang', getLocale())
         }
 
-        const user = await context.queryClient.ensureQueryData(
-            authQueryOptions.user()
-        )
+        // Cache the session in the TanStack Query cache so that
+        // navigating between pages does not re-trigger this API call on
+        // every route change. It is reused until it becomes stale.
+        const [user] = await Promise.all([
+            context.queryClient.ensureQueryData({
+                queryKey: ['auth', 'session'],
+                queryFn: () => getSessionFn().catch(() => null),
+                staleTime: 1000 * 60 * 5,
+            }),
+        ])
 
-        return { user }
+        return {user}
     },
+
     head: () => ({
         meta: [
-            { charSet: 'utf-8' },
-            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { title: 'SchoolPortal' },
+            {
+                charSet: 'utf-8',
+            },
+            {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1',
+            },
+            {
+                title: 'eSemilla',
+            },
         ],
-        links: [{ rel: 'stylesheet', href: appCss }],
+        links: [
+            {
+                rel: 'stylesheet',
+                href: appCss,
+            },
+        ],
     }),
-    notFoundComponent: NotFoundPage,
+
+    errorComponent: ({error}) => {
+        const message =
+            error instanceof Error ? error.message : 'An unexpected error occurred'
+        return (
+            <div className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+                <h1 className="text-2xl font-bold text-destructive">
+                    Application Error
+                </h1>
+                <p className="mt-2 text-sm text-muted-foreground">{message}</p>
+            </div>
+        )
+    },
+
+    notFoundComponent: () => (
+        <div className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+            <h1 className="text-2xl font-bold">404 - Not Found</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+                The page you are looking for does not exist.
+            </p>
+        </div>
+    ),
+
+    component: RootComponent,
     shellComponent: RootDocument,
 })
 
-function NotFoundPage() {
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-background">
-            <div className="rounded-full bg-muted p-4 mb-4 text-muted-foreground">
-                <FileQuestion className="h-10 w-10" />
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Page Not Found
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground max-w-sm text-balance">
-                Sorry, we couldn&apos;t find the page you are looking for. It might have been moved or deleted.
-            </p>
-            <div className="mt-6 flex items-center gap-3">
-                <Button asChild variant="default">
-                    <Link to="/dashboard">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Dashboard
-                    </Link>
-                </Button>
-            </div>
-        </div>
-    )
+function RootComponent() {
+    return <Outlet/>
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({children}: { children: React.ReactNode }) {
     return (
         <html lang={getLocale()}>
         <head>
-            <HeadContent />
+            <HeadContent/>
         </head>
         <body>
-        <NavigationProgress />
-        <AuthProvider>{children}</AuthProvider>
-        <TanStackDevtools
-            config={{ position: 'bottom-right' }}
-            plugins={[
-                { name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-                TanStackQueryDevtools,
-            ]}
-        />
-        <Scripts />
+        <NavigationProgress/>
+        {children}
+        {import.meta.env.DEV && (
+            <TanStackDevtools
+                config={{
+                    position: 'bottom-right',
+                }}
+                plugins={[
+                    {
+                        name: 'Tanstack Router',
+                        render: <TanStackRouterDevtoolsPanel/>,
+                    },
+                    TanStackQueryDevtools,
+                ]}
+            />
+        )}
+        <Scripts/>
         </body>
         </html>
     )

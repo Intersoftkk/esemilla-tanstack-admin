@@ -1,68 +1,80 @@
-// src/echo.ts
-import Echo from 'laravel-echo'
+import { createClientOnlyFn } from '@tanstack/react-start'
+import { configureEcho, echo, echoIsConfigured } from '@laravel/echo-react'
+import type { ChannelAuthorizationCallback } from 'pusher-js'
 import Pusher from 'pusher-js'
-import api from '#/lib/axios'
 import { env } from '#/env'
 
-declare global {
-    interface Window {
-        Pusher: typeof Pusher
-        Echo: Echo<any>
-    }
-}
-
-function createEchoInstance(): Echo<any> | null {
-    // Return null on the server (SSR)
-    if (typeof window === 'undefined') {
-        return null
-    }
-
-    // Attach Pusher to window in the browser
-    window.Pusher = Pusher
-
-    const wsHost =
-        env.VITE_REVERB_HOST ||
-        (typeof window !== 'undefined' ? window.location.hostname : 'localhost')
-
-    const instance = new Echo({
-        broadcaster: 'reverb', // or 'pusher'
-        key: env.VITE_REVERB_APP_KEY ?? env.VITE_PUSHER_APP_KEY ?? '',
-        wsHost: wsHost,
-        wsPort: Number(env.VITE_REVERB_PORT ?? 8080),
-        wssPort: Number(env.VITE_REVERB_PORT ?? 443),
-        forceTLS: (env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-        enabledTransports: ['ws', 'wss'],
-
-        /**
-         * Custom authorizer using Axios with cookies (Sanctum)
-         */
-        authorizer: (channel: { name: string }) => {
-            return {
-                authorize: (
-                    socketId: string,
-                    callback: (error: Error | null, authData: any) => void,
-                ) => {
-                    api.post('broadcasting/auth', {
-                        socket_id: socketId,
-                        channel_name: channel.name,
-                    })
-                        .then((response) => {
-                            callback(null, response.data)
-                        })
-                        .catch((error) => {
-                            const err =
-                                error instanceof Error ? error : new Error(String(error))
-                            callback(err, null)
-                        })
+function createAuthorizer(channel: { name: string }) {
+    return {
+        authorize(socketId: string, callback: ChannelAuthorizationCallback) {
+            fetch('/api/broadcasting/auth', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
                 },
-            }
+                body: JSON.stringify({
+                    socket_id: socketId,
+                    channel_name: channel.name,
+                }),
+            })
+                .then(async (res) => {
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => null)
+                        throw new Error(
+                            err?.message ?? `Broadcasting auth failed (${res.status})`,
+                        )
+                    }
+                    return res.json()
+                })
+                .then((data) => callback(null, data))
+                .catch((err) =>
+                    callback(
+                        err instanceof Error ? err : new Error('Authorization failed'),
+                        null,
+                    ),
+                )
         },
-    })
-
-    window.Echo = instance
-    return instance
+    }
 }
 
-export const echo = createEchoInstance()
+export const setupEcho = createClientOnlyFn(() => {
+    ;(window as unknown as { Pusher: typeof Pusher }).Pusher = Pusher
+    if (echoIsConfigured()) return
 
-export default echo
+    const port = Number(env.VITE_REVERB_PORT ?? 8080)
+    const scheme = env.VITE_REVERB_SCHEME ?? 'https'
+    configureEcho({
+        broadcaster: 'reverb',
+        key: env.VITE_REVERB_APP_KEY ?? '',
+        wsHost: env.VITE_REVERB_HOST ?? window.location.hostname,
+        wsPort: port,
+        wssPort: port,
+        forceTLS: scheme === 'https',
+        enabledTransports: ['ws', 'wss'],
+        authorizer: createAuthorizer,
+    })
+})
+
+export const connectEcho = createClientOnlyFn(() => {
+    setupEcho()
+    try {
+        echo().connect()
+    } catch {
+        /* already connected */
+    }
+})
+
+export const disconnectEcho = createClientOnlyFn(() => {
+    if (!echoIsConfigured()) return
+    try {
+        echo().disconnect()
+    } catch {
+        /* already disconnected */
+    }
+})
+
+export const getEcho = createClientOnlyFn(() =>
+    echoIsConfigured() ? echo() : null,
+)

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import type React from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from '#/lib/utils'
 import { Separator } from '#/components/ui/separator'
 import { SidebarTrigger } from '#/components/ui/sidebar'
-import { RouterBreadcrumb } from "#/components/layout/router-breadcrumb";
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
     fixed?: boolean
@@ -33,7 +33,7 @@ export const Header = ({
 
                 // Dynamic styles applied ONLY on scroll
                 offset > 10
-                    ? 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm'
+                    ? 'bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm'
                     : '',
 
                 className,
@@ -42,7 +42,6 @@ export const Header = ({
         >
             <SidebarTrigger variant="outline" className="scale-125 sm:scale-100" />
             <Separator orientation="vertical" className="h-6" />
-            <RouterBreadcrumb />
             {children}
         </header>
     )

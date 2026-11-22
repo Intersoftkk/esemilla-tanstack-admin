@@ -1,176 +1,146 @@
-// src/features/auth/components/forgot-password-form.tsx
-
-import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { useForm, formOptions } from '@tanstack/react-form'
-import { ArrowLeft, CheckCircle2, KeyRound, Loader2, Mail } from 'lucide-react'
+import { useForm } from '@tanstack/react-form'
+import { useServerFn } from '@tanstack/react-start'
+import { ArrowLeft, Loader, Mail } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '#/components/ui/button'
-import {
-    type ForgotPasswordFormData,
-    forgotPasswordSchema,
-} from '#/features/auth/schema/forgot-password.schema'
-import { useAuth } from '#/features/auth/context/auth.context'
+import { Field, FieldError, FieldLabel } from '#/components/ui/field'
+import { Input } from '#/components/ui/input'
+import { forgotPasswordFn } from '#/features/auth/server/auth.functions'
+import { forgotPasswordSchema } from '#/features/auth/schema/forgot-password.schema'
 
-const inputBase =
-    'flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+function errorMessage(error: unknown) {
+  if (typeof error === 'string') return error
+  if (error && typeof error === 'object' && 'message' in error)
+    return String(error.message)
+  return null
+}
 
 export function ForgotPasswordForm() {
-    const { forgotPassword } = useAuth()
-    const [isSubmitted, setIsSubmitted] = useState(false)
-    const [submittedEmail, setSubmittedEmail] = useState('')
-    const [serverError, setServerError] = useState<string | null>(null)
+  const forgotPassword = useServerFn(forgotPasswordFn)
 
-    const formOpts = formOptions({
-        defaultValues: {
-            email: '',
-        } satisfies ForgotPasswordFormData,
-        validators: {
-            onSubmit: forgotPasswordSchema,
-        },
-    })
+  const form = useForm({
+    defaultValues: { email: '' },
+    validators: { onSubmit: forgotPasswordSchema },
+    onSubmit: async ({ value }) => {
+      try {
+        await forgotPassword({ data: value })
+        toast.success('Password reset link sent to your email.')
+      } catch (error: unknown) {
+        const err = error as {
+          message?: string
+          errors?: Record<string, string[]>
+        }
+        const message = err.errors?.email?.[0]
+        if (message) {
+          form.setFieldMeta('email', (meta) => ({
+            ...meta,
+            errorMap: { ...meta.errorMap, onSubmit: message },
+          }))
+        }
+        form.setErrorMap({
+          onSubmit: {
+            form: err.message || 'Failed to send reset link.',
+            fields: {},
+          },
+        })
+      }
+    },
+  })
 
-    const form = useForm({
-        ...formOpts,
-        onSubmit: async ({ value }) => {
-            setServerError(null)
-            try {
-                await forgotPassword(value.email)
-                setSubmittedEmail(value.email)
-                toast.success('Reset link sent to your email!')
-                setIsSubmitted(true)
-            } catch (error: unknown) {
-                const err = error as { message?: string; response?: { data?: { message?: string } } }
-                setServerError(
-                    err.response?.data?.message ?? err.message ?? 'Something went wrong. Please try again later.'
-                )
-            }
-        },
-    })
+  return (
+    <div className="flex flex-col justify-center px-8 pb-8">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-card-foreground">
+          Forgot password?
+        </h1>
+        <p className="mt-1.5 text-[14px] text-muted-foreground">
+          No worries, we&apos;ll send you reset instructions.
+        </p>
+      </div>
 
-    // Success State View
-    if (isSubmitted) {
-        return (
-            <div className="p-6 md:p-8 space-y-6 text-center">
-                <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                    <CheckCircle2 className="h-6 w-6" />
+      <form
+        className="space-y-6"
+        onSubmit={(event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          void form.handleSubmit()
+        }}
+      >
+        <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+          {(error) => {
+            const message =
+              error &&
+              typeof error === 'object' &&
+              'form' in error &&
+              typeof error.form === 'string'
+                ? error.form
+                : null
+            return message ? (
+              <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+                {message}
+              </div>
+            ) : null
+          }}
+        </form.Subscribe>
+
+        <form.Field name="email">
+          {(field) => {
+            const message = field.state.meta.errors
+              .map(errorMessage)
+              .find(Boolean)
+            return (
+              <Field data-invalid={message ? 'true' : undefined}>
+                <FieldLabel htmlFor={field.name}>
+                  Email <span className="ml-1 text-destructive">*</span>
+                </FieldLabel>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@intersoftkk.com"
+                    className="pl-10"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={!!message}
+                  />
                 </div>
+                {message && <FieldError>{message}</FieldError>}
+              </Field>
+            )
+          }}
+        </form.Field>
 
-                <div className="space-y-2">
-                    <h2 className="text-2xl font-bold tracking-tight">Check your email</h2>
-                    <p className="text-sm text-muted-foreground text-balance">
-                        We sent a password reset link to{' '}
-                        <span className="font-semibold text-foreground">{submittedEmail}</span>
-                    </p>
-                </div>
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                'Reset Password'
+              )}
+            </Button>
+          )}
+        </form.Subscribe>
 
-                <div className="pt-2">
-                    <Link
-                        to="/sign-in"
-                        className="inline-flex items-center justify-center gap-2 text-sm font-medium text-primary hover:underline underline-offset-4"
-                    >
-                        <ArrowLeft className="h-4 w-4" />
-                        Back to sign in
-                    </Link>
-                </div>
-            </div>
-        )
-    }
-
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                form.handleSubmit()
-            }}
-            className="p-6 md:p-8 space-y-6"
-        >
-            {/* Header */}
-            <div className="flex flex-col items-center text-center gap-2">
-                <div className="p-3 rounded-full bg-primary/10 text-primary">
-                    <KeyRound className="h-6 w-6" />
-                </div>
-                <h1 className="text-2xl font-bold tracking-tight">Forgot password?</h1>
-                <p className="text-sm text-muted-foreground text-balance">
-                    No worries! Enter your registered email and we&apos;ll send you reset instructions.
-                </p>
-            </div>
-
-            {/* Root / Server Error */}
-            {serverError && (
-                <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md border border-destructive/20 font-medium">
-                    {serverError}
-                </div>
-            )}
-
-            {/* Email Field */}
-            <form.Field
-                name="email"
-                children={(field) => {
-                    const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0
-
-                    return (
-                        <div className="space-y-2">
-                            <label htmlFor={field.name} className="block text-sm font-medium leading-none">
-                                Email Address <span className="text-destructive">*</span>
-                            </label>
-                            <div className="relative">
-                                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <Mail className="h-4 w-4 text-muted-foreground" />
-                                </div>
-                                <input
-                                    id={field.name}
-                                    name={field.name}
-                                    type="email"
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) => {
-                                        if (serverError) setServerError(null)
-                                        field.handleChange(e.target.value)
-                                    }}
-                                    placeholder="you@schoolportal.com"
-                                    className={`${inputBase} ${hasError ? 'border-destructive focus-visible:ring-destructive' : 'border-input'}`}
-                                />
-                            </div>
-                            {hasError && (
-                                <p className="text-xs font-medium text-destructive">
-                                    {field.state.meta.errors[0]?.message ?? String(field.state.meta.errors[0])}
-                                </p>
-                            )}
-                        </div>
-                    )
-                }}
-            />
-
-            {/* Submit Button */}
-            <form.Subscribe
-                selector={(state) => [state.canSubmit, state.isSubmitting]}
-                children={([canSubmit, isSubmitting]) => (
-                    <Button type="submit" className="w-full" disabled={!canSubmit || isSubmitting}>
-                        {isSubmitting ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Sending reset link...
-                            </>
-                        ) : (
-                            'Send Reset Link'
-                        )}
-                    </Button>
-                )}
-            />
-
-            {/* Back to Sign In Link */}
-            <div className="flex items-center justify-center">
-                <Link
-                    to="/sign-in"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to sign in
-                </Link>
-            </div>
-        </form>
-    )
+        <div className="flex justify-center">
+          <Link
+            to="/sign-in"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to login
+          </Link>
+        </div>
+      </form>
+    </div>
+  )
 }

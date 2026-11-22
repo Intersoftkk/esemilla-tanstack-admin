@@ -1,148 +1,183 @@
-// src/features/auth/components/change-password-form.tsx
+import { useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { useServerFn } from "@tanstack/react-start";
+import { Eye, EyeOff, Loader, Lock } from "lucide-react";
+import { toast } from "sonner";
 
-import { useForm, formOptions } from '@tanstack/react-form'
-import { useState } from 'react'
-import { Loader2, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react'
-import { toast } from 'sonner'
-import { changePasswordSchema } from '#/features/auth/schema/change-password.schema'
-import { useChangePasswordMutation } from '#/features/auth/queries/auth.queries'
-import { getErrorMessage } from '#/features/auth/components/profile-form'
+import { Button } from "#/components/ui/button";
+import { Field, FieldError, FieldLabel } from "#/components/ui/field";
+import { Input } from "#/components/ui/input";
+import { changePasswordFn } from "#/features/auth/server/auth.functions";
+import { changePasswordSchema } from "#/features/auth/schema/change-password.schema";
+import { cn } from "#/lib/utils";
 
-const inputBase =
-    'flex h-10 w-full rounded-md border bg-background py-2 pl-10 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+function fieldErrorMessage(error: unknown): string | null {
+	if (typeof error === "string") return error;
+	if (error && typeof error === "object" && "message" in error) {
+		return String(error.message);
+	}
+	return null;
+}
+
+const FIELDS = [
+	{
+		name: "currentPassword",
+		label: "Current password",
+		autoComplete: "current-password",
+		serverKey: "current_password",
+	},
+	{
+		name: "newPassword",
+		label: "New password",
+		autoComplete: "new-password",
+		serverKey: "password",
+	},
+	{
+		name: "confirmPassword",
+		label: "Confirm new password",
+		autoComplete: "new-password",
+		serverKey: "password_confirmation",
+	},
+] as const;
+
+type FieldName = (typeof FIELDS)[number]["name"];
 
 export function ChangePasswordForm() {
-    const mutation = useChangePasswordMutation()
-    const [visible, setVisible] = useState({ current: false, new: false, confirm: false })
+	const changePassword = useServerFn(changePasswordFn);
+	const [visible, setVisible] = useState<Record<FieldName, boolean>>({
+		currentPassword: false,
+		newPassword: false,
+		confirmPassword: false,
+	});
 
-    const formOpts = formOptions({
-        defaultValues: {
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: '',
-        },
-        validators: {
-            onChange: changePasswordSchema,
-        },
-    })
+	const form = useForm({
+		defaultValues: {
+			currentPassword: "",
+			newPassword: "",
+			confirmPassword: "",
+		},
+		validators: { onSubmit: changePasswordSchema },
+		onSubmit: async ({ value }) => {
+			try {
+				await changePassword({ data: value });
+				toast.success("Password changed successfully.");
+				form.reset();
+			} catch (error: unknown) {
+				const err = error as {
+					message?: string;
+					errors?: Record<string, string[]>;
+				};
+				for (const field of FIELDS) {
+					const message = err.errors?.[field.serverKey]?.[0];
+					if (!message) continue;
+					form.setFieldMeta(field.name, (meta) => ({
+						...meta,
+						errorMap: { ...meta.errorMap, onSubmit: message },
+					}));
+				}
+				form.setErrorMap({
+					onSubmit: {
+						form: err.message || "Password change failed. Please try again.",
+						fields: {},
+					},
+				});
+			}
+		},
+	});
 
-    const form = useForm({
-        ...formOpts,
-        onSubmit: async ({ value }) => {
-            try {
-                await mutation.mutateAsync(value)
-                toast.success('Your account password has been updated.')
-                form.reset()
-            } catch (err: any) {
-                toast.error(err?.response?.data?.message || 'Failed to update credentials')
-            }
-        },
-    })
+	return (
+		<form
+			className="space-y-5"
+			onSubmit={(event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				void form.handleSubmit();
+			}}
+		>
+			<form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+				{(error) =>
+					error ? (
+						<div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+							{typeof error === "string"
+								? error
+								: "Password change failed. Please try again."}
+						</div>
+					) : null
+				}
+			</form.Subscribe>
 
-    const toggle = (key: keyof typeof visible) => setVisible((p) => ({ ...p, [key]: !p[key] }))
+			{FIELDS.map((config) => (
+				<form.Field key={config.name} name={config.name}>
+					{(field) => {
+						const message = field.state.meta.errors
+							.map(fieldErrorMessage)
+							.find(Boolean);
+						const shown = visible[field.name as FieldName];
+						return (
+							<Field data-invalid={message ? "true" : undefined}>
+								<FieldLabel htmlFor={field.name}>
+									{config.label}{" "}
+									<span className="ml-1 text-destructive">*</span>
+								</FieldLabel>
+								<div className="relative">
+									<Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+									<Input
+										id={field.name}
+										name={field.name}
+										type={shown ? "text" : "password"}
+										autoComplete={config.autoComplete}
+										placeholder="********"
+										className="pr-10 pl-10"
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) =>
+											field.handleChange(event.target.value)
+										}
+										aria-invalid={!!message}
+									/>
+									<button
+										type="button"
+										tabIndex={-1}
+										className={cn(
+											"absolute top-0 right-0 flex h-full items-center px-3 text-muted-foreground",
+											"hover:text-foreground",
+										)}
+										aria-label={shown ? "Hide password" : "Show password"}
+										onClick={() =>
+											setVisible((prev) => ({
+												...prev,
+												[field.name]: !prev[field.name as FieldName],
+											}))
+										}
+									>
+										{shown ? (
+											<EyeOff className="h-4 w-4" />
+										) : (
+											<Eye className="h-4 w-4" />
+										)}
+									</button>
+								</div>
+								{message && <FieldError>{message}</FieldError>}
+							</Field>
+						);
+					}}
+				</form.Field>
+			))}
 
-    const PasswordField = ({
-                               name,
-                               label,
-                               placeholder,
-                               visKey,
-                               hint,
-                           }: {
-        name: 'currentPassword' | 'newPassword' | 'confirmPassword'
-        label: string
-        placeholder: string
-        visKey: keyof typeof visible
-        hint?: string
-    }) => (
-        <form.Field
-            name={name}
-            children={(field) => {
-                const errorMsg = getErrorMessage(field.state.meta.errors)
-                return (
-                    <div className="space-y-2">
-                        <label htmlFor={field.name} className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                            {label} <span className="text-destructive">*</span>
-                        </label>
-                        <div className="relative">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Lock className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <input
-                                id={field.name}
-                                type={visible[visKey] ? 'text' : 'password'}
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                placeholder={placeholder}
-                                className={`${inputBase} ${field.state.meta.isTouched && errorMsg ? 'border-destructive focus-visible:ring-destructive' : 'border-input'}`}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => toggle(visKey)}
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-                                tabIndex={-1}
-                            >
-                                {visible[visKey] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                            </button>
-                        </div>
-                        {field.state.meta.isTouched && errorMsg && (
-                            <p className="text-xs font-medium text-destructive">{errorMsg}</p>
-                        )}
-                        {hint && <p className="text-xs text-muted-foreground leading-relaxed">{hint}</p>}
-                    </div>
-                )
-            }}
-        />
-    )
-
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                form.handleSubmit()
-            }}
-            className="space-y-6"
-        >
-            <PasswordField
-                name="currentPassword"
-                label="Current Password"
-                placeholder="Enter current password"
-                visKey="current"
-            />
-            <PasswordField
-                name="newPassword"
-                label="New Password"
-                placeholder="Enter new password"
-                visKey="new"
-                hint="Minimum 8 characters with at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special symbol."
-            />
-            <PasswordField
-                name="confirmPassword"
-                label="Confirm New Password"
-                placeholder="Confirm your new password"
-                visKey="confirm"
-            />
-
-            <div className="flex justify-end pt-2">
-                <form.Subscribe
-                    selector={(state) => [state.canSubmit, state.isSubmitting]}
-                    children={([canSubmit, isSubmitting]) => (
-                        <button
-                            type="submit"
-                            disabled={!canSubmit || isSubmitting}
-                            className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-sm"
-                        >
-                            {isSubmitting ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <ShieldCheck className="h-4 w-4" />
-                            )}
-                            {isSubmitting ? 'Updating...' : 'Update credentials'}
-                        </button>
-                    )}
-                />
-            </div>
-        </form>
-    )
+			<form.Subscribe selector={(state) => state.isSubmitting}>
+				{(isSubmitting) => (
+					<Button type="submit" className="w-full" disabled={isSubmitting}>
+						{isSubmitting ? (
+							<>
+								<Loader className="mr-2 h-4 w-4 animate-spin" />
+								Changing password...
+							</>
+						) : (
+							"Change password"
+						)}
+					</Button>
+				)}
+			</form.Subscribe>
+		</form>
+	);
 }

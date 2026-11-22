@@ -1,7 +1,6 @@
 import { APP_CONFIG } from "@/config/app.config"
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "@tanstack/react-router"
-import {useAuth} from "#/features/auth/context/auth.context.tsx";
 
 export default function HomePage() {
     const { user, logout } = useAuth()

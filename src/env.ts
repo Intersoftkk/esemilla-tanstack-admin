@@ -3,7 +3,10 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
+    NODE_ENV: z.string().optional(),
     SERVER_URL: z.string().url().optional(),
+    BACKEND_API_URL: z.string().url(),
+    SESSION_SECRET: z.string().min(32),
   },
 
   /**
@@ -13,21 +16,27 @@ export const env = createEnv({
   clientPrefix: 'VITE_',
 
   client: {
-    VITE_API_URL: z.string().min(1).optional(),
-    VITE_APP_TITLE: z.string().min(1).optional(),
-    VITE_REVERB_APP_KEY: z.string().optional(),
-    VITE_REVERB_HOST: z.string().optional(),
-    VITE_REVERB_PORT: z.string().optional(),
+    VITE_ENV: z.string().optional(),
+    VITE_ROOT_DOMAIN: z.string().min(1).default('localhost'),
+    VITE_APP_URL: z.string().url('VITE_APP_URL must be a valid URL'),
+    VITE_API_BROADCASTING_URL: z.string().url().optional(),
+
+    // Laravel Reverb / Echo Variables
+    VITE_REVERB_APP_KEY: z.string().min(1).optional(),
+    VITE_REVERB_HOST: z.string().min(1).optional(),
+    VITE_REVERB_PORT: z.coerce.number().optional().default(8080),
     VITE_REVERB_SCHEME: z.enum(['http', 'https']).optional().default('http'),
-    VITE_PUSHER_APP_KEY: z.string().optional(),
-    VITE_PUSHER_APP_CLUSTER: z.string().optional(),
   },
 
   /**
    * What object holds the environment variables at runtime. This is usually
    * `process.env` or `import.meta.env`.
    */
-  runtimeEnv: import.meta.env,
+  // runtimeEnv: import.meta.env,
+  runtimeEnv: {
+    ...import.meta.env,
+    ...process.env,
+  },
 
   /**
    * By default, this library will feed the environment variables directly to

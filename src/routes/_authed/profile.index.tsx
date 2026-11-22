@@ -1,6 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
-import {ProfilePage} from "#/features/auth/profile-page.tsx";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authed/profile/')({
-  component: ProfilePage,
-})
+import { ProfilePage } from "#/features/auth/profile";
+import { pageHead } from "#/lib/head";
+
+export const Route = createFileRoute("/_authed/profile/")({
+	head: () => pageHead("Profile"),
+	component: ProfilePage,
+});

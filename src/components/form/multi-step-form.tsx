@@ -1,7 +1,13 @@
 'use client'
 
+import {
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useState,
+} from 'react'
+
 import type {ComponentType, ReactNode} from 'react'
-import {forwardRef, useEffect, useImperativeHandle, useState,} from 'react'
 
 export interface MultiStepFormStep {
     key: string
