@@ -5,6 +5,7 @@ import {
   useRouter,
 } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
+import { useQueryClient } from '@tanstack/react-query'
 import { LogOut, Settings, User } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
@@ -25,11 +26,13 @@ export function ProfileDropdown() {
   const profile = user
   const navigate = useNavigate()
   const router = useRouter()
+  const queryClient = useQueryClient()
   const signOut = useServerFn(signOutFn)
   const initials = profile?.name.slice(0, 2).toUpperCase() ?? ''
 
   async function logout() {
     await signOut()
+    await queryClient.invalidateQueries({ queryKey: ['auth', 'session'] })
     await router.invalidate()
     await navigate({ to: '/sign-in', replace: true })
   }
