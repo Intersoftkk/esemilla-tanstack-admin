@@ -1,13 +1,19 @@
 import { APP_CONFIG } from "@/config/app.config"
 import { Button } from "@/components/ui/button"
-import { Link, useNavigate } from "@tanstack/react-router"
+import { Link, useNavigate, useRouter } from "@tanstack/react-router"
+import { useServerFn } from "@tanstack/react-start"
+import { signOutFn } from "#/features/auth/server/auth.functions"
+import { usePermission } from "#/features/auth/hooks/use-permission"
 
 export default function HomePage() {
-    const { user, logout } = useAuth()
+    const { user } = usePermission()
     const navigate = useNavigate()
+    const router = useRouter()
+    const signOut = useServerFn(signOutFn)
 
     const handleLogout = async () => {
-        await logout()
+        await signOut()
+        await router.invalidate()
         await navigate({ to: "/" })
     }
 

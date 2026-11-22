@@ -1,9 +1,9 @@
 import {Bell, Save, Shield, Trash2, User} from 'lucide-react'
 import {Button} from '#/components/ui/button'
-import {useAuth} from '#/features/auth/context/auth.context'
+import {usePermission} from '#/features/auth/hooks/use-permission'
 
 export function SettingsPage() {
-    const {user} = useAuth()
+    const {user} = usePermission()
 
     return (
         <div className="max-w-3xl mx-auto space-y-8">

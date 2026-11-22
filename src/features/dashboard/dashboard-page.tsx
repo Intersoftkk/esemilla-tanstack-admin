@@ -9,10 +9,10 @@ import {
     Users,
 } from 'lucide-react'
 import {Button} from '#/components/ui/button'
-import {useAuth} from '#/features/auth/context/auth.context'
+import {usePermission} from '#/features/auth/hooks/use-permission'
 
 export function DashboardPage() {
-    const {user} = useAuth()
+    const {user} = usePermission()
 
     return (
         <div className="max-w-7xl mx-auto space-y-8">

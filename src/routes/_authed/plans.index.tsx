@@ -1,6 +1,18 @@
-import { createFileRoute } from '@tanstack/react-router'
-import {ProfilePage} from "#/features/auth/profile-page.tsx";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authed/plans/')({
-  component: ProfilePage,
-})
+import { ComingSoon } from "#/components/coming-soon";
+import { pageHead } from "#/lib/head";
+
+export const Route = createFileRoute("/_authed/plans/")({
+	head: () => pageHead("Plans"),
+	component: PlansPage,
+});
+
+function PlansPage() {
+	return (
+		<ComingSoon
+			title="Plans"
+			description="Subscription plan management and pricing are coming soon."
+		/>
+	);
+}
