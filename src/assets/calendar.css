@@ -1,0 +1,46 @@
+.fc {
+    /*--fc-border-color: hsl(var(--border));*/
+    --fc-event-bg-color: hsl(var(--primary));
+    --fc-event-border-color: hsl(var(--primary));
+    --fc-page-bg-color: transparent;
+    --fc-neutral-bg-color: hsl(var(--muted));
+    --fc-neutral-text-color: hsl(var(--muted-foreground));
+    --fc-today-bg-color: hsl(var(--primary) / 0.1);
+}
+
+/* Makes toolbar wrap nicely on mobile */
+.fc .fc-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Avoid overflow in narrow screens */
+.fc {
+    max-width: 100%;
+}
+
+/* Make list view text comfy */
+@media (max-width: 768px) {
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem;
+    }
+}
+
+.fc .fc-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.fc .fc-daygrid-event {
+    margin-top: 6px;
+}
+
+.fc .fc-list-event-dot {
+    display: none;
+}
+
+/* Corporate-ish popover */
+.fc-more-popover {
+    border-radius: 12px;
+    overflow: hidden;
+}
