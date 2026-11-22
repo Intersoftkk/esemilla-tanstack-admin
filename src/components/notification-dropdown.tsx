@@ -23,6 +23,7 @@ import type {
 	NotificationRecord,
 	NotificationsResponse,
 } from "#/features/notification/types/notification.ts";
+import { formatDateTimeUTC } from "#/lib/format";
 import { usePrivateChannel } from "#/hooks/use-echo.ts";
 
 export function NotificationDropdown() {
@@ -155,14 +156,9 @@ export function NotificationDropdown() {
 										<span />
 									)}
 									{n.created_at && (
-										<span>
-											{new Date(n.created_at).toLocaleDateString(undefined, {
-												month: "short",
-												day: "numeric",
-												hour: "2-digit",
-												minute: "2-digit",
-											})}
-										</span>
+										<time dateTime={n.created_at}>
+											{formatDateTimeUTC(n.created_at, false)}
+										</time>
 									)}
 								</div>
 							</DropdownMenuItem>

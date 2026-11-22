@@ -1,12 +1,10 @@
 import packageJson from "../../package.json";
 
-const currentYear = new Date().getFullYear();
-
 export const APP_CONFIG = {
     name: "Esemilla",
     shortName: "Esemilla",
     version: packageJson.version,
-    copyright: `© ${currentYear} Esemilla. All rights reserved.`,
+    copyright: "© Esemilla. All rights reserved.",
 
     meta: {
         title: "Esemilla — School Management SaaS",

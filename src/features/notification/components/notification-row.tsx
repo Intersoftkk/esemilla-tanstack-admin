@@ -3,6 +3,7 @@ import { Check, Loader2, MailOpen, Trash2, User } from "lucide-react";
 import { Badge } from "#/components/ui/badge.tsx";
 import { Button } from "#/components/ui/button.tsx";
 import type { NotificationRecord } from "#/features/notification/types/notification.ts";
+import { formatDateTimeUTC } from "#/lib/format";
 import { cn } from "#/lib/utils.ts";
 
 interface NotificationRowProps {
@@ -62,19 +63,14 @@ export function NotificationRow({
 						</div>
 					</div>
 
-					<span className="shrink-0 whitespace-nowrap text-xs text-muted-foreground">
+					<time
+						dateTime={notification.created_at}
+						className="shrink-0 whitespace-nowrap text-xs text-muted-foreground"
+					>
 						{notification.created_at
-							? new Date(notification.created_at).toLocaleDateString(
-									undefined,
-									{
-										month: "short",
-										day: "numeric",
-										hour: "2-digit",
-										minute: "2-digit",
-									},
-								)
+							? formatDateTimeUTC(notification.created_at, false)
 							: ""}
-					</span>
+					</time>
 				</div>
 
 				<p className="text-sm leading-relaxed text-muted-foreground">
