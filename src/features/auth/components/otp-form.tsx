@@ -62,7 +62,7 @@ export function OtpForm() {
   }
 
   return (
-    <div className="flex flex-col justify-center px-8 pb-8">
+    <div className="flex flex-col justify-center">
       <div className="mb-8">
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
           <ShieldCheck className="h-6 w-6 text-primary" />
