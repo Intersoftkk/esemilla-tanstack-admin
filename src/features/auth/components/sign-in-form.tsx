@@ -4,7 +4,7 @@ import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useServerFn } from '@tanstack/react-start'
 import { useQueryClient } from '@tanstack/react-query'
-import { Eye, EyeOff, GraduationCap, Loader, Lock, Mail } from 'lucide-react'
+import { Eye, EyeOff, Loader, Lock, Mail } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '#/components/ui/button'
@@ -12,7 +12,6 @@ import { Field, FieldError, FieldLabel } from '#/components/ui/field'
 import { Input } from '#/components/ui/input'
 import { signInFn } from '#/features/auth/server/auth.functions'
 import { signInSchema } from '#/features/auth/schema/sign-in.schema'
-import { APP_CONFIG } from '#/config/app.config'
 import { cn } from '#/lib/utils'
 
 interface SignInFormProps extends ComponentProps<'div'> {
@@ -84,16 +83,7 @@ export function SignInForm({ search }: SignInFormProps) {
   })
 
   return (
-    <div className="flex flex-col justify-center px-8 pb-8">
-      <div className="mb-6 flex items-center gap-2.5 lg:hidden">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-          <GraduationCap className="h-5 w-5" />
-        </div>
-        <span className="text-lg font-bold tracking-tight text-card-foreground">
-          {APP_CONFIG.name}
-        </span>
-      </div>
-
+    <div className="flex flex-col justify-center">
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-card-foreground">
           Welcome back

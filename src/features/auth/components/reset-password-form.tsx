@@ -68,7 +68,7 @@ export function ResetPasswordForm() {
   })
 
   return (
-    <div className="flex flex-col justify-center px-8 pb-8">
+    <div className="flex flex-col justify-center">
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-card-foreground">
           Set new password
