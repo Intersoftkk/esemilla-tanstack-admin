@@ -14,10 +14,14 @@ const FontContext = createContext<FontContextType | undefined>(undefined)
 export const FontProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [font, _setFont] = useState<Font>(() => {
-    const savedFont = localStorage.getItem('font')
-    return fonts.includes(savedFont as Font) ? (savedFont as Font) : fonts[0]
-  })
+  const [font, _setFont] = useState<Font>(fonts[0])
+
+  useEffect(() => {
+    const savedFont = window.localStorage.getItem('font')
+    if (fonts.includes(savedFont as Font)) {
+      _setFont(savedFont as Font)
+    }
+  }, [])
 
   useEffect(() => {
     const applyFont = (font: string) => {

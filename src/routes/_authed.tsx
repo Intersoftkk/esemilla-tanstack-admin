@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   createFileRoute,
   Outlet,
@@ -47,13 +48,21 @@ export const Route = createFileRoute('/_authed')({
 })
 
 function AuthedLayout() {
+  // Use the same initial sidebar state for SSR and hydration, then restore the
+  // saved browser preference once the client has mounted.
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
-  const defaultOpen = getCookie('sidebar_state') !== 'false'
+  useEffect(() => {
+    const savedState = getCookie('sidebar_state')
+    if (savedState === 'true' || savedState === 'false') {
+      setSidebarOpen(savedState === 'true')
+    }
+  }, [])
 
   return (
     <LayoutProvider>
       <TooltipProvider>
-        <SidebarProvider defaultOpen={defaultOpen}>
+        <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <AppSidebar />
           <SidebarInset
             className={cn(

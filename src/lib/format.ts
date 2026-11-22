@@ -49,6 +49,27 @@ export function formatDateTime(value?: string | null): string {
 	return formatDate(value, "dd MMM yyyy, HH:mm");
 }
 
+/**
+ * Formats a timestamp with a fixed locale and UTC timezone so server and
+ * browser environments produce the same initial markup during hydration.
+ */
+export function formatDateTimeUTC(
+	value?: string | null,
+	includeYear = true,
+): string {
+	const date = toDate(value);
+	if (!date) return "—";
+
+	return new Intl.DateTimeFormat("en-US", {
+		month: "short",
+		day: "numeric",
+		year: includeYear ? "numeric" : undefined,
+		hour: "2-digit",
+		minute: "2-digit",
+		timeZone: "UTC",
+	}).format(date);
+}
+
 /** `3 days ago`, `in 2 months` — falls back to an em dash. */
 export function formatRelative(value?: string | null): string {
 	const date = toDate(value);

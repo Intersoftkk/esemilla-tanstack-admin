@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query'
 import {Loader} from 'lucide-react'
-import {formatDistance} from 'date-fns'
 import React from 'react'
+import { formatDateTimeUTC } from '#/lib/format'
 
 export interface Comment {
     id: string
@@ -109,11 +109,12 @@ function CommentCard({comment}: { comment: Comment }) {
                         {user?.current_position || 'User'}
                     </p>
                 </div>
-                <p className="text-xs text-gray-400">
-                    {formatDistance(comment.created_at as string, new Date(), {
-                        addSuffix: true,
-                    })}
-                </p>
+                <time
+                    dateTime={comment.created_at}
+                    className="text-xs text-gray-400"
+                >
+                    {formatDateTimeUTC(comment.created_at)}
+                </time>
             </div>
 
             {/* Comment Text */}
