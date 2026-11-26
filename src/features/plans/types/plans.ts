@@ -1,4 +1,6 @@
 // #/features/plans/types/plans.ts
+import type { FeatureRecord } from '#/features/plans/types/features.ts'
+
 export type PlanStatus = 'draft' | 'active' | 'completed' | 'archived'
 
 export interface CompanyRecord {
@@ -6,10 +8,6 @@ export interface CompanyRecord {
     name?: string | null
 }
 
-/**
- * A plan is backed by the `performance-cycle` API resource. The UI was renamed
- * to "plans", but the backend endpoints deliberately keep their original path.
- */
 export interface PlanRecord {
     id: string
     company_id: string
@@ -19,6 +17,7 @@ export interface PlanRecord {
     start_date?: string | null
     end_date?: string | null
     status: PlanStatus
+    features?: FeatureRecord[]
 }
 
 export interface CompanyOption {

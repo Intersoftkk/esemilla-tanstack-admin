@@ -1,15 +1,12 @@
 // #/features/plans/components/dialogs/plans-delete-dialog.tsx
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, Loader } from 'lucide-react'
-import { toast } from 'sonner'
 
 import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
-import { PLAN_KEYS } from '#/features/plans/queries/plan.keys.ts'
-import { deletePlan } from '#/features/plans/service/plans.service.ts'
+import { useDeletePlanMutation } from '#/features/plans/queries/plan.queries.ts'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
 
 interface Props {
@@ -21,24 +18,16 @@ interface Props {
 /** Confirmation dialog that deletes a plan after ID confirmation. */
 export function PlansDeleteDialog({ open, onOpenChange, currentRow }: Props) {
     const [value, setValue] = useState('')
-    const queryClient = useQueryClient()
-
-    const mutation = useMutation({
-        mutationFn: () => deletePlan(currentRow.id),
+    const mutation = useDeletePlanMutation({
         onSuccess: () => {
-            void queryClient.invalidateQueries({ queryKey: PLAN_KEYS.all })
-            toast.success('Plan deleted successfully.')
             setValue('')
             onOpenChange(false)
-        },
-        onError: (error: Error) => {
-            toast.error(error.message || 'Failed to delete plan.')
         },
     })
 
     const handleDelete = () => {
         if (value.trim() !== String(currentRow.id)) return
-        mutation.mutate()
+        mutation.mutate(currentRow.id)
     }
 
     return (

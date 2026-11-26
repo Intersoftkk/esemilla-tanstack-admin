@@ -7,12 +7,18 @@ import type {
 } from '#/features/plans/schema/plans-search.schema.ts'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
 import {
+    attachPlanFeaturesFn,
     createPlanFn,
     deletePlanFn,
+    deletePlansFn,
     getCompaniesFn,
+    getFeaturesFn,
+    getPlanFeaturesFn,
     getPlansFn,
+    syncPlanFeaturesFn,
     updatePlanFn,
 } from '#/features/plans/server/plans.functions.ts'
+import type { FeatureRecord } from '#/features/plans/types/features.ts'
 
 /** Client-side wrappers around the server functions for the plans feature. */
 export async function fetchPaginatedPlans(
@@ -46,4 +52,35 @@ export async function updatePlan(
 /** Client wrapper for deleting a plan. */
 export async function deletePlan(id: string): Promise<void> {
     await deletePlanFn({ data: id })
+}
+
+/** Client wrapper for deleting several plans. */
+export async function deletePlans(ids: string[]): Promise<void> {
+    await deletePlansFn({ data: ids })
+}
+
+/** Client wrapper for the feature catalog query. */
+export async function fetchFeatures(): Promise<FeatureRecord[]> {
+    return getFeaturesFn()
+}
+
+/** Client wrapper for a plan's assigned features query. */
+export async function fetchPlanFeatures(id: string): Promise<FeatureRecord[]> {
+    return getPlanFeaturesFn({ data: id })
+}
+
+/** Client wrapper for attaching features to a plan. */
+export async function attachFeatures(
+    id: string,
+    featureIds: string[],
+): Promise<void> {
+    await attachPlanFeaturesFn({ data: { id, feature_ids: featureIds } })
+}
+
+/** Client wrapper for replacing a plan's features. */
+export async function syncFeatures(
+    id: string,
+    featureIds: string[],
+): Promise<void> {
+    await syncPlanFeaturesFn({ data: { id, feature_ids: featureIds } })
 }

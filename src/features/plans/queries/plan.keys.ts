@@ -15,4 +15,9 @@ export const PLAN_KEYS = {
     [...PLAN_KEYS.details(), String(id)] as const,
   /** Key for the companies available to plans. */
   companies: () => [...PLAN_KEYS.all, 'companies'] as const,
+  /** Key for the feature catalog. */
+  features: () => [...PLAN_KEYS.all, 'features'] as const,
+  /** Key for the features assigned to a plan. */
+  planFeatures: (id: string | number) =>
+    [...PLAN_KEYS.features(), String(id)] as const,
 }
