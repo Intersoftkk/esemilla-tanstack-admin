@@ -1,18 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
+// #/routes/_authed/plans.index.tsx
+import { createFileRoute } from '@tanstack/react-router'
 
-import { ComingSoon } from "#/components/coming-soon";
-import { pageHead } from "#/lib/head";
+import PlansPage from '#/features/plans'
+import { pageHead } from '#/lib/head'
+import { planSearchSchema } from '#/features/plans/schema/plans-search.schema.ts'
+import type { NavigateFn } from '#/hooks/use-table-url-state'
 
-export const Route = createFileRoute("/_authed/plans/")({
-	head: () => pageHead("Plans"),
-	component: PlansPage,
-});
+export const Route = createFileRoute('/_authed/plans/')({
+    head: () => pageHead('Plans'),
+    validateSearch: planSearchSchema,
+    component: PlansRoute,
+})
 
-function PlansPage() {
-	return (
-		<ComingSoon
-			title="Plans"
-			description="Subscription plan management and pricing are coming soon."
-		/>
-	);
+/** Route component for the plans page. */
+function PlansRoute() {
+    const search = Route.useSearch()
+    const navigate = Route.useNavigate() as unknown as NavigateFn
+
+    return <PlansPage search={search} navigate={navigate} />
 }
