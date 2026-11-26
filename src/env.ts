@@ -3,9 +3,7 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.string().optional(),
-    SERVER_URL: z.string().url().optional(),
-    BACKEND_API_URL: z.string().url(),
+    BACKEND_API_URL: z.url(),
     SESSION_SECRET: z.string().min(32),
   },
 
@@ -18,8 +16,8 @@ export const env = createEnv({
   client: {
     VITE_ENV: z.string().optional(),
     VITE_ROOT_DOMAIN: z.string().min(1).default('localhost'),
-    VITE_APP_URL: z.string().url('VITE_APP_URL must be a valid URL'),
-    VITE_API_BROADCASTING_URL: z.string().url().optional(),
+    VITE_APP_URL: z.url('VITE_APP_URL must be a valid URL'),
+    VITE_API_BROADCASTING_URL: z.url().optional(),
 
     // Laravel Reverb / Echo Variables
     VITE_REVERB_APP_KEY: z.string().min(1).optional(),

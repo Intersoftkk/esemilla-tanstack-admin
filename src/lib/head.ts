@@ -1,4 +1,4 @@
-const APP_NAME = "SchoolPortal";
+import { APP_CONFIG } from "#/config/app.config.ts";
 
 /**
  * Page-level `<head>` used by routes: browser title plus an optional
@@ -8,7 +8,7 @@ const APP_NAME = "SchoolPortal";
 export function pageHead(title: string, description?: string) {
 	return {
 		meta: [
-			{ title: `${title} · ${APP_NAME}` },
+			{ title: `${title} · ${APP_CONFIG.name}` },
 			...(description ? [{ name: "description", content: description }] : []),
 		],
 	};
