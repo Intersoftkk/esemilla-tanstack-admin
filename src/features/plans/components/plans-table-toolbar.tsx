@@ -1,10 +1,13 @@
 // #/features/plans/components/plans-table-toolbar.tsx
-import { X } from 'lucide-react'
+import { Download, ListFilter, RefreshCw, X } from 'lucide-react'
 import type { Table } from '@tanstack/react-table'
 
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
+import { DataTableFacetedFilter } from '#/components/datatable/data-table-faceted-filter.tsx'
+import { DataTableViewOptions } from '#/components/datatable/data-table-view-options.tsx'
+import { Button } from '#/components/ui/button.tsx'
+import { SearchField } from '#/components/fields/search-field.tsx'
 import type { plansTableFeatures } from '#/features/plans/config/plans.config.ts'
+import { planStatusOptions } from '#/features/plans/data/data.ts'
 import {
     EMPTY_PLAN_FILTERS,
     type PlanFilters,
@@ -15,6 +18,10 @@ interface Props {
     table: Table<typeof plansTableFeatures, PlanRecord>
     filters: PlanFilters
     onChangeFilters: (filters: Partial<PlanFilters>) => void
+    isFetching?: boolean
+    onRefresh?: () => void
+    onExport?: () => void
+    canExport?: boolean
 }
 
 /** Checks whether any list filter is currently active. */
@@ -26,46 +33,98 @@ function hasActiveFilters(filters: PlanFilters): boolean {
     )
 }
 
-/** Search and reset controls for the plans table. */
-export function PlansTableToolbar({ table, filters, onChangeFilters }: Props) {
+/** Search, status filter and utility controls for the plans table. */
+export function PlansTableToolbar({
+    table,
+    filters,
+    onChangeFilters,
+    isFetching = false,
+    onRefresh,
+    onExport,
+    canExport = false,
+}: Props) {
     const hasSorting = table.store.state.sorting.length > 0
     const showReset = hasActiveFilters(filters) || hasSorting
 
     return (
-        <div className="flex items-center justify-between gap-2">
-            <div className="flex flex-1 flex-col-reverse items-start gap-2 sm:flex-row sm:items-center sm:flex-wrap">
-                <Input
-                    placeholder="Search plans..."
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-1 flex-wrap items-center gap-2">
+                <SearchField
                     value={filters.search}
-                    onChange={(event) =>
-                        onChangeFilters({ search: event.target.value })
-                    }
-                    className="w-full sm:w-[220px] lg:w-[320px]"
+                    onChange={(search) => onChangeFilters({ search })}
+                    placeholder="Search plans..."
+                    className="w-full sm:w-56 lg:w-72"
+                />
+
+                <DataTableFacetedFilter
+                    title="Status"
+                    icon={ListFilter}
+                    options={planStatusOptions}
+                    selectedValues={filters.status}
+                    onChange={(status) => onChangeFilters({ status })}
                 />
 
                 {showReset && (
-                    <div className="flex gap-2">
+                    <>
                         {hasActiveFilters(filters) && (
                             <Button
-                                onClick={() => onChangeFilters(EMPTY_PLAN_FILTERS)}
-                                variant="outline"
-                                className="px-2 lg:px-3"
+                                onClick={() =>
+                                    onChangeFilters(EMPTY_PLAN_FILTERS)
+                                }
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2"
                             >
-                                Reset Filters
-                                <X className="ml-2 h-4 w-4" />
+                                Reset filters
+                                <X className="ml-1.5 h-3.5 w-3.5" />
                             </Button>
                         )}
 
                         {hasSorting && (
                             <Button
-                                variant="outline"
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2"
                                 onClick={() => table.resetSorting()}
-                                className="px-2 lg:px-3"
                             >
-                                Reset Sort
+                                Reset sort
                             </Button>
                         )}
-                    </div>
+                    </>
+                )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+                <DataTableViewOptions
+                    table={table as unknown as Table<any, any>}
+                />
+
+                {onRefresh && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8"
+                        onClick={onRefresh}
+                        disabled={isFetching}
+                    >
+                        <RefreshCw
+                            className={`mr-1.5 h-3.5 w-3.5 ${isFetching ? 'animate-spin' : ''}`}
+                        />
+                        Refresh
+                    </Button>
+                )}
+
+                {onExport && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8"
+                        onClick={onExport}
+                        disabled={!canExport}
+                    >
+                        <Download className="mr-1.5 h-3.5 w-3.5" />
+                        Export
+                    </Button>
                 )}
             </div>
         </div>

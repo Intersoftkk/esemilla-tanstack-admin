@@ -2,17 +2,27 @@
 import { useState } from 'react'
 import {
     useTable,
+    type Column,
     type ColumnVisibilityState,
     type PaginationState,
     type SortingState,
     type Table as TableInstance,
-    type Column,
 } from '@tanstack/react-table'
-import { useQuery } from '@tanstack/react-query'
+import { AlertCircle, CalendarRange, Plus } from 'lucide-react'
 
-import { DataTablePagination } from '#/components/datatable/data-table-pagination'
-import DataTableSkeleton from '#/components/datatable/data-table-skeleton'
-import { DataTablePaginationSkeleton } from '#/components/datatable/data-table-pagination-skeleton'
+import { DataTablePagination } from '#/components/datatable/data-table-pagination.tsx'
+import DataTableSkeleton from '#/components/datatable/data-table-skeleton.tsx'
+import { DataTablePaginationSkeleton } from '#/components/datatable/data-table-pagination-skeleton.tsx'
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert.tsx'
+import { Button } from '#/components/ui/button.tsx'
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '#/components/ui/empty.tsx'
 import {
     Table,
     TableBody,
@@ -20,21 +30,26 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '#/components/ui/table'
-import { useDebounce } from '#/hooks/use-debounce'
-import type { NavigateFn } from '#/hooks/use-table-url-state'
-import { parseAsSpatieSort } from '#/lib/nuqs-parsers'
+} from '#/components/ui/table.tsx'
+import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PermissionGuard } from '#/features/auth/components/permission-guard.tsx'
+import { PlansBulkActions } from '#/features/plans/components/plans-bulk-actions.tsx'
 import { columns } from '#/features/plans/components/plans-table-columns.tsx'
+import { PlansStats } from '#/features/plans/components/plans-stats.tsx'
 import { PlansTableToolbar } from '#/features/plans/components/plans-table-toolbar.tsx'
 import { plansTableFeatures } from '#/features/plans/config/plans.config.ts'
-import { PLAN_KEYS } from '#/features/plans/queries/plan.keys.ts'
+import { usePlans } from '#/features/plans/context/plans-context.tsx'
+import { usePlansPaginateQuery } from '#/features/plans/queries/plan.queries.ts'
 import {
     EMPTY_PLAN_FILTERS,
     type PlanFilters,
     type PlanSearch,
 } from '#/features/plans/schema/plans-search.schema.ts'
-import { fetchPaginatedPlans } from '#/features/plans/service/plans.service.ts'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import { downloadPlansCsv } from '#/features/plans/utils/plans.utils.ts'
+import { useDebounce } from '#/hooks/use-debounce'
+import type { NavigateFn } from '#/hooks/use-table-url-state'
+import { parseAsSpatieSort } from '#/lib/nuqs-parsers'
 
 interface Props {
     search: PlanSearch
@@ -55,10 +70,12 @@ function stateToSort(state: SortingState): string[] {
     return value ? [value] : []
 }
 
-/** Server-driven plans table with URL-synced state. */
+/** Server-driven plans table with URL-synced state and summary actions. */
 export function PlansTable({ search, navigate }: Props) {
+    const { setOpen } = usePlans()
     const [rowSelection, setRowSelection] = useState({})
-    const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({})
+    const [columnVisibility, setColumnVisibility] =
+        useState<ColumnVisibilityState>({})
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: Math.max(0, (search.pageIndex ?? 1) - 1),
@@ -78,21 +95,20 @@ export function PlansTable({ search, navigate }: Props) {
 
     const debouncedFilters = useDebounce(filters, 500)
 
-    const queryKey = PLAN_KEYS.lists({
+    const {
+        data: tableData,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+        refetch,
+    } = usePlansPaginateQuery({
         sorting,
         filters: debouncedFilters,
         pagination,
     })
 
-    const { data: tableData, isLoading } = useQuery({
-        queryKey,
-        queryFn: () =>
-            fetchPaginatedPlans({
-                sorting,
-                filters: debouncedFilters,
-                pagination,
-            }),
-    })
+    const plans = tableData?.data ?? EMPTY_DATA
 
     const syncSearch = (patch: Partial<PlanSearch>) =>
         navigate({
@@ -103,7 +119,6 @@ export function PlansTable({ search, navigate }: Props) {
         const next = { ...filters, ...patch }
         setFilters(next)
         setPagination((current) => ({ ...current, pageIndex: 0 }))
-
         syncSearch({ ...next, pageIndex: 1 })
     }
 
@@ -123,7 +138,7 @@ export function PlansTable({ search, navigate }: Props) {
     const table = useTable({
         features: plansTableFeatures,
         columns,
-        data: tableData?.data ?? EMPTY_DATA,
+        data: plans,
         state: { sorting, columnVisibility, rowSelection, pagination },
         onSortingChange: (updater) => {
             const next =
@@ -149,17 +164,84 @@ export function PlansTable({ search, navigate }: Props) {
 
     return (
         <div className="space-y-4">
+            <PlansStats
+                plans={plans}
+                total={tableData?.total ?? 0}
+                isLoading={isLoading}
+            />
+
             <PlansTableToolbar
                 table={table}
                 filters={filters}
                 onChangeFilters={onChangeFilters}
+                isFetching={isFetching}
+                onRefresh={() => void refetch()}
+                onExport={() => downloadPlansCsv(plans)}
+                canExport={plans.length > 0}
             />
 
-            {isLoading ? (
+            {isError ? (
+                <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Could not load plans</AlertTitle>
+                    <AlertDescription className="flex flex-wrap items-center gap-3">
+                        <span>
+                            {error instanceof Error
+                                ? error.message
+                                : 'Please try again in a moment.'}
+                        </span>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => void refetch()}
+                        >
+                            Try again
+                        </Button>
+                    </AlertDescription>
+                </Alert>
+            ) : isLoading ? (
                 <DataTableSkeleton
-                    columns={table.getAllColumns() as unknown as Array<Column<any, any>>}
+                    columns={
+                        table.getAllColumns() as unknown as Array<Column<any, any>>
+                    }
                     rowCount={pagination.pageSize}
                 />
+            ) : plans.length === 0 ? (
+                <Empty className="border border-dashed py-12">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <CalendarRange />
+                        </EmptyMedia>
+                        <EmptyTitle>No plans found</EmptyTitle>
+                        <EmptyDescription>
+                            {hasActiveFiltersValue(filters)
+                                ? 'Try adjusting your search or filters.'
+                                : 'Create a plan to start tracking performance cycles.'}
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        {hasActiveFiltersValue(filters) ? (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                    onChangeFilters(EMPTY_PLAN_FILTERS)
+                                }
+                            >
+                                Clear filters
+                            </Button>
+                        ) : (
+                            <PermissionGuard
+                                permissions={[PERMISSIONS.CreatePlan]}
+                            >
+                                <Button size="sm" onClick={() => setOpen('add')}>
+                                    <Plus className="mr-1.5 h-3.5 w-3.5" />
+                                    Create plan
+                                </Button>
+                            </PermissionGuard>
+                        )}
+                    </EmptyContent>
+                </Empty>
             ) : (
                 <div className="rounded-md border">
                     <Table>
@@ -179,7 +261,9 @@ export function PlansTable({ search, navigate }: Props) {
                                             }
                                         >
                                             {header.isPlaceholder ? null : (
-                                                <table.FlexRender header={header} />
+                                                <table.FlexRender
+                                                    header={header}
+                                                />
                                             )}
                                         </TableHead>
                                     ))}
@@ -188,38 +272,27 @@ export function PlansTable({ search, navigate }: Props) {
                         </TableHeader>
 
                         <TableBody>
-                            {table.getRowModel().rows.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={
-                                            row.getIsSelected() && 'selected'
-                                        }
-                                        className="group/row"
-                                    >
-                                        {row.getAllCells().map((cell) => (
-                                            <TableCell
-                                                key={cell.id}
-                                                className={
-                                                    cell.column.columnDef.meta
-                                                        ?.className ?? ''
-                                                }
-                                            >
-                                                <table.FlexRender cell={cell} />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center"
-                                    >
-                                        No plans found.
-                                    </TableCell>
+                            {table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={
+                                        row.getIsSelected() && 'selected'
+                                    }
+                                    className="group/row"
+                                >
+                                    {row.getAllCells().map((cell) => (
+                                        <TableCell
+                                            key={cell.id}
+                                            className={
+                                                cell.column.columnDef.meta
+                                                    ?.className ?? ''
+                                            }
+                                        >
+                                            <table.FlexRender cell={cell} />
+                                        </TableCell>
+                                    ))}
                                 </TableRow>
-                            )}
+                            ))}
                         </TableBody>
                     </Table>
                 </div>
@@ -227,11 +300,24 @@ export function PlansTable({ search, navigate }: Props) {
 
             {isLoading ? (
                 <DataTablePaginationSkeleton />
-            ) : (
+            ) : !isError && plans.length > 0 ? (
                 <DataTablePagination
                     table={table as unknown as TableInstance<any, any>}
                 />
-            )}
+            ) : null}
+
+            <PlansBulkActions
+                table={table as unknown as TableInstance<any, any>}
+            />
         </div>
+    )
+}
+
+/** Checks whether any filter is active, for the empty-state message. */
+function hasActiveFiltersValue(filters: PlanFilters): boolean {
+    return Boolean(
+        filters.search.trim() ||
+            filters.created_by_ids.length ||
+            filters.status.length,
     )
 }

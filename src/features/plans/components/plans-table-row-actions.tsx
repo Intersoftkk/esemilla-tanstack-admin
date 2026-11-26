@@ -1,5 +1,5 @@
 // #/features/plans/components/plans-table-row-actions.tsx
-import { Edit, EllipsisVertical, Eye, Trash2 } from 'lucide-react'
+import { Edit, EllipsisVertical, Eye, Settings2, Trash2 } from 'lucide-react'
 import type { Row } from '@tanstack/react-table'
 
 import { Button } from '#/components/ui/button'
@@ -38,7 +38,7 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
 
             <DropdownMenuContent align="end" className="w-44">
                 <PermissionGuard
-                    permissions={[PERMISSIONS.ViewPerformanceCycle]}
+                    permissions={[PERMISSIONS.ViewPlan]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer"
@@ -55,7 +55,7 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
                 </PermissionGuard>
 
                 <PermissionGuard
-                    permissions={[PERMISSIONS.EditPerformanceCycle]}
+                    permissions={[PERMISSIONS.EditPlan]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer"
@@ -72,7 +72,24 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
                 </PermissionGuard>
 
                 <PermissionGuard
-                    permissions={[PERMISSIONS.DeletePerformanceCycle]}
+                    permissions={[PERMISSIONS.ManagePlanFeatures]}
+                >
+                    <DropdownMenuItem
+                        className="w-full cursor-pointer"
+                        onClick={() => {
+                            setCurrentRow(row.original)
+                            setOpen('features')
+                        }}
+                    >
+                        Features
+                        <DropdownMenuShortcut>
+                            <Settings2 size={16} />
+                        </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                </PermissionGuard>
+
+                <PermissionGuard
+                    permissions={[PERMISSIONS.DeletePlan]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer text-destructive focus:text-destructive"

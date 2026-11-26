@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
 
-type PlansDialogType = 'add' | 'view' | 'edit' | 'delete'
+type PlansDialogType = 'add' | 'view' | 'edit' | 'delete' | 'features'
 
 interface PlansContextType {
     open: PlansDialogType | null

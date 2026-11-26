@@ -3,6 +3,7 @@ import { PlansActionDialog } from '#/features/plans/components/dialogs/plans-act
 import { PlansDeleteDialog } from '#/features/plans/components/dialogs/plans-delete-dialog.tsx'
 import { usePlans } from '#/features/plans/context/plans-context.tsx'
 import { PlansViewDialog } from '#/features/plans/components/dialogs/plans-view-dialog.tsx'
+import { PlansFeaturesDialog } from '#/features/plans/components/dialogs/plans-features-dialog.tsx'
 
 /** Renders all dialogs controlled by the plans context. */
 export function PlansDialogs() {
@@ -47,6 +48,16 @@ export function PlansDialogs() {
                         open={open === 'delete'}
                         onOpenChange={() => {
                             setOpen('delete')
+                            clearRow()
+                        }}
+                        currentRow={currentRow}
+                    />
+
+                    <PlansFeaturesDialog
+                        key={`plans-features-${currentRow.id}`}
+                        open={open === 'features'}
+                        onOpenChange={() => {
+                            setOpen('features')
                             clearRow()
                         }}
                         currentRow={currentRow}

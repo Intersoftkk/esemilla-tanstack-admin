@@ -1,6 +1,12 @@
 // #/features/plans/server/plans.server.ts
 import { buildQueryParams } from '#/lib/query-builder.ts'
-import { asRecord, readText, unwrapEntity, unwrapList } from '#/lib/payload.ts'
+import {
+    asRecord,
+    readList,
+    readText,
+    unwrapEntity,
+    unwrapList,
+} from '#/lib/payload.ts'
 import type { PaginatedResponse } from '#/types'
 import { api } from '#/server/api.server.ts'
 
@@ -11,9 +17,11 @@ import type {
     PlanRecord,
     PlanStatus,
 } from '#/features/plans/types/plans.ts'
+import type { FeatureRecord } from '#/features/plans/types/features.ts'
 
-// The backend resource keeps its historical name after the UI rename.
-const RESOURCE = '/performance-cycle'
+// Laravel API resources for plans and their features.
+const RESOURCE = '/plans'
+const FEATURES_RESOURCE = '/features'
 
 const PLAN_STATUSES: PlanStatus[] = [
     'draft',
@@ -26,6 +34,20 @@ const PLAN_STATUSES: PlanStatus[] = [
 function normalizeStatus(value: unknown): PlanStatus {
     const status = readText(value)?.toLowerCase()
     return PLAN_STATUSES.find((item) => item === status) ?? 'draft'
+}
+
+/** Normalizes an API payload into a feature record. */
+export function normalizeFeature(value: unknown): FeatureRecord | null {
+    const record = asRecord(value)
+    const id = readText(record.id, record.uuid)
+    if (!id) return null
+
+    return {
+        id,
+        name: readText(record.name) ?? `Feature ${id}`,
+        code: readText(record.code, record.slug, record.key),
+        description: readText(record.description),
+    }
 }
 
 /** Normalizes an API payload into a plan record. */
@@ -53,6 +75,9 @@ export function normalizePlan(value: unknown): PlanRecord | null {
         start_date: readText(record.start_date, record.startDate),
         end_date: readText(record.end_date, record.endDate),
         status: normalizeStatus(record.status),
+        features: readList(record.features)
+            .map(normalizeFeature)
+            .filter((item): item is FeatureRecord => item !== null),
     }
 }
 
@@ -156,4 +181,52 @@ export async function fetchCompanies(): Promise<CompanyOption[]> {
         console.error('Failed to load companies for plans:', error)
         return []
     }
+}
+
+/** Fetches the feature catalog from the Laravel `features` resource. */
+export async function fetchFeatures(): Promise<FeatureRecord[]> {
+    const { data } = await api.get<unknown>(FEATURES_RESOURCE, {
+        params: { per_page: 100 },
+    })
+
+    return unwrapList(data)
+        .map(normalizeFeature)
+        .filter((item): item is FeatureRecord => item !== null)
+}
+
+/** Fetches the features currently assigned to a plan. */
+export async function fetchPlanFeatures(id: string): Promise<FeatureRecord[]> {
+    const { data } = await api.get<unknown>(
+        `${RESOURCE}/${encodeURIComponent(id)}`,
+        { params: { include: 'features' } },
+    )
+
+    const plan = normalizePlan(unwrapEntity(data) ?? data)
+    return plan?.features ?? []
+}
+
+/** Attaches features to a plan without removing existing ones. */
+export async function attachPlanFeatures(
+    id: string,
+    featureIds: string[],
+): Promise<PlanRecord> {
+    const { data } = await api.post<unknown>(
+        `${RESOURCE}/${encodeURIComponent(id)}/attach-features`,
+        { feature_ids: featureIds },
+    )
+
+    return normalizePlan(unwrapEntity(data) ?? data) ?? fetchPlan(id)
+}
+
+/** Replaces a plan's features with exactly the given list. */
+export async function syncPlanFeatures(
+    id: string,
+    featureIds: string[],
+): Promise<PlanRecord> {
+    const { data } = await api.post<unknown>(
+        `${RESOURCE}/${encodeURIComponent(id)}/sync-features`,
+        { feature_ids: featureIds },
+    )
+
+    return normalizePlan(unwrapEntity(data) ?? data) ?? fetchPlan(id)
 }

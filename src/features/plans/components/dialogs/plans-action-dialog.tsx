@@ -2,10 +2,10 @@
 import { CalendarRange, Edit, Loader, Plus } from 'lucide-react'
 import { Controller, useForm, type Control, type SubmitHandler } from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 import { Button } from '#/components/ui/button.tsx'
+import { Field, FieldError, FieldLabel } from '#/components/ui/field.tsx'
+import { Textarea } from '#/components/ui/textarea.tsx'
 import {
     Dialog,
     DialogClose,
@@ -19,14 +19,13 @@ import { ComboboxField } from '#/components/fields/combobox-field.tsx'
 import { DateField } from '#/components/fields/date-field.tsx'
 import { InputField } from '#/components/fields/input-field.tsx'
 import { SelectField } from '#/components/fields/select-field.tsx'
-import { PLAN_KEYS } from '#/features/plans/queries/plan.keys.ts'
 import { planStatusOptions } from '#/features/plans/data/data.ts'
 import { planSchema, type PlanFormData } from '#/features/plans/schema/plans-form.schema.ts'
 import {
-    createPlan,
-    fetchCompanies,
-    updatePlan,
-} from '#/features/plans/service/plans.service.ts'
+    useCompaniesQuery,
+    useCreatePlanMutation,
+    useUpdatePlanMutation,
+} from '#/features/plans/queries/plan.queries.ts'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
 import type { Option } from '#/types'
 
@@ -44,7 +43,6 @@ function toDateInput(value?: string | null): string {
 /** Dialog for creating or editing a plan. */
 export function PlansActionDialog({ currentRow, open, onOpenChange }: Props) {
     const isEditMode = Boolean(currentRow?.id)
-    const queryClient = useQueryClient()
 
     const form = useForm<PlanFormData>({
         resolver: standardSchemaResolver(planSchema),
@@ -62,33 +60,29 @@ export function PlansActionDialog({ currentRow, open, onOpenChange }: Props) {
         data: companies = [],
         isLoading: companiesLoading,
         isError: companiesError,
-    } = useQuery({
-        queryKey: PLAN_KEYS.companies(),
-        queryFn: fetchCompanies,
-    })
+    } = useCompaniesQuery()
 
     const companyOptions: Option[] = companies.map((company) => ({
         value: String(company.id),
         label: company.name ?? `Company ${company.id}`,
     }))
 
-    const mutation = useMutation({
-        mutationFn: (data: PlanFormData) =>
-            isEditMode && currentRow?.id
-                ? updatePlan(currentRow.id, data)
-                : createPlan(data),
-        onSuccess: () => {
-            form.reset()
-            void queryClient.invalidateQueries({ queryKey: PLAN_KEYS.all })
-            toast.success('Plan saved successfully.')
-            onOpenChange(false)
-        },
-        onError: (error: Error) => {
-            toast.error(error.message || 'Failed to save. Please try again.')
-        },
-    })
+    const closeDialog = () => {
+        form.reset()
+        onOpenChange(false)
+    }
 
-    const onSubmit: SubmitHandler<PlanFormData> = (data) => mutation.mutate(data)
+    const createMutation = useCreatePlanMutation({ onSuccess: closeDialog })
+    const updateMutation = useUpdatePlanMutation({ onSuccess: closeDialog })
+    const mutation = isEditMode ? updateMutation : createMutation
+
+    const onSubmit: SubmitHandler<PlanFormData> = (data) => {
+        if (isEditMode && currentRow?.id) {
+            updateMutation.mutate({ id: currentRow.id, payload: data })
+            return
+        }
+        createMutation.mutate(data)
+    }
 
     return (
         <Dialog
@@ -151,11 +145,30 @@ export function PlansActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <InputField
+                        <Controller
                             control={form.control}
                             name="description"
-                            label="Description"
-                            placeholder="Enter plan description"
+                            render={({ field, fieldState }) => (
+                                <Field
+                                    data-invalid={
+                                        fieldState.invalid ? 'true' : undefined
+                                    }
+                                >
+                                    <FieldLabel>Description</FieldLabel>
+                                    <Textarea
+                                        {...field}
+                                        rows={3}
+                                        value={field.value ?? ''}
+                                        placeholder="Enter plan description"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError>
+                                            {fieldState.error.message}
+                                        </FieldError>
+                                    )}
+                                </Field>
+                            )}
                         />
                     </div>
 
