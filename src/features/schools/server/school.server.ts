@@ -1,4 +1,3 @@
-import { PLAN_CATALOG } from "#/features/schools/config/plans.config.ts";
 import type {
 	OnboardSchoolPayload,
 	Plan,
@@ -90,9 +89,12 @@ export async function checkSlugAvailability(
 	slug: string,
 ): Promise<SlugAvailability> {
 	try {
-		const { data } = await api.get<unknown>("/owner/tenants/slug-availability", {
-			params: { slug },
-		});
+		const { data } = await api.get<unknown>(
+			"/owner/tenants/slug-availability",
+			{
+				params: { slug },
+			},
+		);
 		const entity = unwrapEntity(data) ?? {};
 		return {
 			available: Boolean(entity.available ?? true),
@@ -112,13 +114,8 @@ export async function checkSlugAvailability(
 }
 
 export async function fetchSchoolPlans(): Promise<Plan[]> {
-	try {
-		const { data } = await api.get<unknown>("/plans");
-		const parsed = unwrapList(data)
-			.map(normalizePlan)
-			.filter((item): item is Plan => item !== null);
-		return parsed.length > 0 ? parsed : PLAN_CATALOG;
-	} catch {
-		return PLAN_CATALOG;
-	}
+	const { data } = await api.get<unknown>("/plans");
+	return unwrapList(data)
+		.map(normalizePlan)
+		.filter((item): item is Plan => item !== null);
 }

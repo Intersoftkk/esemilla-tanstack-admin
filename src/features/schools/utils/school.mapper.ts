@@ -1,4 +1,3 @@
-import { getPlan, PLAN_CATALOG } from "#/features/schools/config/plans.config";
 import {
 	BILLING_CYCLES,
 	type BillingCycle,
@@ -284,13 +283,7 @@ export function normalizeSchool(input: unknown): School | null {
 	const id = firstText(raw.id, raw.uuid, raw.slug);
 	if (!id) return null;
 
-	const rawPlan = asRecord(raw.plan);
-	const plan =
-		normalizePlan(raw.plan) ??
-		getPlan(
-			PLAN_CATALOG,
-			firstText(raw.plan_id, raw.planId, rawPlan.slug, rawPlan.id),
-		);
+	const plan = normalizePlan(raw.plan);
 
 	const subdomain = firstText(raw.subdomain, raw.slug) ?? "";
 	const rawAddress = asRecord(raw.address);

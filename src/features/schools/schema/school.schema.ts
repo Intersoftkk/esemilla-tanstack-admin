@@ -166,21 +166,6 @@ export const schoolSettingsSchema = z.object({
 
 export type SchoolSettingsFormValues = z.infer<typeof schoolSettingsSchema>;
 
-/** Owner/contact details edited from the school settings tab. */
-export const schoolContactSchema = z.object({
-	name: z.string().trim().max(120, "Name is too long"),
-	email: z
-		.string()
-		.trim()
-		.refine(
-			(value) => value === "" || z.string().email().safeParse(value).success,
-			"Enter a valid email address",
-		),
-	phone: phoneSchema,
-});
-
-export type SchoolContactValues = z.infer<typeof schoolContactSchema>;
-
 export const schoolIdSchema = z
 	.string()
 	.trim()

@@ -35,14 +35,6 @@ import {
 import { Textarea } from "#/components/ui/textarea.tsx";
 import { SchoolAddressFields } from "#/features/schools/components/school-address-fields.tsx";
 import {
-	DEFAULT_PLAN_ID,
-	getPlan,
-	monthlyEquivalent,
-	priceForCycle,
-	recommendPlan,
-	yearlySavingPercent,
-} from "#/features/schools/config/plans.config.ts";
-import {
 	BILLING_CYCLE_OPTIONS,
 	CURRENCY_OPTIONS,
 	getSchoolTypeMeta,
@@ -63,12 +55,17 @@ import type {
 } from "#/features/schools/types/school.types.ts";
 import {
 	buildOnboardingDefaults,
+	getPlan,
+	monthlyEquivalent,
+	recommendPlan,
+	yearlySavingPercent,
 	mapOnboardingErrorField,
 	toOnboardPayload,
 } from "#/features/schools/utils/onboarding.utils.ts";
 import {
 	formatMoney,
 	PORTAL_ROOT_DOMAIN,
+	priceForCycle,
 	slugify,
 } from "#/features/schools/utils/school.utils.ts";
 import { cn } from "#/lib/utils.ts";
@@ -130,7 +127,6 @@ export function OnboardingWizard({ onCreated }: OnboardingWizardProps) {
 						lastName: user.name?.split(" ").slice(1).join(" ") ?? "",
 					}
 				: null,
-			DEFAULT_PLAN_ID,
 		),
 	);
 
@@ -138,7 +134,7 @@ export function OnboardingWizard({ onCreated }: OnboardingWizardProps) {
 		if (plans.length > 0 && !getPlan(plans, values.planId)) {
 			setValues((prev) => ({
 				...prev,
-				planId: plans[0]?.id ?? DEFAULT_PLAN_ID,
+				planId: plans[0]?.id ?? "",
 			}));
 		}
 	}, [plans, values.planId]);
@@ -202,12 +198,27 @@ export function OnboardingWizard({ onCreated }: OnboardingWizardProps) {
 	};
 
 	const handleNext = () => {
+		if (step === 3 && (!selectedPlan || plansQuery.isError)) {
+			setErrors((prev) => ({
+				...prev,
+				planId: "Choose an available plan to continue.",
+			}));
+			return;
+		}
 		if (!validateStep(step)) return;
 		setStep((current) => Math.min(5, current + 1));
 	};
 
 	const handleSubmit = async () => {
 		setFormError(null);
+		if (!selectedPlan || plansQuery.isError) {
+			setStep(3);
+			setErrors((prev) => ({
+				...prev,
+				planId: "Choose an available plan to continue.",
+			}));
+			return;
+		}
 		const parsed = onboardingSchema.safeParse(values);
 		if (!parsed.success) {
 			const nextErrors: Record<string, string> = {};
@@ -509,6 +520,32 @@ export function OnboardingWizard({ onCreated }: OnboardingWizardProps) {
 								))}
 							</div>
 
+							{plansQuery.isLoading && (
+								<p className="text-sm text-muted-foreground">Loading plans…</p>
+							)}
+							{plansQuery.isError && (
+								<div
+									className="flex items-center gap-3 text-sm text-destructive"
+									role="alert"
+								>
+									Unable to load plans.{" "}
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => void plansQuery.refetch()}
+									>
+										Try again
+									</Button>
+								</div>
+							)}
+							{!plansQuery.isLoading &&
+								!plansQuery.isError &&
+								plans.length === 0 && (
+									<p className="text-sm text-muted-foreground">
+										No plans are available. Create a plan before onboarding a
+										school.
+									</p>
+								)}
 							<div className="grid gap-4 md:grid-cols-3">
 								{plans.map((plan) => {
 									const selected = values.planId === plan.id;

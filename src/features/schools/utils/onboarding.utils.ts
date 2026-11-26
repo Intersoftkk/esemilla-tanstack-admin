@@ -8,6 +8,8 @@ import type {
 	SchoolSettingsFormValues,
 } from "#/features/schools/schema/school.schema";
 import type {
+	BillingCycle,
+	Plan,
 	OnboardSchoolPayload,
 	School,
 	UpdateSchoolPayload,
@@ -34,7 +36,6 @@ export interface OnboardingOwner {
 /** Seeds the onboarding wizard with sensible defaults and the owner details. */
 export function buildOnboardingDefaults(
 	user: OnboardingOwner | null,
-	defaultPlanId: string,
 ): OnboardingFormValues {
 	const phone = user?.phone || user?.mobile || "";
 
@@ -57,7 +58,7 @@ export function buildOnboardingDefaults(
 		},
 		currency: DEFAULT_CURRENCY,
 
-		planId: defaultPlanId,
+		planId: "",
 		billingCycle: "monthly",
 		expectedStudents: "750",
 		expectedBranches: "1",
@@ -210,4 +211,47 @@ const API_FIELD_MAP: Record<string, string> = {
 
 export function mapOnboardingErrorField(field: string): string | null {
 	return API_FIELD_MAP[field] ?? API_FIELD_MAP[field.toLowerCase()] ?? null;
+}
+
+/** Find a plan in the API-provided catalogue. */
+export function getPlan(
+	plans: Plan[],
+	planId: string | null | undefined,
+): Plan | null {
+	if (!planId) return null;
+	return (
+		plans.find((plan) => plan.id === planId || plan.slug === planId) ?? null
+	);
+}
+
+/** Normalised monthly cost, useful for comparing yearly vs monthly. */
+export function monthlyEquivalent(plan: Plan, cycle: BillingCycle): number {
+	return cycle === "yearly" ? plan.price.yearly / 12 : plan.price.monthly;
+}
+
+/** Percentage saved by paying yearly (0 when there is no yearly discount). */
+export function yearlySavingPercent(plan: Plan): number {
+	const fullYear = plan.price.monthly * 12;
+	if (!fullYear || plan.price.yearly >= fullYear) return 0;
+	return Math.round(((fullYear - plan.price.yearly) / fullYear) * 100);
+}
+
+/**
+ * Suggests the cheapest plan that comfortably fits the expected size of the
+ * institution, so the plan step can highlight a sensible default.
+ */
+export function recommendPlan(
+	plans: Plan[],
+	expectedStudents: number,
+	expectedBranches: number,
+): Plan | null {
+	const fits = plans
+		.filter(
+			(plan) =>
+				plan.limits.students >= expectedStudents &&
+				plan.limits.branches >= expectedBranches,
+		)
+		.sort((a, b) => a.price.monthly - b.price.monthly);
+
+	return fits[0] ?? plans[plans.length - 1] ?? null;
 }

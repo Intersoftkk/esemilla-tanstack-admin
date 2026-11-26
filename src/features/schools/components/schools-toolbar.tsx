@@ -1,4 +1,4 @@
-import { Download, LayoutGrid, List, Search } from "lucide-react";
+import { Download, LayoutGrid, List, Search, RefreshCw, X } from "lucide-react";
 
 import { Button } from "#/components/ui/button.tsx";
 import { Input } from "#/components/ui/input.tsx";
@@ -26,6 +26,9 @@ interface SchoolsToolbarProps {
 	onViewChange: (view: "grid" | "table") => void;
 	canExport: boolean;
 	onExportCsv: () => void;
+	onRefresh: () => void;
+	isFetching: boolean;
+	onReset: () => void;
 }
 
 export function SchoolsToolbar({
@@ -39,6 +42,9 @@ export function SchoolsToolbar({
 	onViewChange,
 	canExport,
 	onExportCsv,
+	onRefresh,
+	isFetching,
+	onReset,
 }: SchoolsToolbarProps) {
 	return (
 		<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -86,6 +92,11 @@ export function SchoolsToolbar({
 						))}
 					</SelectContent>
 				</Select>
+				{(search || status !== "all" || sort !== "newest") && (
+					<Button variant="ghost" size="sm" className="h-8" onClick={onReset}>
+						Reset filters <X className="ml-1.5 h-3.5 w-3.5" />
+					</Button>
+				)}
 			</div>
 
 			<div className="flex items-center gap-2">
@@ -110,6 +121,18 @@ export function SchoolsToolbar({
 					</Button>
 				</div>
 
+				<Button
+					variant="outline"
+					size="sm"
+					className="h-8"
+					onClick={onRefresh}
+					disabled={isFetching}
+				>
+					<RefreshCw
+						className={`mr-1.5 h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`}
+					/>{" "}
+					Refresh
+				</Button>
 				<Button
 					type="button"
 					variant="outline"
