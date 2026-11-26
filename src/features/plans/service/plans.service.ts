@@ -8,7 +8,9 @@ import type {
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
 import {
     attachPlanFeaturesFn,
+    createFeatureFn,
     createPlanFn,
+    deleteFeatureFn,
     deletePlanFn,
     deletePlansFn,
     getCompaniesFn,
@@ -16,8 +18,10 @@ import {
     getPlanFeaturesFn,
     getPlansFn,
     syncPlanFeaturesFn,
+    updateFeatureFn,
     updatePlanFn,
 } from '#/features/plans/server/plans.functions.ts'
+import type { FeatureFormData } from '#/features/plans/schema/features.schema.ts'
 import type { FeatureRecord } from '#/features/plans/types/features.ts'
 
 /** Client-side wrappers around the server functions for the plans feature. */
@@ -83,4 +87,22 @@ export async function syncFeatures(
     featureIds: string[],
 ): Promise<void> {
     await syncPlanFeaturesFn({ data: { id, feature_ids: featureIds } })
+}
+
+/** Client wrapper for creating a catalog feature. */
+export async function createFeature(payload: FeatureFormData): Promise<void> {
+    await createFeatureFn({ data: payload })
+}
+
+/** Client wrapper for updating a catalog feature. */
+export async function updateFeature(
+    id: string,
+    payload: FeatureFormData,
+): Promise<void> {
+    await updateFeatureFn({ data: { id, payload } })
+}
+
+/** Client wrapper for deleting a catalog feature. */
+export async function deleteFeature(id: string): Promise<void> {
+    await deleteFeatureFn({ data: id })
 }

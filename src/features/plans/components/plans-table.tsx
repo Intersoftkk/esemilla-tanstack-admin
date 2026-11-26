@@ -207,7 +207,7 @@ export function PlansTable({ search, navigate }: Props) {
                     rowCount={pagination.pageSize}
                 />
             ) : plans.length === 0 ? (
-                <Empty className="border border-dashed py-12">
+                <Empty className="rounded-2xl border border-dashed bg-gradient-to-b from-muted/25 to-background py-14">
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
                             <CalendarRange />
@@ -243,9 +243,9 @@ export function PlansTable({ search, navigate }: Props) {
                     </EmptyContent>
                 </Empty>
             ) : (
-                <div className="rounded-md border">
+                <div className="overflow-hidden rounded-xl border bg-card shadow-xs">
                     <Table>
-                        <TableHeader>
+                        <TableHeader className="[&_th]:h-11 [&_th]:text-[11px] [&_th]:font-semibold [&_th]:tracking-wider [&_th]:text-muted-foreground [&_th]:uppercase">
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <TableRow
                                     key={headerGroup.id}

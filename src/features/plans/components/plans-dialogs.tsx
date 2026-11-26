@@ -4,6 +4,7 @@ import { PlansDeleteDialog } from '#/features/plans/components/dialogs/plans-del
 import { usePlans } from '#/features/plans/context/plans-context.tsx'
 import { PlansViewDialog } from '#/features/plans/components/dialogs/plans-view-dialog.tsx'
 import { PlansFeaturesDialog } from '#/features/plans/components/dialogs/plans-features-dialog.tsx'
+import { FeaturesManagerDialog } from '#/features/plans/components/dialogs/features-manager-dialog.tsx'
 
 /** Renders all dialogs controlled by the plans context. */
 export function PlansDialogs() {
@@ -15,6 +16,11 @@ export function PlansDialogs() {
 
     return (
         <>
+            <FeaturesManagerDialog
+                open={open === 'feature-manager'}
+                onOpenChange={() => setOpen('feature-manager')}
+            />
+
             <PlansActionDialog
                 key="plans-add"
                 open={open === 'add'}

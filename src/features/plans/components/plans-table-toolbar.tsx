@@ -47,7 +47,7 @@ export function PlansTableToolbar({
     const showReset = hasActiveFilters(filters) || hasSorting
 
     return (
-        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-3 rounded-xl border bg-card/60 p-3 shadow-xs lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-1 flex-wrap items-center gap-2">
                 <SearchField
                     value={filters.search}

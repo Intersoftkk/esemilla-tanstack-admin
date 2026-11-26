@@ -2,14 +2,19 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 
-import { planFeaturesSchema } from '#/features/plans/schema/features.schema.ts'
+import {
+    featureSchema,
+    planFeaturesSchema,
+} from '#/features/plans/schema/features.schema.ts'
 import { planSchema } from '#/features/plans/schema/plans-form.schema.ts'
 import {
     plansListParamsSchema,
 } from '#/features/plans/schema/plans-search.schema.ts'
 import {
     attachPlanFeatures,
+    createFeatureRequest,
     createPlanRequest,
+    deleteFeatureRequest,
     deletePlanRequest,
     fetchCompanies,
     fetchFeatures,
@@ -17,6 +22,7 @@ import {
     fetchPlanFeatures,
     fetchPlans,
     syncPlanFeatures,
+    updateFeatureRequest,
     updatePlanRequest,
 } from '#/features/plans/server/plans.server.ts'
 
@@ -92,3 +98,26 @@ export const attachPlanFeaturesFn = createServerFn({ method: 'POST' })
 export const syncPlanFeaturesFn = createServerFn({ method: 'POST' })
     .validator((data: unknown) => planFeaturesInputSchema.parse(data))
     .handler(async ({ data }) => syncPlanFeatures(data.id, data.feature_ids))
+
+
+const updateFeatureSchema = z.object({
+    id: planIdSchema,
+    payload: featureSchema,
+})
+
+/** Server function: create a catalog feature. */
+export const createFeatureFn = createServerFn({ method: 'POST' })
+    .validator((data: unknown) => featureSchema.parse(data))
+    .handler(async ({ data }) => createFeatureRequest(data))
+
+/** Server function: update a catalog feature. */
+export const updateFeatureFn = createServerFn({ method: 'POST' })
+    .validator((data: unknown) => updateFeatureSchema.parse(data))
+    .handler(async ({ data }) =>
+        updateFeatureRequest(data.id, data.payload),
+    )
+
+/** Server function: delete a catalog feature. */
+export const deleteFeatureFn = createServerFn({ method: 'POST' })
+    .validator((data: unknown) => planIdSchema.parse(data))
+    .handler(async ({ data: id }) => deleteFeatureRequest(id))

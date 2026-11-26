@@ -10,6 +10,7 @@ import {
 import type { PaginatedResponse } from '#/types'
 import { api } from '#/server/api.server.ts'
 
+import type { FeatureFormData } from '#/features/plans/schema/features.schema.ts'
 import type { PlansListParams } from '#/features/plans/schema/plans-search.schema.ts'
 import type { PlanFormData } from '#/features/plans/schema/plans-form.schema.ts'
 import type {
@@ -229,4 +230,34 @@ export async function syncPlanFeatures(
     )
 
     return normalizePlan(unwrapEntity(data) ?? data) ?? fetchPlan(id)
+}
+
+
+/** Creates a feature in the catalog. */
+export async function createFeatureRequest(
+    payload: FeatureFormData,
+): Promise<FeatureRecord> {
+    const { data } = await api.post<unknown>(FEATURES_RESOURCE, payload)
+    const feature = normalizeFeature(unwrapEntity(data) ?? data)
+    if (!feature) throw new Error('Created feature could not be parsed.')
+    return feature
+}
+
+/** Updates a feature in the catalog. */
+export async function updateFeatureRequest(
+    id: string,
+    payload: FeatureFormData,
+): Promise<FeatureRecord> {
+    const { data } = await api.put<unknown>(
+        `${FEATURES_RESOURCE}/${encodeURIComponent(id)}`,
+        payload,
+    )
+    const feature = normalizeFeature(unwrapEntity(data) ?? data)
+    if (!feature) throw new Error('Updated feature could not be parsed.')
+    return feature
+}
+
+/** Deletes a feature from the catalog. */
+export async function deleteFeatureRequest(id: string): Promise<void> {
+    await api.delete(`${FEATURES_RESOURCE}/${encodeURIComponent(id)}`)
 }
