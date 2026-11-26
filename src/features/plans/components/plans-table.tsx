@@ -207,7 +207,7 @@ export function PlansTable({ search, navigate }: Props) {
                     rowCount={pagination.pageSize}
                 />
             ) : plans.length === 0 ? (
-                <Empty className="rounded-2xl border border-dashed bg-gradient-to-b from-muted/25 to-background py-14">
+                <Empty className="rounded-2xl border border-dashed bg-linear-to-b from-muted/25 to-background py-14">
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
                             <CalendarRange />
