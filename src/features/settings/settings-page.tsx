@@ -15,7 +15,7 @@ export function SettingsPage() {
 
             {/* Profile Section */}
             <div
-                className="bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl p-6 space-y-6">
+                className="bg-white border border-zinc-200/80 rounded-2xl p-6 space-y-6">
                 <h3 className="text-base font-bold text-foreground flex items-center gap-2">
                     <User className="w-4.5 h-4.5 text-primary"/> Profile Information
                 </h3>
