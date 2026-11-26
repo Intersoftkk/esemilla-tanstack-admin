@@ -9,3 +9,13 @@ export const planFeaturesSchema = z.object({
 })
 
 export type PlanFeaturesInput = z.infer<typeof planFeaturesSchema>
+
+/** Payload for creating or editing a feature in the catalog. */
+export const featureSchema = z.object({
+    name: z.string().min(1, 'Feature name is required'),
+    code: z.string().optional(),
+    description: z.string().optional(),
+})
+
+export type FeatureFormData = z.infer<typeof featureSchema>
+

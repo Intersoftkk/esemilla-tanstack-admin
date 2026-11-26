@@ -3,11 +3,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { PLAN_KEYS } from '#/features/plans/queries/plan.keys.ts'
+import type { FeatureFormData } from '#/features/plans/schema/features.schema.ts'
 import type { PlanFormData } from '#/features/plans/schema/plans-form.schema.ts'
 import type { PlansListParams } from '#/features/plans/schema/plans-search.schema.ts'
 import {
     attachFeatures,
+    createFeature,
     createPlan,
+    deleteFeature,
     deletePlan,
     deletePlans,
     fetchCompanies,
@@ -15,6 +18,7 @@ import {
     fetchPaginatedPlans,
     fetchPlanFeatures,
     syncFeatures,
+    updateFeature,
     updatePlan,
 } from '#/features/plans/service/plans.service.ts'
 
@@ -112,10 +116,11 @@ export function useDeletePlansMutation(options?: PlanMutationOptions) {
 
 
 /** Feature catalog available to plans. */
-export function useFeaturesQuery() {
+export function useFeaturesQuery(enabled = true) {
     return useQuery({
         queryKey: PLAN_KEYS.features(),
         queryFn: fetchFeatures,
+        enabled,
         staleTime: 1000 * 60 * 5,
     })
 }
@@ -180,5 +185,70 @@ export function useSyncPlanFeaturesMutation(options?: PlanMutationOptions) {
         },
         onError: (error) =>
             toast.error(getErrorMessage(error, 'Could not sync features.')),
+    })
+}
+
+
+/** Creates a feature in the catalog. */
+export function useCreateFeatureMutation(options?: PlanMutationOptions) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (payload: FeatureFormData) => createFeature(payload),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: PLAN_KEYS.features(),
+                }),
+                queryClient.invalidateQueries({ queryKey: PLAN_KEYS.all }),
+            ])
+            toast.success('Feature created.')
+            options?.onSuccess?.()
+        },
+        onError: (error) =>
+            toast.error(getErrorMessage(error, 'Could not create feature.')),
+    })
+}
+
+/** Updates a feature in the catalog. */
+export function useUpdateFeatureMutation(options?: PlanMutationOptions) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: ({ id, payload }: { id: string; payload: FeatureFormData }) =>
+            updateFeature(id, payload),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: PLAN_KEYS.features(),
+                }),
+                queryClient.invalidateQueries({ queryKey: PLAN_KEYS.all }),
+            ])
+            toast.success('Feature updated.')
+            options?.onSuccess?.()
+        },
+        onError: (error) =>
+            toast.error(getErrorMessage(error, 'Could not update feature.')),
+    })
+}
+
+/** Deletes a feature from the catalog. */
+export function useDeleteFeatureMutation(options?: PlanMutationOptions) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (id: string) => deleteFeature(id),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: PLAN_KEYS.features(),
+                }),
+                queryClient.invalidateQueries({ queryKey: PLAN_KEYS.all }),
+            ])
+            toast.success('Feature deleted.')
+            options?.onSuccess?.()
+        },
+        onError: (error) =>
+            toast.error(getErrorMessage(error, 'Could not delete feature.')),
     })
 }
