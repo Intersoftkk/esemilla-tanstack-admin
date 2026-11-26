@@ -32,7 +32,7 @@ export function SchoolsTable({ schools, onDelete }: SchoolsTableProps) {
 		<Card className="overflow-hidden shadow-xs">
 			<CardContent className="p-0">
 				<Table>
-					<TableHeader>
+					<TableHeader className="[&_th]:h-11 [&_th]:text-[11px] [&_th]:font-semibold [&_th]:tracking-wider [&_th]:text-muted-foreground [&_th]:uppercase">
 						<TableRow>
 							<TableHead className="pl-4">School</TableHead>
 							<TableHead>Portal</TableHead>
@@ -81,7 +81,7 @@ export function SchoolsTable({ schools, onDelete }: SchoolsTableProps) {
 									</TableCell>
 									<TableCell>
 										<Badge variant="secondary" className="text-[11px]">
-											{school.plan?.name ?? "Standard"}
+											{school.plan?.name ?? "—"}
 										</Badge>
 									</TableCell>
 									<TableCell>

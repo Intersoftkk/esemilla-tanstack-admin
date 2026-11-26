@@ -4,11 +4,11 @@ import { env } from "#/env";
 
 import { SCHOOL_STATUS_META } from "#/features/schools/config/school.config";
 import type {
+	BillingCycle,
 	Plan,
 	School,
 	SchoolStats,
 	SchoolStatus,
-	SchoolType,
 	SchoolUsage,
 } from "#/features/schools/types/school.types";
 
@@ -118,10 +118,6 @@ export function portalUrl(school: School): string | null {
 export function usagePercent(used: number, limit: number): number {
 	if (!Number.isFinite(limit) || limit <= 0) return 0;
 	return Math.min(100, Math.round((used / limit) * 100));
-}
-
-export function isOverLimit(used: number, limit: number): boolean {
-	return limit > 0 && used > limit;
 }
 
 /** `students` consumed vs. the plan's student allowance. */
@@ -280,15 +276,7 @@ export function getApiErrorMessage(error: unknown, fallback: string): string {
 	return fallback;
 }
 
-/** Type guard used to keep `form.setError` calls type-safe. */
-export function isSchoolType(value: string): value is SchoolType {
-	return [
-		"school",
-		"college",
-		"university",
-		"kindergarten",
-		"training-center",
-		"coaching",
-		"other",
-	].includes(value);
+/** Price billed today for the selected cycle. */
+export function priceForCycle(plan: Plan, cycle: BillingCycle): number {
+	return cycle === "yearly" ? plan.price.yearly : plan.price.monthly;
 }

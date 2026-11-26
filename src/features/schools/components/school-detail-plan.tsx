@@ -11,7 +11,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "#/components/ui/card.tsx";
-import { priceForCycle } from "#/features/schools/config/plans.config.ts";
 import { BILLING_CYCLE_OPTIONS } from "#/features/schools/config/school.config.ts";
 import {
 	useSchoolPlansQuery,
@@ -21,7 +20,10 @@ import type {
 	BillingCycle,
 	School,
 } from "#/features/schools/types/school.types.ts";
-import { formatMoney } from "#/features/schools/utils/school.utils.ts";
+import {
+	formatMoney,
+	priceForCycle,
+} from "#/features/schools/utils/school.utils.ts";
 import { cn } from "#/lib/utils.ts";
 
 export function SchoolDetailPlan({ school }: { school: School }) {
@@ -59,6 +61,27 @@ export function SchoolDetailPlan({ school }: { school: School }) {
 				</div>
 			</div>
 
+			{plansQuery.isLoading && (
+				<p className="text-sm text-muted-foreground">Loading plans…</p>
+			)}
+			{plansQuery.isError && (
+				<div
+					className="flex items-center gap-3 text-sm text-destructive"
+					role="alert"
+				>
+					Unable to load plans.{" "}
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => void plansQuery.refetch()}
+					>
+						Try again
+					</Button>
+				</div>
+			)}
+			{!plansQuery.isLoading && !plansQuery.isError && plans.length === 0 && (
+				<p className="text-sm text-muted-foreground">No plans are available.</p>
+			)}
 			<div className="grid gap-4 md:grid-cols-3">
 				{plans.map((plan) => {
 					const isCurrent =
