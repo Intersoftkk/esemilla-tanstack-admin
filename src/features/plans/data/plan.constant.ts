@@ -1,4 +1,4 @@
-// #/features/plans/data/data.ts
+// #/features/plans/data/plan.constant.ts
 export const planStatusOptions = [
     { label: 'Draft', value: 'draft' },
     { label: 'Active', value: 'active' },

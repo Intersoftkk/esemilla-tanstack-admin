@@ -28,7 +28,7 @@ export default function PlansPage({ search, navigate }: PlansPageProps) {
     )
 }
 
-/** Page body rendered inside the plans provider. */
+/** Page body rendered inside the plans' provider. */
 function PlansPageContent({ search, navigate }: PlansPageProps) {
     const { setOpen } = usePlans()
 

@@ -19,7 +19,7 @@ import { ComboboxField } from '#/components/fields/combobox-field.tsx'
 import { DateField } from '#/components/fields/date-field.tsx'
 import { InputField } from '#/components/fields/input-field.tsx'
 import { SelectField } from '#/components/fields/select-field.tsx'
-import { planStatusOptions } from '#/features/plans/data/data.ts'
+import { planStatusOptions } from '#/features/plans/data/plan.constant'
 import { planSchema, type PlanFormData } from '#/features/plans/schema/plans-form.schema.ts'
 import {
     useCompaniesQuery,

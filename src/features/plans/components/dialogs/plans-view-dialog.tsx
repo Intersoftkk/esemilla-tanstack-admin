@@ -13,7 +13,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '#/components/ui/dialog'
-import { planStatusOptions } from '#/features/plans/data/data.ts'
+import { planStatusOptions } from '#/features/plans/data/plan.constant'
 import { usePlanFeaturesQuery } from '#/features/plans/queries/plan.queries.ts'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
 

@@ -7,7 +7,7 @@ import { DataTableViewOptions } from '#/components/datatable/data-table-view-opt
 import { Button } from '#/components/ui/button.tsx'
 import { SearchField } from '#/components/fields/search-field.tsx'
 import type { plansTableFeatures } from '#/features/plans/config/plans.config.ts'
-import { planStatusOptions } from '#/features/plans/data/data.ts'
+import { planStatusOptions } from '#/features/plans/data/plan.constant'
 import {
     EMPTY_PLAN_FILTERS,
     type PlanFilters,
