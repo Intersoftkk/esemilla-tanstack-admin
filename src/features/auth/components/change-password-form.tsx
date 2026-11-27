@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button } from "#/components/ui/button";
 import { Field, FieldError, FieldLabel } from "#/components/ui/field";
 import { Input } from "#/components/ui/input";
+import { PasswordStrength } from "#/features/auth/components/password-strength.tsx";
 import { changePasswordSchema } from "#/features/auth/schema/change-password.schema";
 import { changePasswordFn } from "#/features/auth/server/auth.functions";
 import { cn } from "#/lib/utils";
@@ -155,6 +156,9 @@ export function ChangePasswordForm() {
 										)}
 									</button>
 								</div>
+								{config.name === "newPassword" ? (
+									<PasswordStrength password={field.state.value} />
+								) : null}
 								{message && <FieldError>{message}</FieldError>}
 							</Field>
 						);
