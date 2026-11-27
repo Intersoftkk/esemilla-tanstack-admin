@@ -11,8 +11,10 @@ import {
 	readText,
 	unwrapPaginated,
 } from "#/lib/payload.ts";
-import { adminApi } from "#/server/admin-endpoints.ts";
 import { api } from "#/server/api.server.ts";
+
+/* Laravel API resource for custom domains. */
+const RESOURCE = "/v1/admin/domains";
 
 /** Normalizes a custom-domain record from the backend payload. */
 export function normalizeDomain(value: unknown): DomainRecord | null {
@@ -47,7 +49,7 @@ export function normalizeDomain(value: unknown): DomainRecord | null {
 export async function fetchDomains(
 	params: AdminListParams,
 ): Promise<AdminListResult<DomainRecord>> {
-	const { data } = await api.get<unknown>(adminApi.domains.index, {
+	const { data } = await api.get<unknown>(RESOURCE, {
 		params: buildAdminListQuery(params),
 	});
 
