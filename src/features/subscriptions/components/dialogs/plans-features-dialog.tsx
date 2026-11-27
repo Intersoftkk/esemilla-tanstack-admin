@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from '#/components/ui/dialog.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
-import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config.ts'
 import { PermissionGuard } from '#/features/auth/components/permission-guard.tsx'
 import {
     useAttachPlanFeaturesMutation,
@@ -130,7 +130,7 @@ export function PlansFeaturesDialog({ currentRow, open, onOpenChange }: Props) {
                     </DialogClose>
 
                     <PermissionGuard
-                        permissions={[PERMISSIONS.ManagePlanFeatures]}
+                        permissions={[PLATFORM_PERMISSIONS.PlatformPlanEdit]}
                     >
                         <Button
                             variant="outline"

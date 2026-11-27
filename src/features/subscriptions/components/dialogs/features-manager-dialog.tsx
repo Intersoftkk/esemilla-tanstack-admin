@@ -15,7 +15,7 @@ import {
 } from '#/components/ui/dialog.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
-import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config.ts'
 import { PermissionGuard } from '#/features/auth/components/permission-guard.tsx'
 import {
     useCreateFeatureMutation,
@@ -85,7 +85,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
 
                     <div className="space-y-4">
                         <PermissionGuard
-                            permissions={[PERMISSIONS.CreateFeature]}
+                            permissions={[PLATFORM_PERMISSIONS.PlatformFeatureCreate]}
                         >
                             <div className="grid gap-2 rounded-lg border bg-muted/30 p-3 sm:grid-cols-[1fr_1fr_auto]">
                                 <Input
@@ -249,7 +249,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                                                 <div className="flex gap-1">
                                                     <PermissionGuard
                                                         permissions={[
-                                                            PERMISSIONS.EditFeature,
+                                                            PLATFORM_PERMISSIONS.PlatformFeatureEdit,
                                                         ]}
                                                     >
                                                         <Button
@@ -268,7 +268,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                                                     </PermissionGuard>
                                                     <PermissionGuard
                                                         permissions={[
-                                                            PERMISSIONS.DeleteFeature,
+                                                            PLATFORM_PERMISSIONS.PlatformFeatureDelete,
                                                         ]}
                                                     >
                                                         <Button

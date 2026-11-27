@@ -6,7 +6,7 @@ import { Trash2 } from 'lucide-react'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { DataTableBulkActions } from '#/components/datatable/data-table-bulk-actions.tsx'
 import { Button } from '#/components/ui/button.tsx'
-import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config.ts'
 import { PermissionGuard } from '#/features/auth/components/permission-guard.tsx'
 import { useDeletePlansMutation } from '#/features/plans/queries/plan.queries.ts'
 
@@ -34,7 +34,7 @@ export function PlansBulkActions({ table }: PlansBulkActionsProps) {
         <>
             <DataTableBulkActions table={table} entityName="plan">
                 <PermissionGuard
-                    permissions={[PERMISSIONS.DeletePlan]}
+                    permissions={[PLATFORM_PERMISSIONS.PlatformPlanDelete]}
                 >
                     <Button
                         variant="destructive"

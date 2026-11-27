@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
 import { PermissionGuard } from '#/features/auth/components/permission-guard'
-import { PERMISSIONS } from '#/config/permissions.config'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { plansTableFeatures } from '#/features/plans/config/plans.config.ts'
 import { usePlans } from '#/features/plans/context/plans-context.tsx'
 import type { PlanRecord } from '#/features/plans/types/plans.ts'
@@ -38,7 +38,7 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
 
             <DropdownMenuContent align="end" className="w-44">
                 <PermissionGuard
-                    permissions={[PERMISSIONS.ViewPlan]}
+                    permissions={[PLATFORM_PERMISSIONS.PlatformPlanView]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer"
@@ -55,7 +55,7 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
                 </PermissionGuard>
 
                 <PermissionGuard
-                    permissions={[PERMISSIONS.EditPlan]}
+                    permissions={[PLATFORM_PERMISSIONS.PlatformPlanEdit]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer"
@@ -72,7 +72,7 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
                 </PermissionGuard>
 
                 <PermissionGuard
-                    permissions={[PERMISSIONS.ManagePlanFeatures]}
+                    permissions={[PLATFORM_PERMISSIONS.PlatformPlanEdit]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer"
@@ -89,7 +89,7 @@ export function PlansTableRowActions({ row }: PlansTableRowActionsProps) {
                 </PermissionGuard>
 
                 <PermissionGuard
-                    permissions={[PERMISSIONS.DeletePlan]}
+                    permissions={[PLATFORM_PERMISSIONS.PlatformPlanDelete]}
                 >
                     <DropdownMenuItem
                         className="w-full cursor-pointer text-destructive focus:text-destructive"

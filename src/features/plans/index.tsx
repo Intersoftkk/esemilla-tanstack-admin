@@ -3,7 +3,7 @@ import { CalendarRange, Sparkles } from 'lucide-react'
 
 import { PageHeader } from '#/components/page-header.tsx'
 import { Button } from '#/components/ui/button.tsx'
-import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config.ts'
 import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PlansDialogs } from '#/features/plans/components/plans-dialogs.tsx'
 import { PlansPrimaryButtons } from '#/features/plans/components/plans-primary-buttons.tsx'
@@ -42,12 +42,12 @@ function PlansPageContent({ search, navigate }: PlansPageProps) {
                 actions={
                     <>
                         <PermissionGuard
-                            permissions={[PERMISSIONS.CreatePlan]}
+                            permissions={[PLATFORM_PERMISSIONS.PlatformPlanCreate]}
                         >
                             <PlansPrimaryButtons />
                         </PermissionGuard>
                         <PermissionGuard
-                            permissions={[PERMISSIONS.ViewFeature]}
+                            permissions={[PLATFORM_PERMISSIONS.PlatformFeatureView]}
                         >
                             <Button
                                 variant="outline"
