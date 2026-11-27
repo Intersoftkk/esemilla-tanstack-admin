@@ -4,14 +4,12 @@ import { forgotPasswordSchema } from "#/features/auth/schema/forgot-password.sch
 import { otpSchema } from "#/features/auth/schema/otp.schema";
 import { resetPasswordSchema } from "#/features/auth/schema/reset-password.schema";
 import { signInSchema } from "#/features/auth/schema/sign-in.schema";
-import { signUpSchema } from "#/features/auth/schema/sign-up.schema";
 import {
 	changePasswordRequest,
 	fetchSession,
 	forgotPasswordRequest,
 	loginRequest,
 	logoutRequest,
-	registerRequest,
 	resetPasswordRequest,
 	sendOtpRequest,
 	verifyOtpRequest,
@@ -29,13 +27,6 @@ export const signInFn = createServerFn({ method: "POST" })
 	.handler(async ({ data }): Promise<User | null> => {
 		const result = await loginRequest(data);
 		return result.user;
-	});
-
-export const signUpFn = createServerFn({ method: "POST" })
-	.validator((data: unknown) => signUpSchema.parse(data))
-	.handler(async ({ data }) => {
-		const result = await registerRequest(data);
-		return { user: result.user };
 	});
 
 export const signOutFn = createServerFn({ method: "POST" }).handler(

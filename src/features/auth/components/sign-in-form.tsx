@@ -285,26 +285,6 @@ export function SignInForm({ search }: SignInFormProps) {
 					)}
 				</form.Subscribe>
 			</form>
-
-			<p className="mt-6 text-center text-sm text-muted-foreground">
-				New to Esemilla?{" "}
-				<Link
-					to="/sign-up"
-					className="font-medium text-primary underline-offset-2 hover:underline"
-				>
-					Create an account
-				</Link>
-			</p>
-
-			<p className="mt-3 text-center text-[11px] text-muted-foreground">
-				Trouble signing in?{" "}
-				<a
-					href="mailto:support@esemilla.com"
-					className="underline underline-offset-2 hover:text-foreground"
-				>
-					Contact support
-				</a>
-			</p>
 		</div>
 	);
 }
