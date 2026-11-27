@@ -8,9 +8,6 @@ import {
 import { asRecord, readText, unwrapPaginated } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for the audit trail. */
-const RESOURCE = "/v1/admin/audit-logs";
-
 /** Drops the PHP namespace so the UI can show `Tenant` instead of `App\\Models\\Tenant`. */
 function shortClassName(value: string | null): string | null {
 	if (!value) return null;
@@ -63,7 +60,7 @@ export function normalizeAuditLog(value: unknown): AuditLogRecord | null {
 export async function fetchAuditLogs(
 	params: AdminListParams,
 ): Promise<AdminListResult<AuditLogRecord>> {
-	const { data } = await api.get<unknown>(RESOURCE, {
+	const { data } = await api.get<unknown>("/v1/admin/audit-logs", {
 		params: buildAdminListQuery(params),
 	});
 
@@ -77,7 +74,7 @@ export async function fetchAuditLogsForRecord(
 	id: string,
 ): Promise<Array<AuditLogRecord>> {
 	const { data } = await api.get<unknown>(
-		`${RESOURCE}/record/${encodeURIComponent(type)}/${encodeURIComponent(id)}`,
+		`/v1/admin/audit-logs/record/${encodeURIComponent(type)}/${encodeURIComponent(id)}`,
 	);
 	const { items } = unwrapPaginated(data, normalizeAuditLog);
 	return items;

@@ -14,9 +14,6 @@ import {
 } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for central owners. */
-const RESOURCE = "/v1/admin/owners";
-
 /** Normalizes a central owner profile from the backend payload. */
 export function normalizeOwner(value: unknown): OwnerRecord | null {
 	const record = asRecord(value);
@@ -48,7 +45,7 @@ export function normalizeOwner(value: unknown): OwnerRecord | null {
 export async function fetchOwners(
 	params: AdminListParams,
 ): Promise<AdminListResult<OwnerRecord>> {
-	const { data } = await api.get<unknown>(RESOURCE, {
+	const { data } = await api.get<unknown>("/v1/admin/owners", {
 		params: buildAdminListQuery(params),
 	});
 

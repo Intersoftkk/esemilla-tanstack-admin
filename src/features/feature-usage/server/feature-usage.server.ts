@@ -16,9 +16,6 @@ import {
 } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for feature usage counters. */
-const RESOURCE = "/v1/admin/feature-usage";
-
 function normalizeRef(
 	value: unknown,
 	fallbackName?: string,
@@ -71,7 +68,7 @@ export function normalizeFeatureUsage(
 export async function fetchFeatureUsages(
 	params: AdminListParams,
 ): Promise<AdminListResult<FeatureUsageRecord>> {
-	const { data } = await api.get<unknown>(RESOURCE, {
+	const { data } = await api.get<unknown>("/v1/admin/feature-usage", {
 		params: buildAdminListQuery(params),
 	});
 
@@ -81,5 +78,5 @@ export async function fetchFeatureUsages(
 
 /** `POST /v1/admin/feature-usage/{featureUsage}/reset` */
 export async function resetFeatureUsageRequest(id: string): Promise<void> {
-	await api.post(`${RESOURCE}/${encodeURIComponent(id)}/reset`);
+	await api.post(`/v1/admin/feature-usage/${encodeURIComponent(id)}/reset`);
 }

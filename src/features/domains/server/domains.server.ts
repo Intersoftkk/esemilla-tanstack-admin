@@ -13,9 +13,6 @@ import {
 } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for custom domains. */
-const RESOURCE = "/v1/admin/domains";
-
 /** Normalizes a custom-domain record from the backend payload. */
 export function normalizeDomain(value: unknown): DomainRecord | null {
 	const record = asRecord(value);
@@ -49,7 +46,7 @@ export function normalizeDomain(value: unknown): DomainRecord | null {
 export async function fetchDomains(
 	params: AdminListParams,
 ): Promise<AdminListResult<DomainRecord>> {
-	const { data } = await api.get<unknown>(RESOURCE, {
+	const { data } = await api.get<unknown>("/v1/admin/domains", {
 		params: buildAdminListQuery(params),
 	});
 

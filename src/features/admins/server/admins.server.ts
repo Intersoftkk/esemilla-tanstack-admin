@@ -13,9 +13,6 @@ import {
 } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for central admins. */
-const RESOURCE = "/v1/admin/admins";
-
 function normalizeRoleName(value: unknown): string | null {
 	if (typeof value === "string") return value.trim() || null;
 	const record = asRecord(value);
@@ -45,7 +42,7 @@ export function normalizeAdmin(value: unknown): AdminRecord | null {
 export async function fetchAdmins(
 	params: AdminListParams,
 ): Promise<AdminListResult<AdminRecord>> {
-	const { data } = await api.get<unknown>(RESOURCE, {
+	const { data } = await api.get<unknown>("/v1/admin/admins", {
 		params: buildAdminListQuery(params),
 	});
 
