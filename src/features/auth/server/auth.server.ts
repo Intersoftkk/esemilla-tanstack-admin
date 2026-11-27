@@ -24,7 +24,7 @@ export async function fetchSession(): Promise<User | null> {
 		});
 
 		if (res.status === 401) {
-			await session.destroy();
+			session.destroy();
 			return null;
 		}
 
