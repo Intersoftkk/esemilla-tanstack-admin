@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countPaymentsByStatus} from '#/features/payments/utils/payments.utils.ts'
-import type {PaymentRecord} from '#/features/payments/types/payments.ts'
+import type {PaymentRecord} from '#/features/payments/types/payments.type.ts'
 
 interface PaymentsStatsProps {
     payments: PaymentRecord[]

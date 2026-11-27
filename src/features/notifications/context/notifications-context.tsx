@@ -1,7 +1,7 @@
 // #/features/notifications/context/notifications-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 
 type NotificationsDialogType =
     | 'add'

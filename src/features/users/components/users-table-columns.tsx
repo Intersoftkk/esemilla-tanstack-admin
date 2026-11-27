@@ -11,7 +11,7 @@ import { UsersTableRowActions } from '#/features/users/components/users-table-ro
 import type {
     UserRecord,
     UserStatus,
-} from '#/features/users/types/users.ts'
+} from '#/features/users/types/users.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

@@ -45,7 +45,7 @@ import {
     type PlanFilters,
     type PlanSearch,
 } from '#/features/plans/schema/plans-search.schema.ts'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 import { downloadPlansCsv } from '#/features/plans/utils/plans.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

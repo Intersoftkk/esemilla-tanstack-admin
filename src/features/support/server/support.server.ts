@@ -16,7 +16,7 @@ import type {
     SupportRecord,
     TicketPriority,
     TicketStatus,
-} from '#/features/support/types/support.ts'
+} from '#/features/support/types/support.type.ts'
 
 // Laravel API resource for tenant support tickets.
 const RESOURCE = '/support'

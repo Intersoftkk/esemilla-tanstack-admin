@@ -26,7 +26,7 @@ import {
     useCreatePaymentMutation,
     useUpdatePaymentMutation,
 } from '#/features/payments/queries/payment.queries.ts'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

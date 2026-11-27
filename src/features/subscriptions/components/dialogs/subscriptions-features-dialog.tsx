@@ -22,7 +22,7 @@ import {
     useSubscriptionFeaturesQuery,
     useSyncSubscriptionFeaturesMutation,
 } from '#/features/subscriptions/queries/subscription.queries.ts'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 
 interface Props {
     currentRow: SubscriptionRecord | null

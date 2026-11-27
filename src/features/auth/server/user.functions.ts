@@ -15,7 +15,7 @@ import {
   deleteUserRequest,
   fetchPaginatedUsers,
 } from '#/features/auth/server/user.server.ts'
-import type { User } from '#/features/auth/types/user.types.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 import type { PaginatedResponse } from '#/types'
 
 export const getPaginatedUsersFn = createServerFn({ method: 'GET' })

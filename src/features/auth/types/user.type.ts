@@ -1,9 +1,9 @@
-// #/features/auth/types/user.types.ts
+// #/features/auth/types/user.type.ts
 
 import type {
   Role,
   PermissionRecord,
-} from '#/features/auth/types/role-permission.types.ts'
+} from '#/features/auth/types/role-permission.type.ts'
 
 export interface User {
   id: string

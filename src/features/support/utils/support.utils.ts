@@ -3,7 +3,7 @@ import { saveBlob } from '#/lib/download.ts'
 import type {
     SupportRecord,
     TicketStatus,
-} from '#/features/support/types/support.ts'
+} from '#/features/support/types/support.type.ts'
 
 /** Quotes a CSV cell and escapes embedded double quotes. */
 function escapeCsv(value: string | number | null | undefined): string {

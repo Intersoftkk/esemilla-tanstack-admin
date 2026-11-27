@@ -1,7 +1,7 @@
 import type {
 	NotificationRecord,
 	NotificationsResponse,
-} from "#/features/notification/types/notification.ts";
+} from "#/features/notification/types/notification.type.ts";
 import { api } from "#/server/api.server.ts";
 import type { QueryBuilderInput } from "#/utils/query-builder.ts";
 import { buildQueryString } from "#/utils/query-builder.ts";

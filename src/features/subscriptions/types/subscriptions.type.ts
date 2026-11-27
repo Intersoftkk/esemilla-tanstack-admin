@@ -1,5 +1,5 @@
-// #/features/subscriptions/types/subscriptions.ts
-import type { FeatureRecord } from '#/features/subscriptions/types/features.ts'
+// #/features/subscriptions/types/subscriptions.type.ts
+import type { FeatureRecord } from '#/features/subscriptions/types/features.type.ts'
 
 export type SubscriptionStatus = 'draft' | 'active' | 'completed' | 'archived'
 

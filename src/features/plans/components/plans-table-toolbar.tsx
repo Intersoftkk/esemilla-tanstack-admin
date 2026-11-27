@@ -12,7 +12,7 @@ import {
     EMPTY_PLAN_FILTERS,
     type PlanFilters,
 } from '#/features/plans/schema/plans-search.schema.ts'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 
 interface Props {
     table: Table<typeof plansTableFeatures, PlanRecord>

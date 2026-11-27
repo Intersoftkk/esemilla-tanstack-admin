@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
 	BILLING_CYCLES,
 	SCHOOL_TYPES,
-} from "#/features/schools/types/school.types";
+} from "#/features/schools/types/schools.type";
 
 const PHONE_REGEX = /^\+?[\d\s\-()]{7,20}$/;
 const DOMAIN_REGEX =

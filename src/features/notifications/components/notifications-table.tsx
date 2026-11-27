@@ -43,7 +43,7 @@ import {
     type NotificationFilters,
     type NotificationSearch,
 } from '#/features/notifications/schema/notifications-search.schema.ts'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 import { downloadNotificationsCsv } from '#/features/notifications/utils/notifications.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

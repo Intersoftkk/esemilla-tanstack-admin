@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countSubscriptionsByStatus} from '#/features/subscriptions/utils/subscriptions.utils.ts'
-import type {SubscriptionRecord} from '#/features/subscriptions/types/subscriptions.ts'
+import type {SubscriptionRecord} from '#/features/subscriptions/types/subscriptions.type.ts'
 
 interface SubscriptionsStatsProps {
     subscriptions: SubscriptionRecord[]

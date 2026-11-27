@@ -1,13 +1,13 @@
-// #/features/payments/types/payments.ts
+// #/features/role-permissions/types/role-permissions.type.ts
 
-export type PaymentStatus = 'draft' | 'active' | 'completed' | 'archived'
+export type RolePermissionStatus = 'draft' | 'active' | 'completed' | 'archived'
 
 export interface CompanyRecord {
     id: string | number
     name?: string | null
 }
 
-export interface PaymentRecord {
+export interface RolePermissionRecord {
     id: string
     company_id: string
     company?: CompanyRecord | null
@@ -15,7 +15,7 @@ export interface PaymentRecord {
     description?: string | null
     start_date?: string | null
     end_date?: string | null
-    status: PaymentStatus
+    status: RolePermissionStatus
 }
 
 export interface CompanyOption {

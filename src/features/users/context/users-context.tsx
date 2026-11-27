@@ -1,7 +1,7 @@
 // #/features/users/context/users-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 
 type UsersDialogType =
     | 'add'

@@ -21,7 +21,7 @@ import type {
     SupportRecord,
     TicketPriority,
     TicketStatus,
-} from '#/features/support/types/support.ts'
+} from '#/features/support/types/support.type.ts'
 
 interface Props {
     currentRow: SupportRecord | null

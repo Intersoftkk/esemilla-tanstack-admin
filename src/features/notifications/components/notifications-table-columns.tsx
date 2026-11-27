@@ -11,7 +11,7 @@ import { NotificationsTableRowActions } from '#/features/notifications/component
 import type {
     NotificationRecord,
     NotificationStatus,
-} from '#/features/notifications/types/notifications.ts'
+} from '#/features/notifications/types/notifications.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

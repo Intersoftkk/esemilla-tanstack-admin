@@ -15,7 +15,7 @@ import type {
     CompanyOption,
     RolePermissionRecord,
     RolePermissionStatus,
-} from '#/features/role-permissions/types/role-permissions.ts'
+} from '#/features/role-permissions/types/role-permissions.type.ts'
 
 // Laravel API resource for rolePermissions.
 const RESOURCE = '/role-permissions'

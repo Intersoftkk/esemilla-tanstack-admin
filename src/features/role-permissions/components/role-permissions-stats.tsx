@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countRolePermissionsByStatus} from '#/features/role-permissions/utils/role-permissions.utils.ts'
-import type {RolePermissionRecord} from '#/features/role-permissions/types/role-permissions.ts'
+import type {RolePermissionRecord} from '#/features/role-permissions/types/role-permissions.type.ts'
 
 interface RolePermissionsStatsProps {
     rolePermissions: RolePermissionRecord[]

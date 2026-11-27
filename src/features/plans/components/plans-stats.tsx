@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countPlansByStatus} from '#/features/plans/utils/plans.utils.ts'
-import type {PlanRecord} from '#/features/plans/types/plans.ts'
+import type {PlanRecord} from '#/features/plans/types/plans.type.ts'
 
 interface PlansStatsProps {
     plans: PlanRecord[]

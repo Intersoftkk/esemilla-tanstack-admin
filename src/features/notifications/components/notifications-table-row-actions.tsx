@@ -12,7 +12,7 @@ import {
 } from '#/components/ui/dropdown-menu'
 import type { notificationsTableFeatures } from '#/features/notifications/config/notifications.config.ts'
 import { useNotifications } from '#/features/notifications/context/notifications-context.tsx'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 
 interface NotificationsTableRowActionsProps {
     row: Row<typeof notificationsTableFeatures, NotificationRecord>

@@ -26,7 +26,7 @@ import {
     useCreateNotificationMutation,
     useUpdateNotificationMutation,
 } from '#/features/notifications/queries/notification.queries.ts'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

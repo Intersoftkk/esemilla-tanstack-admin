@@ -31,8 +31,8 @@ import type {
   PermissionRecord,
   Role,
   TargetType,
-} from '#/features/auth/types/role-permission.types.ts'
-import type { User } from '#/features/auth/types/user.types.ts'
+} from '#/features/auth/types/role-permission.type.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 import type { Option } from '#/types'
 
 import type { TargetTypeOption } from '#/components/fields/target-type-field.tsx'

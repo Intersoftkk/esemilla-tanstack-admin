@@ -37,7 +37,7 @@ import {
     useCreateSupportMutation,
     useUpdateSupportMutation,
 } from '#/features/support/queries/support.queries.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

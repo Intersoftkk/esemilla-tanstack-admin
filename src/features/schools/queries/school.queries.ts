@@ -18,7 +18,7 @@ import type {
 	SchoolListFilters,
 	SchoolStatus,
 	UpdateSchoolPayload,
-} from "#/features/schools/types/school.types.ts";
+} from "#/features/schools/types/schools.type.ts";
 import { getApiErrorMessage } from "#/features/schools/utils/school.utils.ts";
 
 export function useSchoolsQuery(filters?: SchoolListFilters) {

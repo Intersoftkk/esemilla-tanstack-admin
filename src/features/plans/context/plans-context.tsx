@@ -1,7 +1,7 @@
 // #/features/plans/context/plans-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 
 type PlansDialogType =
     | 'add'

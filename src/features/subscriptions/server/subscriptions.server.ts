@@ -17,8 +17,8 @@ import type {
     CompanyOption,
     SubscriptionRecord,
     SubscriptionStatus,
-} from '#/features/subscriptions/types/subscriptions.ts'
-import type { FeatureRecord } from '#/features/subscriptions/types/features.ts'
+} from '#/features/subscriptions/types/subscriptions.type.ts'
+import type { FeatureRecord } from '#/features/subscriptions/types/features.type.ts'
 
 // Laravel API resources for subscriptions and their features.
 const RESOURCE = '/subscriptions'

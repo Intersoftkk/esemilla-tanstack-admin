@@ -11,7 +11,7 @@ import { InvoicesTableRowActions } from '#/features/invoices/components/invoices
 import type {
     InvoiceRecord,
     InvoiceStatus,
-} from '#/features/invoices/types/invoices.ts'
+} from '#/features/invoices/types/invoices.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

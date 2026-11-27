@@ -12,7 +12,7 @@ import {
     EMPTY_PAYMENT_FILTERS,
     type PaymentFilters,
 } from '#/features/payments/schema/payments-search.schema.ts'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 
 interface Props {
     table: Table<typeof paymentsTableFeatures, PaymentRecord>

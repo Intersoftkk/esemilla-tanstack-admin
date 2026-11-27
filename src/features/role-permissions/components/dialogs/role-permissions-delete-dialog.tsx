@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeleteRolePermissionMutation } from '#/features/role-permissions/queries/role-permission.queries.ts'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 
 interface Props {
     open: boolean

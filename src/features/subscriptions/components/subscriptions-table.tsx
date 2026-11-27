@@ -45,7 +45,7 @@ import {
     type SubscriptionFilters,
     type SubscriptionSearch,
 } from '#/features/subscriptions/schema/subscriptions-search.schema.ts'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 import { downloadSubscriptionsCsv } from '#/features/subscriptions/utils/subscriptions.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

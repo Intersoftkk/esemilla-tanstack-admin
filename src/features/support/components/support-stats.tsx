@@ -5,7 +5,7 @@ import { Card, CardContent } from '#/components/ui/card.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 import { cn } from '#/lib/utils.ts'
 import { countSupportByStatus } from '#/features/support/utils/support.utils.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 interface SupportStatsProps {
     support: SupportRecord[]

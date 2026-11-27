@@ -1,6 +1,6 @@
 import { Badge } from "#/components/ui/badge.tsx";
 import { SCHOOL_STATUS_META } from "#/features/schools/config/school.config.ts";
-import type { SchoolStatus } from "#/features/schools/types/school.types.ts";
+import type { SchoolStatus } from "#/features/schools/types/schools.type.ts";
 import { cn } from "#/lib/utils.ts";
 
 export function SchoolStatusBadge({ status }: { status: SchoolStatus }) {

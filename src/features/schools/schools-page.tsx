@@ -18,7 +18,7 @@ import {
 	useSchoolsQuery,
 	useUpdateSchoolStatusMutation,
 } from "#/features/schools/queries/school.queries.ts";
-import type { School } from "#/features/schools/types/school.types.ts";
+import type { School } from "#/features/schools/types/schools.type.ts";
 import {
 	downloadCsv,
 	schoolsToCsv,

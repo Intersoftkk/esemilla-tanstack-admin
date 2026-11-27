@@ -1,4 +1,4 @@
-// src/features/schools/types/school.types.ts
+// #/features/schools/types/schools.type.ts
 
 /**
  * Lifecycle of a business workspace.

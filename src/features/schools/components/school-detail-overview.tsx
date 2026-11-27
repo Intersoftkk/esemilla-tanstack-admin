@@ -20,7 +20,7 @@ import {
 } from "#/components/ui/card.tsx";
 import { Progress } from "#/components/ui/progress.tsx";
 import { getSchoolTypeMeta } from "#/features/schools/config/school.config.ts";
-import type { School } from "#/features/schools/types/school.types.ts";
+import type { School } from "#/features/schools/types/schools.type.ts";
 import {
 	copyToClipboard,
 	formatSchoolDate,

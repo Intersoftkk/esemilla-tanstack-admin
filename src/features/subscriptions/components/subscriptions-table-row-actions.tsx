@@ -14,7 +14,7 @@ import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { subscriptionsTableFeatures } from '#/features/subscriptions/config/subscriptions.config.ts'
 import { useSubscriptions } from '#/features/subscriptions/context/subscriptions-context.tsx'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 
 interface SubscriptionsTableRowActionsProps {
     row: Row<typeof subscriptionsTableFeatures, SubscriptionRecord>

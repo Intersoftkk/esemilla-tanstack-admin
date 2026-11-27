@@ -22,7 +22,7 @@ import {
 import type {
 	NotificationRecord,
 	NotificationsResponse,
-} from "#/features/notification/types/notification.ts";
+} from "#/features/notification/types/notification.type.ts";
 import { usePrivateChannel } from "#/hooks/use-echo.ts";
 
 export function NotificationDropdown() {

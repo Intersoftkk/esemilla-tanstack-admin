@@ -12,7 +12,7 @@ import {
     EMPTY_SUBSCRIPTION_FILTERS,
     type SubscriptionFilters,
 } from '#/features/subscriptions/schema/subscriptions-search.schema.ts'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 
 interface Props {
     table: Table<typeof subscriptionsTableFeatures, SubscriptionRecord>

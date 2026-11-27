@@ -1,4 +1,4 @@
-// #/features/support/types/support.ts
+// #/features/support/types/support.type.ts
 
 export type TicketStatus = 'open' | 'pending' | 'resolved' | 'closed'
 

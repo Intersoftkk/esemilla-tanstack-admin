@@ -1,4 +1,4 @@
-// #/features/users/types/users.ts
+// #/features/users/types/users.type.ts
 
 export type UserStatus = 'draft' | 'active' | 'completed' | 'archived'
 

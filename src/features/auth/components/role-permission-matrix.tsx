@@ -5,7 +5,7 @@
 import type {
   GroupedPermissions,
   PermissionRecord,
-} from '#/features/auth/types/role-permission.types.ts'
+} from '#/features/auth/types/role-permission.type.ts'
 import { RolePermissionModuleCard } from '#/features/auth/components/role-permission-module-card.tsx'
 
 interface RolePermissionMatrixProps {

@@ -13,7 +13,7 @@ import type {
 	OnboardSchoolPayload,
 	School,
 	UpdateSchoolPayload,
-} from "#/features/schools/types/school.types";
+} from "#/features/schools/types/schools.type";
 
 function trimmed(value: string): string {
 	return value.trim();

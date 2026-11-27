@@ -14,7 +14,7 @@ import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { rolePermissionsTableFeatures } from '#/features/role-permissions/config/role-permissions.config.ts'
 import { useRolePermissions } from '#/features/role-permissions/context/role-permissions-context.tsx'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 
 interface RolePermissionsTableRowActionsProps {
     row: Row<typeof rolePermissionsTableFeatures, RolePermissionRecord>

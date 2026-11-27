@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countNotificationsByStatus} from '#/features/notifications/utils/notifications.utils.ts'
-import type {NotificationRecord} from '#/features/notifications/types/notifications.ts'
+import type {NotificationRecord} from '#/features/notifications/types/notifications.type.ts'
 
 interface NotificationsStatsProps {
     notifications: NotificationRecord[]

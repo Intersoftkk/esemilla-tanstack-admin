@@ -1,6 +1,6 @@
 // #/features/role-permissions/utils/role-permissions.utils.ts
 import { saveBlob } from '#/lib/download.ts'
-import type { RolePermissionRecord, RolePermissionStatus } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord, RolePermissionStatus } from '#/features/role-permissions/types/role-permissions.type.ts'
 
 /** Quotes a CSV cell and escapes embedded double quotes. */
 function escapeCsv(value: string | number | null | undefined): string {

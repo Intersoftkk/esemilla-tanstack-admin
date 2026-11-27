@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '#/types'
 
 import type { PaymentFormData } from '#/features/payments/schema/payments-form.schema.ts'
 import type { PaymentsListParams } from '#/features/payments/schema/payments-search.schema.ts'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 import {
     createPaymentFn,
     deletePaymentFn,

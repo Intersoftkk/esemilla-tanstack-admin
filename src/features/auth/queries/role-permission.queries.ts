@@ -10,7 +10,7 @@ import {
   getPaginatedRolePermissionsFn,
 } from '#/features/auth/server/role-permission.functions'
 import type { PaginatedResponse } from '#/types'
-import type { RolePermission } from '#/features/auth/types/role-permission.types'
+import type { RolePermission } from '#/features/auth/types/role-permission.type'
 import type { RolePermissionSearchInput } from '#/features/auth/schema/role-permission.schema'
 
 type QOpts<TRes, TData, TParams = void> = Omit<

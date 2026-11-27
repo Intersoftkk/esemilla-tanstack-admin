@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeleteNotificationMutation } from '#/features/notifications/queries/notification.queries.ts'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 
 interface Props {
     open: boolean

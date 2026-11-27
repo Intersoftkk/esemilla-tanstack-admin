@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '#/types'
 
 import type { NotificationFormData } from '#/features/notifications/schema/notifications-form.schema.ts'
 import type { NotificationsListParams } from '#/features/notifications/schema/notifications-search.schema.ts'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 import {
     createNotificationFn,
     deleteNotificationFn,

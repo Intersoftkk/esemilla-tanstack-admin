@@ -1,7 +1,7 @@
 // #/features/role-permissions/context/role-permissions-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 
 type RolePermissionsDialogType =
     | 'add'

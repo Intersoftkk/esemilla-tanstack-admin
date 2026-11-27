@@ -14,7 +14,7 @@ import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { plansTableFeatures } from '#/features/plans/config/plans.config.ts'
 import { usePlans } from '#/features/plans/context/plans-context.tsx'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 
 interface PlansTableRowActionsProps {
     row: Row<typeof plansTableFeatures, PlanRecord>

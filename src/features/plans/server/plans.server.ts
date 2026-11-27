@@ -17,8 +17,8 @@ import type {
     CompanyOption,
     PlanRecord,
     PlanStatus,
-} from '#/features/plans/types/plans.ts'
-import type { FeatureRecord } from '#/features/plans/types/features.ts'
+} from '#/features/plans/types/plans.type.ts'
+import type { FeatureRecord } from '#/features/plans/types/features.type.ts'
 
 // Laravel API resources for plans and their features.
 const RESOURCE = '/plans'

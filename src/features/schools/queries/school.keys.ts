@@ -1,4 +1,4 @@
-import type { SchoolListFilters } from "#/features/schools/types/school.types.ts";
+import type { SchoolListFilters } from "#/features/schools/types/schools.type.ts";
 
 export const SCHOOL_KEYS = {
 	all: ["schools"] as const,

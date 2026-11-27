@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '#/types'
 
 import type { RolePermissionFormData } from '#/features/role-permissions/schema/role-permissions-form.schema.ts'
 import type { RolePermissionsListParams } from '#/features/role-permissions/schema/role-permissions-search.schema.ts'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 import {
     createRolePermissionFn,
     deleteRolePermissionFn,

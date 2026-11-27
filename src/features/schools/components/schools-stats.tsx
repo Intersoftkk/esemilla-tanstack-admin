@@ -2,7 +2,7 @@ import { Building2, CheckCircle2, Globe, GraduationCap } from "lucide-react";
 
 import { Card, CardContent } from "#/components/ui/card.tsx";
 import { Skeleton } from "#/components/ui/skeleton.tsx";
-import type { School } from "#/features/schools/types/school.types.ts";
+import type { School } from "#/features/schools/types/schools.type.ts";
 import {
 	computeSchoolStats,
 	formatCompactNumber,

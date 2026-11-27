@@ -1,6 +1,6 @@
 // #/features/notifications/utils/notifications.utils.ts
 import { saveBlob } from '#/lib/download.ts'
-import type { NotificationRecord, NotificationStatus } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord, NotificationStatus } from '#/features/notifications/types/notifications.type.ts'
 
 /** Quotes a CSV cell and escapes embedded double quotes. */
 function escapeCsv(value: string | number | null | undefined): string {

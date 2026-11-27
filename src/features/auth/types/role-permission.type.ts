@@ -1,6 +1,6 @@
-// #/features/role-permission/types/role-permission.ts
+// #/features/auth/types/role-permission.type.ts
 
-import type { User } from '#/features/auth/types/user.types.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 
 export type TargetType = 'role' | 'user'
 

@@ -36,7 +36,7 @@ import {
 import type {
 	School,
 	SchoolStatus,
-} from "#/features/schools/types/school.types.ts";
+} from "#/features/schools/types/schools.type.ts";
 import {
 	copyToClipboard,
 	formatCompactNumber,

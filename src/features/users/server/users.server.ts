@@ -15,7 +15,7 @@ import type {
     CompanyOption,
     UserRecord,
     UserStatus,
-} from '#/features/users/types/users.ts'
+} from '#/features/users/types/users.type.ts'
 
 // Laravel API resource for users.
 const RESOURCE = '/users'

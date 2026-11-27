@@ -26,7 +26,7 @@ import {
     useCreateUserMutation,
     useUpdateUserMutation,
 } from '#/features/users/queries/user.queries.ts'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

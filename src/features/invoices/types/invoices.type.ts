@@ -1,5 +1,5 @@
-// #/features/invoices/types/invoices.ts
-import type { FeatureRecord } from '#/features/invoices/types/features.ts'
+// #/features/invoices/types/invoices.type.ts
+import type { FeatureRecord } from '#/features/invoices/types/features.type.ts'
 
 export type InvoiceStatus = 'draft' | 'active' | 'completed' | 'archived'
 

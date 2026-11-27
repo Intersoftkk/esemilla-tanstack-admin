@@ -26,7 +26,7 @@ import {
     useCreateSubscriptionMutation,
     useUpdateSubscriptionMutation,
 } from '#/features/subscriptions/queries/subscription.queries.ts'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

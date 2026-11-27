@@ -12,7 +12,7 @@ import type {
     SupportRecord,
     TicketPriority,
     TicketStatus,
-} from '#/features/support/types/support.ts'
+} from '#/features/support/types/support.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

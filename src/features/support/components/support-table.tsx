@@ -43,7 +43,7 @@ import {
     type SupportFilters,
     type SupportSearch,
 } from '#/features/support/schema/support-search.schema.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 import { downloadSupportCsv } from '#/features/support/utils/support.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

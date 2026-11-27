@@ -3,7 +3,7 @@
 import { api } from '#/server/api.server.ts'
 import { buildQueryString } from '#/utils/query-builder.ts'
 import type { QueryBuilderInput } from '#/utils/query-builder.ts'
-import type { User } from '#/features/auth/types/user.types.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 import type { UserCreateInput } from '#/features/auth/schema/user.schema.ts'
 import type { PaginatedResponse } from '#/types'
 

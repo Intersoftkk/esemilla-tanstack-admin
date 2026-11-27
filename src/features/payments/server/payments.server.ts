@@ -15,7 +15,7 @@ import type {
     CompanyOption,
     PaymentRecord,
     PaymentStatus,
-} from '#/features/payments/types/payments.ts'
+} from '#/features/payments/types/payments.type.ts'
 
 // Laravel API resource for payments.
 const RESOURCE = '/payments'

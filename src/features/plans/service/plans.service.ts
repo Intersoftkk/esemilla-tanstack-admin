@@ -5,7 +5,7 @@ import type { PlanFormData } from '#/features/plans/schema/plans-form.schema.ts'
 import type {
     PlansListParams,
 } from '#/features/plans/schema/plans-search.schema.ts'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 import {
     attachPlanFeaturesFn,
     createFeatureFn,
@@ -22,7 +22,7 @@ import {
     updatePlanFn,
 } from '#/features/plans/server/plans.functions.ts'
 import type { FeatureFormData } from '#/features/plans/schema/features.schema.ts'
-import type { FeatureRecord } from '#/features/plans/types/features.ts'
+import type { FeatureRecord } from '#/features/plans/types/features.type.ts'
 
 /** Client-side wrappers around the server functions for the plans feature. */
 export async function fetchPaginatedPlans(

@@ -1,5 +1,5 @@
 // utils/session.ts — import only from server code
-import type { AuthSession } from '#/features/auth/types/auth.types'
+import type { AuthSession } from '#/features/auth/types/auth.type'
 import { env } from '#/env.ts'
 import { getIronSession } from 'iron-session'
 import { getCookie, setCookie } from '@tanstack/react-start/server'

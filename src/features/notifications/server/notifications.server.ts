@@ -15,7 +15,7 @@ import type {
     CompanyOption,
     NotificationRecord,
     NotificationStatus,
-} from '#/features/notifications/types/notifications.ts'
+} from '#/features/notifications/types/notifications.type.ts'
 
 // Laravel API resource for notifications.
 const RESOURCE = '/notifications'

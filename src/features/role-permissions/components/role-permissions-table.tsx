@@ -45,7 +45,7 @@ import {
     type RolePermissionFilters,
     type RolePermissionSearch,
 } from '#/features/role-permissions/schema/role-permissions-search.schema.ts'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 import { downloadRolePermissionsCsv } from '#/features/role-permissions/utils/role-permissions.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

@@ -17,8 +17,8 @@ import type {
     CompanyOption,
     InvoiceRecord,
     InvoiceStatus,
-} from '#/features/invoices/types/invoices.ts'
-import type { FeatureRecord } from '#/features/invoices/types/features.ts'
+} from '#/features/invoices/types/invoices.type.ts'
+import type { FeatureRecord } from '#/features/invoices/types/features.type.ts'
 
 // Laravel API resources for invoices and their features.
 const RESOURCE = '/invoices'

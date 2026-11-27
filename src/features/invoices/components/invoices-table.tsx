@@ -45,7 +45,7 @@ import {
     type InvoiceFilters,
     type InvoiceSearch,
 } from '#/features/invoices/schema/invoices-search.schema.ts'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 import { downloadInvoicesCsv } from '#/features/invoices/utils/invoices.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

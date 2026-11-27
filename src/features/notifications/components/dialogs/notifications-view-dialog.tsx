@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from '#/components/ui/dialog'
 import { notificationStatusOptions } from '#/features/notifications/data/notification.constant'
-import type { NotificationRecord } from '#/features/notifications/types/notifications.ts'
+import type { NotificationRecord } from '#/features/notifications/types/notifications.type.ts'
 
 interface Props {
     currentRow: NotificationRecord | null

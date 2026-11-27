@@ -15,7 +15,7 @@ import {
     EMPTY_SUPPORT_FILTERS,
     type SupportFilters,
 } from '#/features/support/schema/support-search.schema.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 interface Props {
     table: Table<typeof supportTableFeatures, SupportRecord>

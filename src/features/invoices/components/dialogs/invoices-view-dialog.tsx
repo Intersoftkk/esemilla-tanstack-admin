@@ -15,7 +15,7 @@ import {
 } from '#/components/ui/dialog'
 import { invoiceStatusOptions } from '#/features/invoices/data/invoice.constant'
 import { useInvoiceFeaturesQuery } from '#/features/invoices/queries/invoice.queries.ts'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 
 interface Props {
     currentRow: InvoiceRecord | null

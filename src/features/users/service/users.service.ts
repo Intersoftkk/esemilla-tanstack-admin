@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '#/types'
 
 import type { UserFormData } from '#/features/users/schema/users-form.schema.ts'
 import type { UsersListParams } from '#/features/users/schema/users-search.schema.ts'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 import {
     createUserFn,
     deleteUserFn,

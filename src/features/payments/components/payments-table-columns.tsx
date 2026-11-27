@@ -11,7 +11,7 @@ import { PaymentsTableRowActions } from '#/features/payments/components/payments
 import type {
     PaymentRecord,
     PaymentStatus,
-} from '#/features/payments/types/payments.ts'
+} from '#/features/payments/types/payments.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

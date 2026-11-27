@@ -33,7 +33,7 @@ import {
 import type {
 	School,
 	SchoolType,
-} from "#/features/schools/types/school.types.ts";
+} from "#/features/schools/types/schools.type.ts";
 import {
 	buildSchoolSettingsDefaults,
 	toUpdateSchoolPayload,
