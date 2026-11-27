@@ -14,7 +14,7 @@ import {
 } from "#/components/ui/table.tsx";
 import { SchoolStatusBadge } from "#/features/schools/components/school-status-badge.tsx";
 import { getSchoolTypeMeta } from "#/features/schools/config/school.config.ts";
-import type { School } from "#/features/schools/types/school.types.ts";
+import type { School } from "#/features/schools/types/schools.type.ts";
 import {
 	formatCompactNumber,
 	formatSchoolDate,

@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeleteSupportMutation } from '#/features/support/queries/support.queries.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 interface Props {
     open: boolean
@@ -57,10 +57,10 @@ export function SupportDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             desc={
                 <div className="space-y-4">
                     <p className="mb-2">
-                        Are you sure you want to delete the support with ID{' '}
+                        Are you sure you want to delete the ticket with ID{' '}
                         <span className="font-bold">{currentRow.id}</span>?
                         <br />
-                        This action will permanently remove this support from the
+                        This action will permanently remove this ticket from the
                         system. This cannot be undone.
                     </p>
 

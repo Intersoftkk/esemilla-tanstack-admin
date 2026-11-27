@@ -13,7 +13,7 @@ import {
   getPaginatedUsersFn,
 } from '#/features/auth/server/user.functions'
 import type { PaginatedResponse } from '#/types'
-import type { User } from '#/features/auth/types/user.types'
+import type { User } from '#/features/auth/types/user.type'
 import type { UserSearchInput } from '#/features/auth/schema/user.schema'
 
 type QOpts<TRes, TData, TParams = void> = Omit<

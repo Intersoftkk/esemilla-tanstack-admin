@@ -22,7 +22,7 @@ import {
 import type {
 	NotificationRecord,
 	NotificationsResponse,
-} from "#/features/notification/types/notification.ts";
+} from "#/features/notification/types/notification.type.ts";
 import { usePrivateChannel } from "#/hooks/use-echo.ts";
 
 export function NotificationDropdown() {
@@ -179,7 +179,14 @@ export function NotificationDropdown() {
 
 				<DropdownMenuItem asChild>
 					<Link
-						to="/notification"
+						to="/notifications"
+						search={{
+							search: "",
+							pageIndex: 1,
+							pageSize: 10,
+							created_by_ids: [],
+							status: [],
+						}}
 						className="w-full justify-center text-center text-xs font-medium text-primary hover:underline"
 					>
 						View all notifications

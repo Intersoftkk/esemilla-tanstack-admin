@@ -15,7 +15,7 @@ import {
   updateRoleRequest,
   deleteRoleRequest,
 } from '#/features/auth/server/role.server.ts'
-import type { Role } from '#/features/auth/types/role-permission.types.ts'
+import type { Role } from '#/features/auth/types/role-permission.type.ts'
 import type { PaginatedResponse } from '#/types'
 
 export const getPaginatedRolesFn = createServerFn({ method: 'GET' })

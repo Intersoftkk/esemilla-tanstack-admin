@@ -22,7 +22,7 @@ import type {
 	Plan,
 	School,
 	SlugAvailability,
-} from "#/features/schools/types/school.types.ts";
+} from "#/features/schools/types/schools.type.ts";
 
 export const getSchoolsFn = createServerFn({ method: "GET" })
 	.validator((data?: unknown) => schoolListFiltersSchema.parse(data ?? {}))

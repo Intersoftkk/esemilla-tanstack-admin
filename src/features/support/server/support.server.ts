@@ -14,35 +14,52 @@ import type { SupportFormData } from '#/features/support/schema/support-form.sch
 import type {
     CompanyOption,
     SupportRecord,
-    SupportStatus,
-} from '#/features/support/types/support.ts'
+    TicketPriority,
+    TicketStatus,
+} from '#/features/support/types/support.type.ts'
 
-// Laravel API resource for support.
+// Laravel API resource for tenant support tickets.
 const RESOURCE = '/support'
 
-const SUPPORT_STATUSES: SupportStatus[] = [
-    'draft',
-    'active',
-    'completed',
-    'archived',
+const TICKET_STATUSES: TicketStatus[] = [
+    'open',
+    'pending',
+    'resolved',
+    'closed',
 ]
 
-/** Maps an API status value onto the support status union. */
-function normalizeStatus(value: unknown): SupportStatus {
+const TICKET_PRIORITIES: TicketPriority[] = [
+    'low',
+    'normal',
+    'high',
+    'urgent',
+]
+
+/** Maps an API status value onto the ticket status union. */
+function normalizeStatus(value: unknown): TicketStatus {
     const status = readText(value)?.toLowerCase()
-    return SUPPORT_STATUSES.find((item) => item === status) ?? 'draft'
+    return TICKET_STATUSES.find((item) => item === status) ?? 'open'
 }
 
-/** Normalizes an API payload into a support record. */
+/** Maps an API priority value onto the ticket priority union. */
+function normalizePriority(value: unknown): TicketPriority {
+    const priority = readText(value)?.toLowerCase()
+    return TICKET_PRIORITIES.find((item) => item === priority) ?? 'normal'
+}
+
+/** Normalizes an API payload into a support ticket record. */
 export function normalizeSupport(value: unknown): SupportRecord | null {
     const record = asRecord(value)
     const id = readText(record.id, record.uuid)
     if (!id) return null
 
     const company = asRecord(record.company)
+    const assignee = asRecord(record.assignee ?? record.assigned_to)
 
     return {
         id,
+        subject: readText(record.subject, record.name) ?? 'Untitled ticket',
+        description: readText(record.description),
         company_id:
             readText(record.company_id, record.companyId) ??
             readText(company.id) ??
@@ -53,11 +70,25 @@ export function normalizeSupport(value: unknown): SupportRecord | null {
                   name: readText(company.name),
               }
             : null,
-        name: readText(record.name) ?? 'Untitled support',
-        description: readText(record.description),
-        start_date: readText(record.start_date, record.startDate),
-        end_date: readText(record.end_date, record.endDate),
+        priority: normalizePriority(record.priority),
         status: normalizeStatus(record.status),
+        opened_at: readText(
+            record.opened_at,
+            record.openedAt,
+            record.created_at,
+            record.createdAt,
+        ),
+        closed_at: readText(
+            record.closed_at,
+            record.closedAt,
+            record.resolved_at,
+            record.resolvedAt,
+        ),
+        assignee: readText(
+            record.assignee_name,
+            record.assigneeName,
+            assignee.name,
+        ),
     }
 }
 
@@ -69,7 +100,7 @@ function normalizeCompany(value: unknown): CompanyOption | null {
     return { id, name: readText(record.name) }
 }
 
-/** Fetches a paginated list of support from the backend. */
+/** Fetches a paginated list of support tickets from the backend. */
 export async function fetchSupportList(
     params: SupportListParams,
 ): Promise<PaginatedResponse<SupportRecord>> {
@@ -109,27 +140,27 @@ export async function fetchSupportList(
     }
 }
 
-/** Fetches a single support by ID. */
+/** Fetches a single support ticket by ID. */
 export async function fetchSupport(id: string): Promise<SupportRecord> {
     const { data } = await api.get<unknown>(
         `${RESOURCE}/${encodeURIComponent(id)}`,
     )
     const support = normalizeSupport(unwrapEntity(data) ?? data)
-    if (!support) throw new Error('Support record could not be parsed.')
+    if (!support) throw new Error('Support ticket could not be parsed.')
     return support
 }
 
-/** Creates a support in the backend. */
+/** Raises a support ticket in the backend. */
 export async function createSupportRequest(
     payload: SupportFormData,
 ): Promise<SupportRecord> {
     const { data } = await api.post<unknown>(RESOURCE, payload)
     const support = normalizeSupport(unwrapEntity(data) ?? data)
-    if (!support) throw new Error('Created support could not be parsed.')
+    if (!support) throw new Error('Created support ticket could not be parsed.')
     return support
 }
 
-/** Updates an existing support in the backend. */
+/** Updates an existing support ticket in the backend. */
 export async function updateSupportRequest(
     id: string,
     payload: SupportFormData,
@@ -139,16 +170,16 @@ export async function updateSupportRequest(
         payload,
     )
     const support = normalizeSupport(unwrapEntity(data) ?? data)
-    if (!support) throw new Error('Updated support could not be parsed.')
+    if (!support) throw new Error('Updated support ticket could not be parsed.')
     return support
 }
 
-/** Deletes a support from the backend. */
+/** Deletes a support ticket from the backend. */
 export async function deleteSupportRequest(id: string): Promise<void> {
     await api.delete(`${RESOURCE}/${encodeURIComponent(id)}`)
 }
 
-/** Fetches companies available for support assignment. */
+/** Fetches companies available for ticket assignment. */
 export async function fetchCompanies(): Promise<CompanyOption[]> {
     try {
         const { data } = await api.get<unknown>('/companies', {
@@ -158,7 +189,7 @@ export async function fetchCompanies(): Promise<CompanyOption[]> {
             .map(normalizeCompany)
             .filter((item): item is CompanyOption => item !== null)
     } catch (error) {
-        console.error('Failed to load companies for support:', error)
+        console.error('Failed to load companies for support tickets:', error)
         return []
     }
 }

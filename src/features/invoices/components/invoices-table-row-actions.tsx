@@ -14,7 +14,7 @@ import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { invoicesTableFeatures } from '#/features/invoices/config/invoices.config.ts'
 import { useInvoices } from '#/features/invoices/context/invoices-context.tsx'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 
 interface InvoicesTableRowActionsProps {
     row: Row<typeof invoicesTableFeatures, InvoiceRecord>

@@ -1,0 +1,26 @@
+// #/features/plans/types/plans.type.ts
+import type { FeatureRecord } from '#/features/plans/types/features.type.ts'
+
+export type PlanStatus = 'draft' | 'active' | 'completed' | 'archived'
+
+export interface CompanyRecord {
+    id: string | number
+    name?: string | null
+}
+
+export interface PlanRecord {
+    id: string
+    company_id: string
+    company?: CompanyRecord | null
+    name: string
+    description?: string | null
+    start_date?: string | null
+    end_date?: string | null
+    status: PlanStatus
+    features?: FeatureRecord[]
+}
+
+export interface CompanyOption {
+    id: string | number
+    name?: string | null
+}

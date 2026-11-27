@@ -14,7 +14,7 @@ import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { paymentsTableFeatures } from '#/features/payments/config/payments.config.ts'
 import { usePayments } from '#/features/payments/context/payments-context.tsx'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 
 interface PaymentsTableRowActionsProps {
     row: Row<typeof paymentsTableFeatures, PaymentRecord>

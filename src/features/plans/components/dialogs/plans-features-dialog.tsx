@@ -22,7 +22,7 @@ import {
     usePlanFeaturesQuery,
     useSyncPlanFeaturesMutation,
 } from '#/features/plans/queries/plan.queries.ts'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 
 interface Props {
     currentRow: PlanRecord | null

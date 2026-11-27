@@ -28,7 +28,7 @@ function SupportPageContent({ search, navigate }: SupportPageProps) {
     return (
         <div className="space-y-6">
             <PageHeader
-                title="Support"
+                title="Support Tickets"
                 description="Support tickets raised by tenant schools."
                 icon={LifeBuoy}
                 iconBgClassName="bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 ring-1 ring-primary/15"

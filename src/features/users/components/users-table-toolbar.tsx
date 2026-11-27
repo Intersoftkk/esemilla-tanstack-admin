@@ -12,7 +12,7 @@ import {
     EMPTY_USER_FILTERS,
     type UserFilters,
 } from '#/features/users/schema/users-search.schema.ts'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 
 interface Props {
     table: Table<typeof usersTableFeatures, UserRecord>

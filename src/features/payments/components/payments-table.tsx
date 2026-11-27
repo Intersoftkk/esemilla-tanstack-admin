@@ -45,7 +45,7 @@ import {
     type PaymentFilters,
     type PaymentSearch,
 } from '#/features/payments/schema/payments-search.schema.ts'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 import { downloadPaymentsCsv } from '#/features/payments/utils/payments.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

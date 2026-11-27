@@ -1,5 +1,5 @@
 // #/features/support/components/support-table-columns.tsx
-import { format, parseISO, isValid } from 'date-fns'
+import { format, isValid, parseISO } from 'date-fns'
 import { createColumnHelper, type Column } from '@tanstack/react-table'
 
 import { DataTableColumnHeader } from '#/components/datatable/data-table-column-header.tsx'
@@ -10,8 +10,9 @@ import type { supportTableFeatures } from '#/features/support/config/support.con
 import { SupportTableRowActions } from '#/features/support/components/support-table-row-actions.tsx'
 import type {
     SupportRecord,
-    SupportStatus,
-} from '#/features/support/types/support.ts'
+    TicketPriority,
+    TicketStatus,
+} from '#/features/support/types/support.type.ts'
 
 type AnyColumn = Column<any, any, any>
 
@@ -31,29 +32,51 @@ function formatDate(value?: string | null): string {
 }
 
 const statusConfig: Record<
-    SupportStatus,
+    TicketStatus,
     { label: string; className: string }
 > = {
-    draft: {
-        label: 'Draft',
-        className: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
-    },
-    active: {
-        label: 'Active',
-        className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    },
-    completed: {
-        label: 'Completed',
+    open: {
+        label: 'Open',
         className: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
     },
-    archived: {
-        label: 'Archived',
+    pending: {
+        label: 'Pending',
+        className: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
+    },
+    resolved: {
+        label: 'Resolved',
+        className: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    },
+    closed: {
+        label: 'Closed',
         className: 'bg-muted text-muted-foreground',
     },
 }
 
-/** Renders a compact, colour-coded status badge. */
-function StatusBadge({ status }: { status: SupportStatus }) {
+const priorityConfig: Record<
+    TicketPriority,
+    { label: string; className: string }
+> = {
+    urgent: {
+        label: 'Urgent',
+        className: 'bg-rose-500/10 text-rose-700 dark:text-rose-400',
+    },
+    high: {
+        label: 'High',
+        className: 'bg-orange-500/10 text-orange-700 dark:text-orange-400',
+    },
+    normal: {
+        label: 'Normal',
+        className: 'bg-sky-500/10 text-sky-700 dark:text-sky-400',
+    },
+    low: {
+        label: 'Low',
+        className: 'bg-muted text-muted-foreground',
+    },
+}
+
+/** Renders a compact, colour-coded ticket status badge. */
+function StatusBadge({ status }: { status: TicketStatus }) {
     const config = statusConfig[status]
 
     return (
@@ -62,6 +85,20 @@ function StatusBadge({ status }: { status: SupportStatus }) {
             className={cn('gap-1.5 border-transparent', config.className)}
         >
             <span className="h-1.5 w-1.5 rounded-full bg-current" />
+            {config.label}
+        </Badge>
+    )
+}
+
+/** Renders a compact, colour-coded ticket priority badge. */
+function PriorityBadge({ priority }: { priority: TicketPriority }) {
+    const config = priorityConfig[priority]
+
+    return (
+        <Badge
+            variant="outline"
+            className={cn('border-transparent', config.className)}
+        >
             {config.label}
         </Badge>
     )
@@ -103,23 +140,23 @@ export const columns = columnHelper.columns([
         },
     }),
 
-    columnHelper.accessor('name', {
+    columnHelper.accessor('subject', {
         header: ({ column }) => (
             <DataTableColumnHeader
                 column={asAnyColumn(column)}
-                title="Support Name"
+                title="Subject"
             />
         ),
         cell: ({ row }) => (
             <div className="flex min-w-[240px] items-center gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/10">
-                    {row.original.name.charAt(0).toUpperCase()}
+                    {row.original.subject.charAt(0).toUpperCase()}
                 </div>
                 <div
                     className="max-w-xs truncate font-medium"
-                    title={row.original.name}
+                    title={row.original.subject}
                 >
-                    {row.original.name}
+                    {row.original.subject}
                 </div>
             </div>
         ),
@@ -146,51 +183,17 @@ export const columns = columnHelper.columns([
                 {row.original.company?.name || '—'}
             </div>
         ),
+        enableSorting: false,
     }),
 
-    columnHelper.accessor('description', {
+    columnHelper.accessor('priority', {
         header: ({ column }) => (
             <DataTableColumnHeader
                 column={asAnyColumn(column)}
-                title="Description"
+                title="Priority"
             />
         ),
-        cell: ({ row }) => (
-            <div
-                className="max-w-xs truncate text-muted-foreground"
-                title={row.original.description ?? ''}
-            >
-                {row.original.description || '—'}
-            </div>
-        ),
-    }),
-
-    columnHelper.accessor('start_date', {
-        header: ({ column }) => (
-            <DataTableColumnHeader
-                column={asAnyColumn(column)}
-                title="Start Date"
-            />
-        ),
-        cell: ({ row }) => (
-            <div className="text-muted-foreground tabular-nums">
-                {formatDate(row.original.start_date)}
-            </div>
-        ),
-    }),
-
-    columnHelper.accessor('end_date', {
-        header: ({ column }) => (
-            <DataTableColumnHeader
-                column={asAnyColumn(column)}
-                title="End Date"
-            />
-        ),
-        cell: ({ row }) => (
-            <div className="text-muted-foreground tabular-nums">
-                {formatDate(row.original.end_date)}
-            </div>
-        ),
+        cell: ({ row }) => <PriorityBadge priority={row.original.priority} />,
     }),
 
     columnHelper.accessor('status', {
@@ -198,6 +201,48 @@ export const columns = columnHelper.columns([
             <DataTableColumnHeader column={asAnyColumn(column)} title="Status" />
         ),
         cell: ({ row }) => <StatusBadge status={row.original.status} />,
+    }),
+
+    columnHelper.accessor('assignee', {
+        header: ({ column }) => (
+            <DataTableColumnHeader
+                column={asAnyColumn(column)}
+                title="Assignee"
+            />
+        ),
+        cell: ({ row }) => (
+            <div className="max-w-40 truncate text-muted-foreground">
+                {row.original.assignee || 'Unassigned'}
+            </div>
+        ),
+    }),
+
+    columnHelper.accessor('opened_at', {
+        header: ({ column }) => (
+            <DataTableColumnHeader
+                column={asAnyColumn(column)}
+                title="Opened"
+            />
+        ),
+        cell: ({ row }) => (
+            <div className="text-muted-foreground tabular-nums">
+                {formatDate(row.original.opened_at)}
+            </div>
+        ),
+    }),
+
+    columnHelper.accessor('closed_at', {
+        header: ({ column }) => (
+            <DataTableColumnHeader
+                column={asAnyColumn(column)}
+                title="Closed"
+            />
+        ),
+        cell: ({ row }) => (
+            <div className="text-muted-foreground tabular-nums">
+                {formatDate(row.original.closed_at)}
+            </div>
+        ),
     }),
 
     columnHelper.display({

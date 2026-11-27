@@ -12,7 +12,7 @@ import {
 } from '#/components/ui/dropdown-menu'
 import type { supportTableFeatures } from '#/features/support/config/support.config.ts'
 import { useSupport } from '#/features/support/context/support-context.tsx'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 interface SupportTableRowActionsProps {
     row: Row<typeof supportTableFeatures, SupportRecord>

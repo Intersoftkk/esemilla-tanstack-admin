@@ -11,7 +11,7 @@ import { PlansTableRowActions } from '#/features/plans/components/plans-table-ro
 import type {
     PlanRecord,
     PlanStatus,
-} from '#/features/plans/types/plans.ts'
+} from '#/features/plans/types/plans.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

@@ -18,7 +18,7 @@ import {
   deleteRoleFn,
 } from '#/features/auth/server/role.functions'
 import type { PaginatedResponse } from '#/types'
-import type { Role } from '#/features/auth/types/role-permission.types'
+import type { Role } from '#/features/auth/types/role-permission.type'
 import type {
   RoleSearchInput,
   RoleFormData,

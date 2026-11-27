@@ -13,7 +13,7 @@ import type {
 	BillingCycle,
 	SchoolStatus,
 	SchoolType,
-} from "#/features/schools/types/school.types";
+} from "#/features/schools/types/schools.type";
 
 export interface SchoolTypeOption {
 	value: SchoolType;

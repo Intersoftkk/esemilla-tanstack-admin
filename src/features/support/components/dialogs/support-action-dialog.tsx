@@ -1,6 +1,11 @@
 // #/features/support/components/dialogs/support-action-dialog.tsx
-import { CalendarRange, Edit, Loader, Plus } from 'lucide-react'
-import { Controller, useForm, type Control, type SubmitHandler } from 'react-hook-form'
+import { Edit, Loader, Plus, Ticket } from 'lucide-react'
+import {
+    Controller,
+    useForm,
+    type Control,
+    type SubmitHandler,
+} from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { Button } from '#/components/ui/button.tsx'
@@ -19,14 +24,20 @@ import { ComboboxField } from '#/components/fields/combobox-field.tsx'
 import { DateField } from '#/components/fields/date-field.tsx'
 import { InputField } from '#/components/fields/input-field.tsx'
 import { SelectField } from '#/components/fields/select-field.tsx'
-import { supportStatusOptions } from '#/features/support/data/support.constant'
-import { supportSchema, type SupportFormData } from '#/features/support/schema/support-form.schema.ts'
+import {
+    supportPriorityOptions,
+    supportStatusOptions,
+} from '#/features/support/data/support.constant'
+import {
+    supportSchema,
+    type SupportFormData,
+} from '#/features/support/schema/support-form.schema.ts'
 import {
     useCompaniesQuery,
     useCreateSupportMutation,
     useUpdateSupportMutation,
 } from '#/features/support/queries/support.queries.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 import type { Option } from '#/types'
 
 interface Props {
@@ -40,19 +51,24 @@ function toDateInput(value?: string | null): string {
     return value ? value.slice(0, 10) : ''
 }
 
-/** Dialog for creating or editing a support. */
+/** Dialog for raising or editing a support ticket. */
 export function SupportActionDialog({ currentRow, open, onOpenChange }: Props) {
     const isEditMode = Boolean(currentRow?.id)
 
     const form = useForm<SupportFormData>({
         resolver: standardSchemaResolver(supportSchema),
         defaultValues: {
-            company_id: currentRow?.company_id ? String(currentRow.company_id) : '',
-            name: currentRow?.name ?? '',
+            company_id: currentRow?.company_id
+                ? String(currentRow.company_id)
+                : '',
+            subject: currentRow?.subject ?? '',
             description: currentRow?.description ?? '',
-            start_date: toDateInput(currentRow?.start_date),
-            end_date: toDateInput(currentRow?.end_date),
-            status: currentRow?.status ?? 'draft',
+            priority: currentRow?.priority ?? 'normal',
+            status: currentRow?.status ?? 'open',
+            opened_at: toDateInput(
+                currentRow?.opened_at ?? new Date().toISOString(),
+            ),
+            closed_at: toDateInput(currentRow?.closed_at),
         },
     })
 
@@ -98,17 +114,17 @@ export function SupportActionDialog({ currentRow, open, onOpenChange }: Props) {
                         {isEditMode ? (
                             <>
                                 <Edit className="h-5 w-5" />
-                                Edit Support
+                                Edit Ticket
                             </>
                         ) : (
                             <>
-                                <CalendarRange className="h-5 w-5" />
-                                Add Support
+                                <Ticket className="h-5 w-5" />
+                                New Ticket
                             </>
                         )}
                     </DialogTitle>
                     <DialogDescription>
-                        Fill out the support details below.
+                        Fill out the ticket details below.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -137,9 +153,9 @@ export function SupportActionDialog({ currentRow, open, onOpenChange }: Props) {
                     <div className="sm:col-span-2">
                         <InputField
                             control={form.control}
-                            name="name"
-                            label="Support Name"
-                            placeholder="e.g. Mid-Year Review 2026"
+                            name="subject"
+                            label="Subject"
+                            placeholder="e.g. Cannot export invoices"
                             required
                         />
                     </div>
@@ -159,7 +175,7 @@ export function SupportActionDialog({ currentRow, open, onOpenChange }: Props) {
                                         {...field}
                                         rows={3}
                                         value={field.value ?? ''}
-                                        placeholder="Enter support description"
+                                        placeholder="Describe the issue..."
                                         aria-invalid={fieldState.invalid}
                                     />
                                     {fieldState.error && (
@@ -172,37 +188,59 @@ export function SupportActionDialog({ currentRow, open, onOpenChange }: Props) {
                         />
                     </div>
 
+                    <Controller
+                        control={form.control}
+                        name="priority"
+                        render={({ field, fieldState }) => (
+                            <SelectField
+                                name="priority"
+                                label="Priority"
+                                options={supportPriorityOptions}
+                                value={field.value ?? ''}
+                                onChange={field.onChange}
+                                errors={
+                                    fieldState.error
+                                        ? [fieldState.error]
+                                        : undefined
+                                }
+                                required
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        control={form.control}
+                        name="status"
+                        render={({ field, fieldState }) => (
+                            <SelectField
+                                name="status"
+                                label="Status"
+                                options={supportStatusOptions}
+                                value={field.value ?? ''}
+                                onChange={field.onChange}
+                                errors={
+                                    fieldState.error
+                                        ? [fieldState.error]
+                                        : undefined
+                                }
+                                required
+                            />
+                        )}
+                    />
+
                     <DateField
                         control={form.control as unknown as Control<any>}
-                        name="start_date"
-                        label="Start Date"
+                        name="opened_at"
+                        label="Opened"
                         required
                     />
 
                     <DateField
                         control={form.control as unknown as Control<any>}
-                        name="end_date"
-                        label="End Date"
-                        required
+                        name="closed_at"
+                        label="Closed"
+                        description="Leave empty while the ticket is still open."
                     />
-
-                    <div className="sm:col-span-2">
-                        <Controller
-                            control={form.control}
-                            name="status"
-                            render={({ field, fieldState }) => (
-                                <SelectField
-                                    name="status"
-                                    label="Status"
-                                    options={supportStatusOptions}
-                                    value={field.value ?? ''}
-                                    onChange={field.onChange}
-                                    errors={fieldState.error ? [fieldState.error] : undefined}
-                                    required
-                                />
-                            )}
-                        />
-                    </div>
                 </form>
 
                 <DialogFooter className="gap-y-2">
@@ -227,7 +265,7 @@ export function SupportActionDialog({ currentRow, open, onOpenChange }: Props) {
                             </>
                         ) : (
                             <>
-                                Create Support
+                                Create Ticket
                                 <Plus className="ml-2 h-4 w-4" />
                             </>
                         )}

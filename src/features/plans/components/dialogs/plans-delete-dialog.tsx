@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeletePlanMutation } from '#/features/plans/queries/plan.queries.ts'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 
 interface Props {
     open: boolean

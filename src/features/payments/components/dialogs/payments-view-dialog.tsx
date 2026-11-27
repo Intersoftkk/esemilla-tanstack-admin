@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from '#/components/ui/dialog'
 import { paymentStatusOptions } from '#/features/payments/data/payment.constant'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 
 interface Props {
     currentRow: PaymentRecord | null

@@ -11,7 +11,7 @@ import { SubscriptionsTableRowActions } from '#/features/subscriptions/component
 import type {
     SubscriptionRecord,
     SubscriptionStatus,
-} from '#/features/subscriptions/types/subscriptions.ts'
+} from '#/features/subscriptions/types/subscriptions.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

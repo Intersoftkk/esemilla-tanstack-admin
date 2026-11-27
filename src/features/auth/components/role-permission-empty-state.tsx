@@ -3,7 +3,7 @@
 'use client'
 
 import { Shield, Users } from 'lucide-react'
-import type { TargetType } from '#/features/auth/types/role-permission.types.ts'
+import type { TargetType } from '#/features/auth/types/role-permission.type.ts'
 
 interface EmptyStateProps {
   targetType: TargetType

@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeletePaymentMutation } from '#/features/payments/queries/payment.queries.ts'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 
 interface Props {
     open: boolean

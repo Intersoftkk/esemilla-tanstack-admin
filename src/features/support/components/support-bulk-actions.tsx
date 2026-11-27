@@ -30,7 +30,7 @@ export function SupportBulkActions({ table }: SupportBulkActionsProps) {
 
     return (
         <>
-            <DataTableBulkActions table={table} entityName="support">
+            <DataTableBulkActions table={table} entityName="ticket">
                 <Button
                     variant="destructive"
                     size="sm"
@@ -47,8 +47,8 @@ export function SupportBulkActions({ table }: SupportBulkActionsProps) {
                 handleConfirm={() => mutation.mutate(selectedIds)}
                 isLoading={mutation.isPending}
                 disabled={selectedIds.length === 0}
-                title="Delete selected support"
-                desc={`Are you sure you want to delete ${selectedIds.length} selected support${selectedIds.length === 1 ? '' : 's'}? This cannot be undone.`}
+                title="Delete selected tickets"
+                desc={`Are you sure you want to delete ${selectedIds.length} selected ticket${selectedIds.length === 1 ? '' : 's'}? This cannot be undone.`}
                 confirmText="Delete selected"
                 destructive
             />

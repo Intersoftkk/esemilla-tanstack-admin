@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '#/types'
 
 import type { SupportFormData } from '#/features/support/schema/support-form.schema.ts'
 import type { SupportListParams } from '#/features/support/schema/support-search.schema.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 import {
     createSupportFn,
     deleteSupportFn,

@@ -5,7 +5,7 @@ import type { SubscriptionFormData } from '#/features/subscriptions/schema/subsc
 import type {
     SubscriptionsListParams,
 } from '#/features/subscriptions/schema/subscriptions-search.schema.ts'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 import {
     attachSubscriptionFeaturesFn,
     createFeatureFn,
@@ -22,7 +22,7 @@ import {
     updateSubscriptionFn,
 } from '#/features/subscriptions/server/subscriptions.functions.ts'
 import type { FeatureFormData } from '#/features/subscriptions/schema/features.schema.ts'
-import type { FeatureRecord } from '#/features/subscriptions/types/features.ts'
+import type { FeatureRecord } from '#/features/subscriptions/types/features.type.ts'
 
 /** Client-side wrappers around the server functions for the subscriptions feature. */
 export async function fetchPaginatedSubscriptions(

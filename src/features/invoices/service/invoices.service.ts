@@ -5,7 +5,7 @@ import type { InvoiceFormData } from '#/features/invoices/schema/invoices-form.s
 import type {
     InvoicesListParams,
 } from '#/features/invoices/schema/invoices-search.schema.ts'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 import {
     attachInvoiceFeaturesFn,
     createFeatureFn,
@@ -22,7 +22,7 @@ import {
     updateInvoiceFn,
 } from '#/features/invoices/server/invoices.functions.ts'
 import type { FeatureFormData } from '#/features/invoices/schema/features.schema.ts'
-import type { FeatureRecord } from '#/features/invoices/types/features.ts'
+import type { FeatureRecord } from '#/features/invoices/types/features.type.ts'
 
 /** Client-side wrappers around the server functions for the invoices feature. */
 export async function fetchPaginatedInvoices(

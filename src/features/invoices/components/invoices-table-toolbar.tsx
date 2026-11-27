@@ -12,7 +12,7 @@ import {
     EMPTY_INVOICE_FILTERS,
     type InvoiceFilters,
 } from '#/features/invoices/schema/invoices-search.schema.ts'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 
 interface Props {
     table: Table<typeof invoicesTableFeatures, InvoiceRecord>

@@ -12,7 +12,7 @@ import {
   syncUserPermissionsRequest,
   deleteUserPermissionRequest,
 } from '#/features/auth/server/user-permission.server.ts'
-import type { UserPermission } from '#/features/auth/types/role-permission.types.ts'
+import type { UserPermission } from '#/features/auth/types/role-permission.type.ts'
 import type { PaginatedResponse } from '#/types'
 
 export const getPaginatedUserPermissionsFn = createServerFn({ method: 'GET' })

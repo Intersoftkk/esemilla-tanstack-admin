@@ -4,7 +4,7 @@ import { api } from '#/server/api.server.ts'
 import { buildQueryString } from '#/utils/query-builder.ts'
 import type { QueryBuilderInput } from '#/utils/query-builder.ts'
 import type { PaginatedResponse } from '#/types'
-import type { Role } from '#/features/auth/types/role-permission.types.ts'
+import type { Role } from '#/features/auth/types/role-permission.type.ts'
 import type { RoleFormData } from '#/features/auth/schema/role-permission.schema.ts'
 
 /**

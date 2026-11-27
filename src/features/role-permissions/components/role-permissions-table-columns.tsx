@@ -11,7 +11,7 @@ import { RolePermissionsTableRowActions } from '#/features/role-permissions/comp
 import type {
     RolePermissionRecord,
     RolePermissionStatus,
-} from '#/features/role-permissions/types/role-permissions.ts'
+} from '#/features/role-permissions/types/role-permissions.type.ts'
 
 type AnyColumn = Column<any, any, any>
 

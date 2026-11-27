@@ -1,6 +1,6 @@
 // #/features/plans/utils/plans.utils.ts
 import { saveBlob } from '#/lib/download.ts'
-import type { PlanRecord, PlanStatus } from '#/features/plans/types/plans.ts'
+import type { PlanRecord, PlanStatus } from '#/features/plans/types/plans.type.ts'
 
 /** Quotes a CSV cell and escapes embedded double quotes. */
 function escapeCsv(value: string | number | null | undefined): string {

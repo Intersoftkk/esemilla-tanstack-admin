@@ -6,7 +6,7 @@ import type { QueryBuilderInput } from '#/utils/query-builder.ts'
 import type {
   PermissionRecord,
   GroupedPermissions,
-} from '#/features/auth/types/role-permission.types.ts'
+} from '#/features/auth/types/role-permission.type.ts'
 import type { PermissionFormData } from '#/features/auth/schema/role-permission.schema.ts'
 
 /**

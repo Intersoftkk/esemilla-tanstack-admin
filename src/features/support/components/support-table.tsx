@@ -8,7 +8,7 @@ import {
     type SortingState,
     type Table as TableInstance,
 } from '@tanstack/react-table'
-import { AlertCircle, CalendarRange, Plus } from 'lucide-react'
+import { AlertCircle, Plus, Ticket } from 'lucide-react'
 
 import { DataTablePagination } from '#/components/datatable/data-table-pagination.tsx'
 import DataTableSkeleton from '#/components/datatable/data-table-skeleton.tsx'
@@ -43,7 +43,7 @@ import {
     type SupportFilters,
     type SupportSearch,
 } from '#/features/support/schema/support-search.schema.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 import { downloadSupportCsv } from '#/features/support/utils/support.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'
@@ -87,8 +87,9 @@ export function SupportTable({ search, navigate }: Props) {
     const [filters, setFilters] = useState<SupportFilters>({
         ...EMPTY_SUPPORT_FILTERS,
         search: search.search ?? '',
-        created_by_ids: search.created_by_ids ?? [],
+        company_ids: search.company_ids ?? [],
         status: search.status ?? [],
+        priority: search.priority ?? [],
     })
 
     const debouncedFilters = useDebounce(filters, 500)
@@ -181,7 +182,7 @@ export function SupportTable({ search, navigate }: Props) {
             {isError ? (
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Could not load support</AlertTitle>
+                    <AlertTitle>Could not load support tickets</AlertTitle>
                     <AlertDescription className="flex flex-wrap items-center gap-3">
                         <span>
                             {error instanceof Error
@@ -208,7 +209,7 @@ export function SupportTable({ search, navigate }: Props) {
                 <Empty className="rounded-2xl border border-dashed bg-linear-to-b from-muted/25 to-background py-14">
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
-                            <CalendarRange />
+                            <Ticket />
                         </EmptyMedia>
                         <EmptyTitle>No support tickets found</EmptyTitle>
                         <EmptyDescription>
@@ -231,7 +232,7 @@ export function SupportTable({ search, navigate }: Props) {
                         ) : (
                             <Button size="sm" onClick={() => setOpen('add')}>
                                 <Plus className="mr-1.5 h-3.5 w-3.5" />
-                                Create support
+                                New ticket
                             </Button>
                         )}
                     </EmptyContent>
@@ -311,7 +312,8 @@ export function SupportTable({ search, navigate }: Props) {
 function hasActiveFiltersValue(filters: SupportFilters): boolean {
     return Boolean(
         filters.search.trim() ||
-            filters.created_by_ids.length ||
-            filters.status.length,
+            filters.company_ids.length ||
+            filters.status.length ||
+            filters.priority.length,
     )
 }

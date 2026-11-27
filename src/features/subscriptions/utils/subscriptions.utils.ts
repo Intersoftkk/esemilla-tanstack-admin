@@ -1,6 +1,6 @@
 // #/features/subscriptions/utils/subscriptions.utils.ts
 import { saveBlob } from '#/lib/download.ts'
-import type { SubscriptionRecord, SubscriptionStatus } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord, SubscriptionStatus } from '#/features/subscriptions/types/subscriptions.type.ts'
 
 /** Quotes a CSV cell and escapes embedded double quotes. */
 function escapeCsv(value: string | number | null | undefined): string {

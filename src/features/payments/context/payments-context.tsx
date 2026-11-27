@@ -1,7 +1,7 @@
 // #/features/payments/context/payments-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { PaymentRecord } from '#/features/payments/types/payments.ts'
+import type { PaymentRecord } from '#/features/payments/types/payments.type.ts'
 
 type PaymentsDialogType =
     | 'add'

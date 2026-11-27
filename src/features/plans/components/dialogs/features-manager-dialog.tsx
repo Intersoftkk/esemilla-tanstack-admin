@@ -23,7 +23,7 @@ import {
     useFeaturesQuery,
     useUpdateFeatureMutation,
 } from '#/features/plans/queries/plan.queries.ts'
-import type { FeatureRecord } from '#/features/plans/types/features.ts'
+import type { FeatureRecord } from '#/features/plans/types/features.type.ts'
 
 interface Props {
     open: boolean

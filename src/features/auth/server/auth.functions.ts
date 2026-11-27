@@ -16,7 +16,7 @@ import { otpSchema } from '#/features/auth/schema/otp.schema'
 import { resetPasswordSchema } from '#/features/auth/schema/reset-password.schema'
 import { signInSchema } from '#/features/auth/schema/sign-in.schema'
 import { signUpSchema } from '#/features/auth/schema/sign-up.schema'
-import type { User } from '#/features/auth/types/user.types.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 
 export const getSessionFn = createServerFn({ method: 'GET' }).handler(
   async (): Promise<User | null> => {

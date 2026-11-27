@@ -49,11 +49,11 @@ export function useCreateSupportMutation(options?: SupportMutationOptions) {
         mutationFn: (payload: SupportFormData) => createSupport(payload),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: SUPPORT_KEYS.all })
-            toast.success('Support created successfully.')
+            toast.success('Ticket created successfully.')
             options?.onSuccess?.()
         },
         onError: (error) =>
-            toast.error(getErrorMessage(error, 'Could not create support.')),
+            toast.error(getErrorMessage(error, 'Could not create ticket.')),
     })
 }
 
@@ -66,11 +66,11 @@ export function useUpdateSupportMutation(options?: SupportMutationOptions) {
             updateSupport(id, payload),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: SUPPORT_KEYS.all })
-            toast.success('Support updated successfully.')
+            toast.success('Ticket updated successfully.')
             options?.onSuccess?.()
         },
         onError: (error) =>
-            toast.error(getErrorMessage(error, 'Could not update support.')),
+            toast.error(getErrorMessage(error, 'Could not update ticket.')),
     })
 }
 
@@ -82,11 +82,11 @@ export function useDeleteSupportMutation(options?: SupportMutationOptions) {
         mutationFn: (id: string) => deleteSupport(id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: SUPPORT_KEYS.all })
-            toast.success('Support deleted successfully.')
+            toast.success('Ticket deleted successfully.')
             options?.onSuccess?.()
         },
         onError: (error) =>
-            toast.error(getErrorMessage(error, 'Could not delete support.')),
+            toast.error(getErrorMessage(error, 'Could not delete ticket.')),
     })
 }
 
@@ -98,10 +98,10 @@ export function useDeleteSupportsMutation(options?: SupportMutationOptions) {
         mutationFn: (ids: string[]) => deleteSupports(ids),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: SUPPORT_KEYS.all })
-            toast.success('Selected support deleted successfully.')
+            toast.success('Selected tickets deleted successfully.')
             options?.onSuccess?.()
         },
         onError: (error) =>
-            toast.error(getErrorMessage(error, 'Could not delete support.')),
+            toast.error(getErrorMessage(error, 'Could not delete ticket.')),
     })
 }

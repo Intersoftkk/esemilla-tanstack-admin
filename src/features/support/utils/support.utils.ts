@@ -1,6 +1,9 @@
 // #/features/support/utils/support.utils.ts
 import { saveBlob } from '#/lib/download.ts'
-import type { SupportRecord, SupportStatus } from '#/features/support/types/support.ts'
+import type {
+    SupportRecord,
+    TicketStatus,
+} from '#/features/support/types/support.type.ts'
 
 /** Quotes a CSV cell and escapes embedded double quotes. */
 function escapeCsv(value: string | number | null | undefined): string {
@@ -8,16 +11,18 @@ function escapeCsv(value: string | number | null | undefined): string {
     return `"${text.replaceAll('"', '""')}"`
 }
 
-/** Converts support records into a CSV document with a header row. */
+/** Converts support tickets into a CSV document with a header row. */
 export function supportToCsv(records: SupportRecord[]): string {
     const header = [
         'ID',
-        'Name',
+        'Subject',
         'Company',
-        'Description',
-        'Start Date',
-        'End Date',
+        'Priority',
         'Status',
+        'Assignee',
+        'Opened',
+        'Closed',
+        'Description',
     ]
         .map(escapeCsv)
         .join(',')
@@ -25,12 +30,14 @@ export function supportToCsv(records: SupportRecord[]): string {
     const rows = records.map((record) =>
         [
             record.id,
-            record.name,
+            record.subject,
             record.company?.name ?? '',
-            record.description ?? '',
-            record.start_date ?? '',
-            record.end_date ?? '',
+            record.priority,
             record.status,
+            record.assignee ?? '',
+            record.opened_at ?? '',
+            record.closed_at ?? '',
+            record.description ?? '',
         ]
             .map(escapeCsv)
             .join(','),
@@ -39,23 +46,23 @@ export function supportToCsv(records: SupportRecord[]): string {
     return [header, ...rows].join('\r\n')
 }
 
-/** Downloads the visible support records as a CSV file. */
+/** Downloads the visible support tickets as a CSV file. */
 export function downloadSupportCsv(records: SupportRecord[]): void {
     saveBlob(
         new Blob([supportToCsv(records)], { type: 'text/csv;charset=utf-8;' }),
-        `support-${new Date().toISOString().slice(0, 10)}.csv`,
+        `support-tickets-${new Date().toISOString().slice(0, 10)}.csv`,
     )
 }
 
-/** Counts support records per status for the summary cards. */
+/** Counts support tickets per status for the summary cards. */
 export function countSupportByStatus(
     records: SupportRecord[],
-): Record<SupportStatus, number> {
-    const counts: Record<SupportStatus, number> = {
-        draft: 0,
-        active: 0,
-        completed: 0,
-        archived: 0,
+): Record<TicketStatus, number> {
+    const counts: Record<TicketStatus, number> = {
+        open: 0,
+        pending: 0,
+        resolved: 0,
+        closed: 0,
     }
 
     for (const record of records) counts[record.status] += 1

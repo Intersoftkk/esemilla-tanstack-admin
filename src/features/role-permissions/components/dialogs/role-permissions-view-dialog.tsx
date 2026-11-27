@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from '#/components/ui/dialog'
 import { rolePermissionStatusOptions } from '#/features/role-permissions/data/role-permission.constant'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 
 interface Props {
     currentRow: RolePermissionRecord | null

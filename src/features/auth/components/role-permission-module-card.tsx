@@ -13,7 +13,7 @@ import {
   TableRow,
 } from '#/components/ui/table.tsx'
 import { formatModuleName } from '#/features/auth/hooks/use-permission.ts'
-import type { PermissionRecord } from '#/features/auth/types/role-permission.types.ts'
+import type { PermissionRecord } from '#/features/auth/types/role-permission.type.ts'
 import { RolePermissionChip } from '#/features/auth/components/role-permission-chip.tsx'
 
 interface RolePermissionModuleCardProps {

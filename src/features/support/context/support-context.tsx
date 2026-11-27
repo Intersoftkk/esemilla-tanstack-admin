@@ -1,7 +1,7 @@
 // #/features/support/context/support-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 type SupportDialogType =
     | 'add'

@@ -26,7 +26,7 @@ import {
     useCreateInvoiceMutation,
     useUpdateInvoiceMutation,
 } from '#/features/invoices/queries/invoice.queries.ts'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

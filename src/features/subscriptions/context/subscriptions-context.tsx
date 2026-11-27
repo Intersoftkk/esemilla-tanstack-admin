@@ -1,7 +1,7 @@
 // #/features/subscriptions/context/subscriptions-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 
 type SubscriptionsDialogType =
     | 'add'

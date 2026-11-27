@@ -10,7 +10,7 @@ import {
 	type SchoolStatus,
 	type SchoolType,
 	type SchoolUsage,
-} from "#/features/schools/types/school.types";
+} from "#/features/schools/types/schools.type";
 
 /**
  * The API may return Laravel resources, plain objects or a mix of

@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeleteSubscriptionMutation } from '#/features/subscriptions/queries/subscription.queries.ts'
-import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.ts'
+import type { SubscriptionRecord } from '#/features/subscriptions/types/subscriptions.type.ts'
 
 interface Props {
     open: boolean

@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countInvoicesByStatus} from '#/features/invoices/utils/invoices.utils.ts'
-import type {InvoiceRecord} from '#/features/invoices/types/invoices.ts'
+import type {InvoiceRecord} from '#/features/invoices/types/invoices.type.ts'
 
 interface InvoicesStatsProps {
     invoices: InvoiceRecord[]

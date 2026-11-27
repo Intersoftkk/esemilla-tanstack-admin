@@ -52,7 +52,7 @@ import {
 import type {
 	BillingCycle,
 	School,
-} from "#/features/schools/types/school.types.ts";
+} from "#/features/schools/types/schools.type.ts";
 import {
 	buildOnboardingDefaults,
 	getPlan,

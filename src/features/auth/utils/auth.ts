@@ -1,8 +1,8 @@
 import type {
   PermissionRecord,
   Role,
-} from '#/features/auth/types/role-permission.types.ts'
-import type { User } from '#/features/auth/types/user.types.ts'
+} from '#/features/auth/types/role-permission.type.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 
 export type PermissionInput = string | PermissionRecord
 export type RoleInput = string | Role

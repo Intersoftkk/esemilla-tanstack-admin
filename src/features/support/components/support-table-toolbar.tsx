@@ -7,12 +7,15 @@ import { DataTableViewOptions } from '#/components/datatable/data-table-view-opt
 import { Button } from '#/components/ui/button.tsx'
 import { SearchField } from '#/components/fields/search-field.tsx'
 import type { supportTableFeatures } from '#/features/support/config/support.config.ts'
-import { supportStatusOptions } from '#/features/support/data/support.constant'
+import {
+    supportPriorityOptions,
+    supportStatusOptions,
+} from '#/features/support/data/support.constant'
 import {
     EMPTY_SUPPORT_FILTERS,
     type SupportFilters,
 } from '#/features/support/schema/support-search.schema.ts'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 interface Props {
     table: Table<typeof supportTableFeatures, SupportRecord>
@@ -28,12 +31,13 @@ interface Props {
 function hasActiveFilters(filters: SupportFilters): boolean {
     return Boolean(
         filters.search.trim() ||
-            filters.created_by_ids.length ||
-            filters.status.length,
+            filters.company_ids.length ||
+            filters.status.length ||
+            filters.priority.length,
     )
 }
 
-/** Search, status filter and utility controls for the support table. */
+/** Search, status/priority filters and utility controls for the support table. */
 export function SupportTableToolbar({
     table,
     filters,
@@ -52,7 +56,7 @@ export function SupportTableToolbar({
                 <SearchField
                     value={filters.search}
                     onChange={(search) => onChangeFilters({ search })}
-                    placeholder="Search support..."
+                    placeholder="Search tickets..."
                     className="w-full sm:w-56 lg:w-72"
                 />
 
@@ -62,6 +66,14 @@ export function SupportTableToolbar({
                     options={supportStatusOptions}
                     selectedValues={filters.status}
                     onChange={(status) => onChangeFilters({ status })}
+                />
+
+                <DataTableFacetedFilter
+                    title="Priority"
+                    icon={ListFilter}
+                    options={supportPriorityOptions}
+                    selectedValues={filters.priority}
+                    onChange={(priority) => onChangeFilters({ priority })}
                 />
 
                 {showReset && (

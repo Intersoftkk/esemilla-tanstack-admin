@@ -1,7 +1,7 @@
 // #/features/invoices/context/invoices-context.tsx
 import React, { useState } from 'react'
 import useDialogState from '#/hooks/use-dialog-state'
-import type { InvoiceRecord } from '#/features/invoices/types/invoices.ts'
+import type { InvoiceRecord } from '#/features/invoices/types/invoices.type.ts'
 
 type InvoicesDialogType =
     | 'add'

@@ -13,7 +13,7 @@ import {
 	SCHOOL_SORT_OPTIONS,
 	type SchoolSort,
 } from "#/features/schools/config/school.config.ts";
-import type { SchoolStatus } from "#/features/schools/types/school.types.ts";
+import type { SchoolStatus } from "#/features/schools/types/schools.type.ts";
 
 interface SchoolsToolbarProps {
 	search: string;

@@ -7,7 +7,7 @@ import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { ConfirmDialog } from '#/components/confirm-dialog.tsx'
 import { useDeleteUserMutation } from '#/features/users/queries/user.queries.ts'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 
 interface Props {
     open: boolean

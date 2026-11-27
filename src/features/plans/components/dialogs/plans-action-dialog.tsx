@@ -26,7 +26,7 @@ import {
     useCreatePlanMutation,
     useUpdatePlanMutation,
 } from '#/features/plans/queries/plan.queries.ts'
-import type { PlanRecord } from '#/features/plans/types/plans.ts'
+import type { PlanRecord } from '#/features/plans/types/plans.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

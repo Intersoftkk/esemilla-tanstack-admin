@@ -5,7 +5,7 @@ import {Card, CardContent} from '#/components/ui/card.tsx'
 import {Skeleton} from '#/components/ui/skeleton.tsx'
 import {cn} from '#/lib/utils.ts'
 import {countUsersByStatus} from '#/features/users/utils/users.utils.ts'
-import type {UserRecord} from '#/features/users/types/users.ts'
+import type {UserRecord} from '#/features/users/types/users.type.ts'
 
 interface UsersStatsProps {
     users: UserRecord[]

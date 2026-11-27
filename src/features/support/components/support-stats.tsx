@@ -1,11 +1,11 @@
 // #/features/support/components/support-stats.tsx
-import {Archive, CalendarRange, CheckCircle2, Clock3} from 'lucide-react'
+import { CheckCircle2, Clock3, Ticket, Timer } from 'lucide-react'
 
-import {Card, CardContent} from '#/components/ui/card.tsx'
-import {Skeleton} from '#/components/ui/skeleton.tsx'
-import {cn} from '#/lib/utils.ts'
-import {countSupportByStatus} from '#/features/support/utils/support.utils.ts'
-import type {SupportRecord} from '#/features/support/types/support.ts'
+import { Card, CardContent } from '#/components/ui/card.tsx'
+import { Skeleton } from '#/components/ui/skeleton.tsx'
+import { cn } from '#/lib/utils.ts'
+import { countSupportByStatus } from '#/features/support/utils/support.utils.ts'
+import type { SupportRecord } from '#/features/support/types/support.type.ts'
 
 interface SupportStatsProps {
     support: SupportRecord[]
@@ -13,8 +13,8 @@ interface SupportStatsProps {
     isLoading: boolean
 }
 
-/** Stat cards give a quick overview of the support list. */
-export function SupportStats({support, total, isLoading}: SupportStatsProps) {
+/** Stat cards give a quick overview of the support ticket queue. */
+export function SupportStats({ support, total, isLoading }: SupportStatsProps) {
     if (isLoading) {
         return (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -22,10 +22,10 @@ export function SupportStats({support, total, isLoading}: SupportStatsProps) {
                     <Card key={`support-stat-${slot}`} size="sm">
                         <CardContent className="flex items-center justify-between p-4">
                             <div className="space-y-2">
-                                <Skeleton className="h-3 w-20"/>
-                                <Skeleton className="h-7 w-12"/>
+                                <Skeleton className="h-3 w-20" />
+                                <Skeleton className="h-7 w-12" />
                             </div>
-                            <Skeleton className="h-10 w-10 rounded-xl"/>
+                            <Skeleton className="h-10 w-10 rounded-xl" />
                         </CardContent>
                     </Card>
                 ))}
@@ -36,24 +36,24 @@ export function SupportStats({support, total, isLoading}: SupportStatsProps) {
     const counts = countSupportByStatus(support)
     const items = [
         {
-            label: 'Total support',
+            label: 'Total tickets',
             value: total,
-            icon: CalendarRange,
+            icon: Ticket,
         },
         {
-            label: 'Active',
-            value: counts.active,
-            icon: CheckCircle2,
+            label: 'Open',
+            value: counts.open,
+            icon: Timer,
         },
         {
-            label: 'Draft',
-            value: counts.draft,
+            label: 'Pending',
+            value: counts.pending,
             icon: Clock3,
         },
         {
-            label: 'Completed / archived',
-            value: counts.completed + counts.archived,
-            icon: Archive,
+            label: 'Resolved / closed',
+            value: counts.resolved + counts.closed,
+            icon: CheckCircle2,
         },
     ]
 
@@ -82,7 +82,7 @@ export function SupportStats({support, total, isLoading}: SupportStatsProps) {
                                 'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 ring-inset ring-foreground/5',
                             )}
                         >
-                            <item.icon className={cn('h-4 w-4')}/>
+                            <item.icon className={cn('h-4 w-4')} />
                         </div>
                     </CardContent>
                 </Card>

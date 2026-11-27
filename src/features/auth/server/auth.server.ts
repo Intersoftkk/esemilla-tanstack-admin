@@ -1,7 +1,7 @@
-import type { AuthSession } from '#/features/auth/types/auth.types'
+import type { AuthSession } from '#/features/auth/types/auth.type'
 import { API_URL } from '#/server/api.server.ts'
 import type { SignInFormData } from '#/features/auth/schema/sign-in.schema.ts'
-import type { User } from '#/features/auth/types/user.types.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 import { getAppSession } from '#/features/auth/utils/session.ts'
 
 /**

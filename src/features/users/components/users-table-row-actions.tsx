@@ -14,7 +14,7 @@ import { PermissionGuard } from '#/features/auth/components/permission-guard'
 import { PLATFORM_PERMISSIONS } from '#/config/permissions.config'
 import type { usersTableFeatures } from '#/features/users/config/users.config.ts'
 import { useUsers } from '#/features/users/context/users-context.tsx'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 
 interface UsersTableRowActionsProps {
     row: Row<typeof usersTableFeatures, UserRecord>

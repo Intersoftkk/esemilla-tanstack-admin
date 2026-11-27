@@ -26,7 +26,7 @@ import {
     useCreateRolePermissionMutation,
     useUpdateRolePermissionMutation,
 } from '#/features/role-permissions/queries/role-permission.queries.ts'
-import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.ts'
+import type { RolePermissionRecord } from '#/features/role-permissions/types/role-permissions.type.ts'
 import type { Option } from '#/types'
 
 interface Props {

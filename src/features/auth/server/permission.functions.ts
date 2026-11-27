@@ -17,7 +17,7 @@ import {
 import type {
   PermissionRecord,
   GroupedPermissions,
-} from '#/features/auth/types/role-permission.types.ts'
+} from '#/features/auth/types/role-permission.type.ts'
 
 export const getPermissionsFn = createServerFn({ method: 'GET' })
   .validator((data?: unknown) => permissionSearchSchema.parse(data ?? {}))

@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from '#/components/ui/dialog'
 import { userStatusOptions } from '#/features/users/data/user.constant'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 
 interface Props {
     currentRow: UserRecord | null

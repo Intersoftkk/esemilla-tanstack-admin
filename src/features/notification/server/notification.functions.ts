@@ -14,7 +14,7 @@ import {
 	markNotificationAsRead,
 	type NotificationsResponse,
 } from "#/features/notification/server/notifications.server.ts";
-import type { NotificationRecord } from "#/features/notification/types/notification.ts";
+import type { NotificationRecord } from "#/features/notification/types/notification.type.ts";
 
 export type { NotificationsResponse };
 

@@ -3,7 +3,7 @@ import { ArrowRight, MailCheck, MailWarning } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "#/components/ui/avatar";
 import { Badge } from "#/components/ui/badge";
-import type { User } from "#/features/auth/types/user.types";
+import type { User } from "#/features/auth/types/user.type";
 import { initials } from "#/lib/format";
 
 /**

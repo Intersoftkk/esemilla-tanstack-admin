@@ -18,7 +18,7 @@ import {
 } from '#/features/auth/server/permission.functions'
 import type {
   PermissionRecord,
-} from '#/features/auth/types/role-permission.types'
+} from '#/features/auth/types/role-permission.type'
 import type {
   PermissionFormData,
 } from '#/features/auth/schema/role-permission.schema'

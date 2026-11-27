@@ -11,7 +11,7 @@ import {
   getAllUserPermissions,
 } from '#/features/auth/utils/auth.ts'
 import type { PermissionInput, RoleInput } from '#/features/auth/utils/auth.ts'
-import type { User } from '#/features/auth/types/user.types.ts'
+import type { User } from '#/features/auth/types/user.type.ts'
 
 export function usePermission() {
   const { user } = useRouteContext({ from: '__root__' })

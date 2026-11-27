@@ -45,7 +45,7 @@ import {
     type UserFilters,
     type UserSearch,
 } from '#/features/users/schema/users-search.schema.ts'
-import type { UserRecord } from '#/features/users/types/users.ts'
+import type { UserRecord } from '#/features/users/types/users.type.ts'
 import { downloadUsersCsv } from '#/features/users/utils/users.utils.ts'
 import { useDebounce } from '#/hooks/use-debounce'
 import type { NavigateFn } from '#/hooks/use-table-url-state'

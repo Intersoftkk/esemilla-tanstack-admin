@@ -10,7 +10,7 @@ import type {
 	SchoolStats,
 	SchoolStatus,
 	SchoolUsage,
-} from "#/features/schools/types/school.types";
+} from "#/features/schools/types/schools.type";
 
 /** Root domain used to build the hosted portal hostname. */
 export const PORTAL_ROOT_DOMAIN = env.VITE_ROOT_DOMAIN ?? "schoolportal.app";

@@ -19,7 +19,7 @@ import {
 import type {
 	NotificationRecord,
 	NotificationsResponse,
-} from "#/features/notification/types/notification.ts";
+} from "#/features/notification/types/notification.type.ts";
 
 type QueryOptions<TData> = Omit<
 	UseQueryOptions<NotificationsResponse, Error, TData>,
