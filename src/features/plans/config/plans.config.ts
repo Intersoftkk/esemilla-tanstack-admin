@@ -1,11 +1,11 @@
 // #/features/plans/config/plans.config.ts
 import {
-    columnVisibilityFeature,
-    rowPaginationFeature,
-    rowSelectionFeature,
-    rowSortingFeature,
-    tableFeatures,
-} from '@tanstack/react-table'
+	columnVisibilityFeature,
+	rowPaginationFeature,
+	rowSelectionFeature,
+	rowSortingFeature,
+	tableFeatures,
+} from "@tanstack/react-table";
 
 /**
  * Sorting and pagination are performed by the API, so no client-side row
@@ -13,8 +13,8 @@ import {
  * the shared datatable components.
  */
 export const plansTableFeatures = tableFeatures({
-    rowSelectionFeature,
-    rowSortingFeature,
-    columnVisibilityFeature,
-    rowPaginationFeature,
-})
+	rowSelectionFeature,
+	rowSortingFeature,
+	columnVisibilityFeature,
+	rowPaginationFeature,
+});

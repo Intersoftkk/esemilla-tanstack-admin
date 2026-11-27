@@ -1,4 +1,4 @@
-import { Download, LayoutGrid, List, Search, RefreshCw, X } from "lucide-react";
+import { Download, LayoutGrid, List, RefreshCw, Search, X } from "lucide-react";
 
 import { Button } from "#/components/ui/button.tsx";
 import { Input } from "#/components/ui/input.tsx";

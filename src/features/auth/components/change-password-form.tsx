@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useServerFn } from "@tanstack/react-start";
 import { Eye, EyeOff, Loader, Lock } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "#/components/ui/button";
 import { Field, FieldError, FieldLabel } from "#/components/ui/field";
 import { Input } from "#/components/ui/input";
-import { changePasswordFn } from "#/features/auth/server/auth.functions";
 import { changePasswordSchema } from "#/features/auth/schema/change-password.schema";
+import { changePasswordFn } from "#/features/auth/server/auth.functions";
 import { cn } from "#/lib/utils";
 
 function fieldErrorMessage(error: unknown): string | null {
@@ -130,9 +130,7 @@ export function ChangePasswordForm() {
 										className="pr-10 pl-10"
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onChange={(event) =>
-											field.handleChange(event.target.value)
-										}
+										onChange={(event) => field.handleChange(event.target.value)}
 										aria-invalid={!!message}
 									/>
 									<button

@@ -32,7 +32,6 @@ export const adminNavigation: Array<NavGroup> = [
 				description: "Platform health, tenants, and revenue",
 				url: "/dashboard",
 				icon: LayoutDashboard,
-				permissions: [PLATFORM_PERMISSIONS.PlatformDashboardView],
 			},
 		],
 	},

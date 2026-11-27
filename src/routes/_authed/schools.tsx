@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SchoolsPage } from "#/features/schools/schools-page.tsx";
 import { schoolsSearchSchema } from "#/features/schools/schema/schools-search.schema.ts";
+import { SchoolsPage } from "#/features/schools/schools-page.tsx";
 import { pageHead } from "#/lib/head";
 
 export const Route = createFileRoute("/_authed/schools")({

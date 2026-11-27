@@ -9,8 +9,8 @@ import type {
 } from "#/features/schools/schema/school.schema";
 import type {
 	BillingCycle,
-	Plan,
 	OnboardSchoolPayload,
+	Plan,
 	School,
 	UpdateSchoolPayload,
 } from "#/features/schools/types/schools.type";

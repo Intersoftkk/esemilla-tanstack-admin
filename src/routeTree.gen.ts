@@ -17,12 +17,10 @@ import { Route as AuthOtpRouteImport } from './routes/_auth/otp'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
-import { Route as AuthedBillingRouteImport } from './routes/_authed/billing'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
 import { Route as AuthedInvoicesRouteImport } from './routes/_authed/invoices'
 import { Route as AuthedSchoolsRouteImport } from './routes/_authed/schools'
 import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
-import { Route as AuthedBackupsIndexRouteImport } from './routes/_authed/backups.index'
 import { Route as AuthedNotificationsIndexRouteImport } from './routes/_authed/notifications.index'
 import { Route as AuthedPaymentsIndexRouteImport } from './routes/_authed/payments.index'
 import { Route as AuthedPlansIndexRouteImport } from './routes/_authed/plans.index'
@@ -74,11 +72,6 @@ const AuthSignUpRoute = AuthSignUpRouteImport.update({
   path: '/sign-up',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthedBillingRoute = AuthedBillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
-  getParentRoute: () => AuthedRoute,
-} as any)
 const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -97,11 +90,6 @@ const AuthedSchoolsRoute = AuthedSchoolsRouteImport.update({
 const AuthedSettingsRoute = AuthedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedBackupsIndexRoute = AuthedBackupsIndexRouteImport.update({
-  id: '/backups/',
-  path: '/backups/',
   getParentRoute: () => AuthedRoute,
 } as any)
 const AuthedNotificationsIndexRoute =
@@ -176,7 +164,6 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/billing': typeof AuthedBillingRoute
   '/dashboard': typeof AuthedDashboardRoute
   '/invoices': typeof AuthedInvoicesRoute
   '/schools': typeof AuthedSchoolsRoute
@@ -184,7 +171,6 @@ export interface FileRoutesByFullPath {
   '/profile/change-password': typeof AuthedProfileChangePasswordRoute
   '/schools/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/schools/new': typeof AuthedSchoolsNewRoute
-  '/backups/': typeof AuthedBackupsIndexRoute
   '/notifications/': typeof AuthedNotificationsIndexRoute
   '/payments/': typeof AuthedPaymentsIndexRoute
   '/plans/': typeof AuthedPlansIndexRoute
@@ -202,7 +188,6 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/billing': typeof AuthedBillingRoute
   '/dashboard': typeof AuthedDashboardRoute
   '/invoices': typeof AuthedInvoicesRoute
   '/schools': typeof AuthedSchoolsRoute
@@ -210,7 +195,6 @@ export interface FileRoutesByTo {
   '/profile/change-password': typeof AuthedProfileChangePasswordRoute
   '/schools/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/schools/new': typeof AuthedSchoolsNewRoute
-  '/backups': typeof AuthedBackupsIndexRoute
   '/notifications': typeof AuthedNotificationsIndexRoute
   '/payments': typeof AuthedPaymentsIndexRoute
   '/plans': typeof AuthedPlansIndexRoute
@@ -231,7 +215,6 @@ export interface FileRoutesById {
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
-  '/_authed/billing': typeof AuthedBillingRoute
   '/_authed/dashboard': typeof AuthedDashboardRoute
   '/_authed/invoices': typeof AuthedInvoicesRoute
   '/_authed/schools': typeof AuthedSchoolsRoute
@@ -239,7 +222,6 @@ export interface FileRoutesById {
   '/_authed/profile/change-password': typeof AuthedProfileChangePasswordRoute
   '/_authed/schools_/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/_authed/schools_/new': typeof AuthedSchoolsNewRoute
-  '/_authed/backups/': typeof AuthedBackupsIndexRoute
   '/_authed/notifications/': typeof AuthedNotificationsIndexRoute
   '/_authed/payments/': typeof AuthedPaymentsIndexRoute
   '/_authed/plans/': typeof AuthedPlansIndexRoute
@@ -259,7 +241,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
-    | '/billing'
     | '/dashboard'
     | '/invoices'
     | '/schools'
@@ -267,7 +248,6 @@ export interface FileRouteTypes {
     | '/profile/change-password'
     | '/schools/$schoolId'
     | '/schools/new'
-    | '/backups/'
     | '/notifications/'
     | '/payments/'
     | '/plans/'
@@ -285,7 +265,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
-    | '/billing'
     | '/dashboard'
     | '/invoices'
     | '/schools'
@@ -293,7 +272,6 @@ export interface FileRouteTypes {
     | '/profile/change-password'
     | '/schools/$schoolId'
     | '/schools/new'
-    | '/backups'
     | '/notifications'
     | '/payments'
     | '/plans'
@@ -313,7 +291,6 @@ export interface FileRouteTypes {
     | '/_auth/reset-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
-    | '/_authed/billing'
     | '/_authed/dashboard'
     | '/_authed/invoices'
     | '/_authed/schools'
@@ -321,7 +298,6 @@ export interface FileRouteTypes {
     | '/_authed/profile/change-password'
     | '/_authed/schools_/$schoolId'
     | '/_authed/schools_/new'
-    | '/_authed/backups/'
     | '/_authed/notifications/'
     | '/_authed/payments/'
     | '/_authed/plans/'
@@ -397,13 +373,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignUpRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_authed/billing': {
-      id: '/_authed/billing'
-      path: '/billing'
-      fullPath: '/billing'
-      preLoaderRoute: typeof AuthedBillingRouteImport
-      parentRoute: typeof AuthedRoute
-    }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
       path: '/dashboard'
@@ -430,13 +399,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthedSettingsRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/backups/': {
-      id: '/_authed/backups/'
-      path: '/backups'
-      fullPath: '/backups/'
-      preLoaderRoute: typeof AuthedBackupsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/notifications/': {
@@ -545,7 +507,6 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthedRouteChildren {
-  AuthedBillingRoute: typeof AuthedBillingRoute
   AuthedDashboardRoute: typeof AuthedDashboardRoute
   AuthedInvoicesRoute: typeof AuthedInvoicesRoute
   AuthedSchoolsRoute: typeof AuthedSchoolsRoute
@@ -553,7 +514,6 @@ interface AuthedRouteChildren {
   AuthedProfileChangePasswordRoute: typeof AuthedProfileChangePasswordRoute
   AuthedSchoolsSchoolIdRoute: typeof AuthedSchoolsSchoolIdRoute
   AuthedSchoolsNewRoute: typeof AuthedSchoolsNewRoute
-  AuthedBackupsIndexRoute: typeof AuthedBackupsIndexRoute
   AuthedNotificationsIndexRoute: typeof AuthedNotificationsIndexRoute
   AuthedPaymentsIndexRoute: typeof AuthedPaymentsIndexRoute
   AuthedPlansIndexRoute: typeof AuthedPlansIndexRoute
@@ -566,7 +526,6 @@ interface AuthedRouteChildren {
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedBillingRoute: AuthedBillingRoute,
   AuthedDashboardRoute: AuthedDashboardRoute,
   AuthedInvoicesRoute: AuthedInvoicesRoute,
   AuthedSchoolsRoute: AuthedSchoolsRoute,
@@ -574,7 +533,6 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedProfileChangePasswordRoute: AuthedProfileChangePasswordRoute,
   AuthedSchoolsSchoolIdRoute: AuthedSchoolsSchoolIdRoute,
   AuthedSchoolsNewRoute: AuthedSchoolsNewRoute,
-  AuthedBackupsIndexRoute: AuthedBackupsIndexRoute,
   AuthedNotificationsIndexRoute: AuthedNotificationsIndexRoute,
   AuthedPaymentsIndexRoute: AuthedPaymentsIndexRoute,
   AuthedPlansIndexRoute: AuthedPlansIndexRoute,

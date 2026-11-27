@@ -1,37 +1,37 @@
 // #/features/auth/hooks/use-permission.ts
 
-import { useRouteContext } from '@tanstack/react-router'
+import { useRouteContext } from "@tanstack/react-router";
+import type { User } from "#/features/auth/types/user.type.ts";
+import type { PermissionInput, RoleInput } from "#/features/auth/utils/auth.ts";
 import {
-  hasRole,
-  hasAnyRole,
-  hasAllRoles,
-  hasPermission,
-  hasAnyPermission,
-  hasAllPermissions,
-  getAllUserPermissions,
-} from '#/features/auth/utils/auth.ts'
-import type { PermissionInput, RoleInput } from '#/features/auth/utils/auth.ts'
-import type { User } from '#/features/auth/types/user.type.ts'
+	getAllUserPermissions,
+	hasAllPermissions,
+	hasAllRoles,
+	hasAnyPermission,
+	hasAnyRole,
+	hasPermission,
+	hasRole,
+} from "#/features/auth/utils/auth.ts";
 
 export function usePermission() {
-  const { user } = useRouteContext({ from: '__root__' })
-  const User = user as User | null | undefined
+	const { user } = useRouteContext({ from: "__root__" });
+	const User = user as User | null | undefined;
 
-  return {
-    user: User,
-    isAuthenticated: Boolean(User),
-    roles: User?.roles ?? [],
-    permissions: getAllUserPermissions(User),
-    hasRole: (role: RoleInput) => hasRole(User, role),
-    hasAnyRole: (roles: RoleInput[]) => hasAnyRole(User, roles),
-    hasAllRoles: (roles: RoleInput[]) => hasAllRoles(User, roles),
-    hasPermission: (permission: PermissionInput) =>
-      hasPermission(User, permission),
-    hasAnyPermission: (permissions: PermissionInput[]) =>
-      hasAnyPermission(User, permissions),
-    hasAllPermissions: (permissions: PermissionInput[]) =>
-      hasAllPermissions(User, permissions),
-  }
+	return {
+		user: User,
+		isAuthenticated: Boolean(User),
+		roles: User?.roles ?? [],
+		permissions: getAllUserPermissions(User),
+		hasRole: (role: RoleInput) => hasRole(User, role),
+		hasAnyRole: (roles: RoleInput[]) => hasAnyRole(User, roles),
+		hasAllRoles: (roles: RoleInput[]) => hasAllRoles(User, roles),
+		hasPermission: (permission: PermissionInput) =>
+			hasPermission(User, permission),
+		hasAnyPermission: (permissions: PermissionInput[]) =>
+			hasAnyPermission(User, permissions),
+		hasAllPermissions: (permissions: PermissionInput[]) =>
+			hasAllPermissions(User, permissions),
+	};
 }
 
 /**
@@ -44,18 +44,18 @@ export function usePermission() {
  *  - "can-edit-user" -> "Edit User"
  */
 export function formatPermissionName(name: string): string {
-  if (!name) return ''
+	if (!name) return "";
 
-  // For namespaced permissions like 'academic.attendance.mark', strip the root module prefix
-  const parts = name.split('.')
-  const actionTarget = parts.length > 1 ? parts.slice(1).join(' ') : parts[0]
+	// For namespaced permissions like 'academic.attendance.mark', strip the root module prefix
+	const parts = name.split(".");
+	const actionTarget = parts.length > 1 ? parts.slice(1).join(" ") : parts[0];
 
-  return actionTarget
-    .replace(/^can[_-]/i, '')
-    .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase support
-    .replace(/[-_.]+/g, ' ') // kebab/snake/dot to space
-    .trim()
-    .replace(/\b\w/g, (c) => c.toUpperCase())
+	return actionTarget
+		.replace(/^can[_-]/i, "")
+		.replace(/([a-z])([A-Z])/g, "$1 $2") // camelCase support
+		.replace(/[-_.]+/g, " ") // kebab/snake/dot to space
+		.trim()
+		.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 /**
@@ -67,11 +67,11 @@ export function formatPermissionName(name: string): string {
  *  - "marksheet" -> "Marksheet"
  */
 export function formatModuleName(module: string): string {
-  if (!module) return ''
+	if (!module) return "";
 
-  return module
-    .replace(/([a-z])([A-Z])/g, '$1 $2') // split camelCase
-    .replace(/[-_.]+/g, ' ') // replace delimiters with space
-    .trim()
-    .replace(/\b\w/g, (c) => c.toUpperCase())
+	return module
+		.replace(/([a-z])([A-Z])/g, "$1 $2") // split camelCase
+		.replace(/[-_.]+/g, " ") // replace delimiters with space
+		.trim()
+		.replace(/\b\w/g, (c) => c.toUpperCase());
 }
