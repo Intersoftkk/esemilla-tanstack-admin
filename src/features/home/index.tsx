@@ -7,7 +7,7 @@ import {
 	Check,
 	GraduationCap,
 	LogOut,
-	Sparkles,
+	ShieldCheck,
 } from "lucide-react";
 
 import { Button } from "#/components/ui/button.tsx";
@@ -15,23 +15,58 @@ import { APP_CONFIG } from "#/config/app.config.ts";
 import { usePermission } from "#/features/auth/hooks/use-permission";
 import { signOutFn } from "#/features/auth/server/auth.functions";
 import {
-	homeFeatures,
-	homeHighlights,
-	homePlans,
-	homeStats,
-	homeSteps,
+	accessRoles,
+	consoleModules,
+	deskSteps,
+	platformStats,
 } from "#/features/home/data/home.data.ts";
 import { cn } from "#/lib/utils";
 
-const collectionBars = [46, 58, 52, 71, 64, 82, 76, 91] as const;
-
 const navLinks = [
-	{ label: "Features", href: "#features" },
-	{ label: "How it works", href: "#how-it-works" },
-	{ label: "Pricing", href: "#pricing" },
+	{ label: "Modules", href: "#modules" },
+	{ label: "Desk workflow", href: "#workflow" },
+	{ label: "Access", href: "#access" },
 ];
 
-/** Marketing landing page for the platform. */
+const ticketPreview = [
+	{
+		id: "TCK-4821",
+		school: "Oakridge Academy",
+		subject: "Invoice 2041 charged twice",
+		priority: "urgent",
+		state: "open",
+	},
+	{
+		id: "TCK-4820",
+		school: "Bright Future School",
+		subject: "Cannot export attendance report",
+		priority: "high",
+		state: "pending",
+	},
+	{
+		id: "TCK-4818",
+		school: "Greenfield College",
+		subject: "Add a second campus to our plan",
+		priority: "normal",
+		state: "open",
+	},
+];
+
+const priorityClasses: Record<string, string> = {
+	urgent: "bg-rose-500/10 text-rose-700 dark:text-rose-400",
+	high: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+	normal: "bg-sky-500/10 text-sky-700 dark:text-sky-400",
+};
+
+const stateClasses: Record<string, string> = {
+	open: "bg-primary/10 text-primary",
+	pending: "bg-muted text-muted-foreground",
+};
+
+/**
+ * Landing page for the platform admin console: what the workspace contains,
+ * how the support desk runs, and who can reach what.
+ */
 export default function HomePage() {
 	const { user } = usePermission();
 	const navigate = useNavigate();
@@ -60,8 +95,13 @@ export default function HomePage() {
 						<span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
 							<GraduationCap className="size-4.5" aria-hidden="true" />
 						</span>
-						<span className="text-base font-semibold tracking-tight">
-							{APP_CONFIG.name}
+						<span className="flex flex-col leading-tight">
+							<span className="text-base font-semibold tracking-tight">
+								{APP_CONFIG.name}
+							</span>
+							<span className="text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
+								Platform admin
+							</span>
 						</span>
 					</Link>
 
@@ -84,7 +124,7 @@ export default function HomePage() {
 							rel="noopener noreferrer"
 							className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
 						>
-							Docs
+							Runbook
 						</a>
 					</nav>
 
@@ -96,17 +136,17 @@ export default function HomePage() {
 									Log out
 								</Button>
 								<Button size="sm" asChild>
-									<Link to="/dashboard">Open dashboard</Link>
+									<Link to="/dashboard">Open console</Link>
 								</Button>
 							</>
 						) : (
 							<>
 								<Button variant="ghost" size="sm" asChild>
-									<Link to="/sign-in">Sign in</Link>
+									<a href={APP_CONFIG.links.support}>Contact platform team</a>
 								</Button>
 								<Button size="sm" asChild>
-									<Link to="/sign-up">
-										{APP_CONFIG.cta.primary}
+									<Link to="/sign-in">
+										Sign in
 										<ArrowRight className="size-3.5" aria-hidden="true" />
 									</Link>
 								</Button>
@@ -123,111 +163,140 @@ export default function HomePage() {
 						className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_0%,color-mix(in_oklab,var(--primary)_14%,transparent),transparent_55%),radial-gradient(ellipse_at_85%_10%,rgba(56,189,248,0.12),transparent_45%)]"
 						aria-hidden="true"
 					/>
-					<div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:py-24">
+					<div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:py-24">
 						<div>
 							<span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-xs">
-								<Sparkles
-									className="size-3.5 text-primary"
-									aria-hidden="true"
-								/>
-								{APP_CONFIG.tagline}
+								<span className="size-1.5 rounded-full bg-emerald-500" />
+								Internal workspace · platform team
 							</span>
 
-							<h1 className="mt-5 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-[3.35rem] lg:leading-[1.06]">
-								{APP_CONFIG.headline}
+							<h1 className="mt-5 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-[3.2rem] lg:leading-[1.07]">
+								The console behind every Esemilla school
 							</h1>
 							<p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
-								{APP_CONFIG.subheadline}
+								Tenants, subscriptions, invoices and the support queue in one
+								workspace — with an audit trail behind every administrative
+								change.
 							</p>
 
 							<div className="mt-8 flex flex-col gap-3 sm:flex-row">
 								<Button size="lg" asChild>
-									<Link to={user ? "/dashboard" : "/sign-up"}>
-										{user ? "Open dashboard" : APP_CONFIG.cta.primary}
+									<Link to={user ? "/dashboard" : "/sign-in"}>
+										{user ? "Open console" : "Sign in to the console"}
 										<ArrowRight className="size-4" aria-hidden="true" />
 									</Link>
 								</Button>
 								<Button variant="outline" size="lg" asChild>
-									<Link to="/sign-in">{APP_CONFIG.cta.login}</Link>
+									<a
+										href={APP_CONFIG.links.docs}
+										target="_blank"
+										rel="noreferrer"
+									>
+										Read the runbook
+									</a>
 								</Button>
 							</div>
 
-							<ul className="mt-8 flex flex-col gap-2">
-								{homeHighlights.map((highlight) => (
-									<li
-										key={highlight.label}
-										className="flex items-center gap-2 text-sm text-muted-foreground"
-									>
-										<highlight.icon
-											className="size-4 text-primary"
-											aria-hidden="true"
-										/>
-										{highlight.label}
-									</li>
-								))}
-							</ul>
+							<div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+								<span className="inline-flex items-center gap-1.5">
+									<ShieldCheck
+										className="size-4 text-primary"
+										aria-hidden="true"
+									/>
+									Role-based access
+								</span>
+								<span className="inline-flex items-center gap-1.5">
+									<Check
+										className="size-4 text-emerald-600 dark:text-emerald-400"
+										aria-hidden="true"
+									/>
+									Full audit trail
+								</span>
+								<span className="inline-flex items-center gap-1.5">
+									<Check
+										className="size-4 text-emerald-600 dark:text-emerald-400"
+										aria-hidden="true"
+									/>
+									Support SLAs tracked
+								</span>
+							</div>
 						</div>
 
-						{/* Product preview */}
+						{/* Support queue preview */}
 						<div className="relative">
 							<div
 								className="absolute -inset-4 -z-10 rounded-3xl bg-linear-to-br from-primary/10 via-transparent to-sky-400/10 blur-2xl"
 								aria-hidden="true"
 							/>
 							<div className="rounded-2xl border border-border/70 bg-card p-4 shadow-xl shadow-slate-900/5 sm:p-5">
-								<div className="flex items-center gap-1.5">
-									<span className="size-2 rounded-full bg-rose-400" />
-									<span className="size-2 rounded-full bg-amber-400" />
-									<span className="size-2 rounded-full bg-emerald-400" />
-									<span className="ms-2 text-[11px] text-muted-foreground">
-										esemilla.com/dashboard
+								<div className="flex items-center justify-between gap-3">
+									<div>
+										<p className="text-sm font-semibold text-foreground">
+											Support queue
+										</p>
+										<p className="text-[11px] text-muted-foreground">
+											3 tickets need attention
+										</p>
+									</div>
+									<span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:text-amber-400">
+										1 breaching SLA
 									</span>
 								</div>
 
-								<div className="mt-4 grid grid-cols-2 gap-3">
-									{[
-										{ label: "Active students", value: "1,284" },
-										{ label: "Fees collected", value: "92.4%" },
-										{ label: "Attendance today", value: "96.1%" },
-										{ label: "Open invoices", value: "38" },
-									].map((kpi) => (
-										<div
-											key={kpi.label}
-											className="rounded-xl border border-border/60 bg-muted/30 p-3"
+								<ul className="mt-4 space-y-2">
+									{ticketPreview.map((ticket) => (
+										<li
+											key={ticket.id}
+											className="rounded-xl border border-border/60 bg-muted/20 p-3"
 										>
-											<p className="text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-												{kpi.label}
+											<div className="flex items-center justify-between gap-2">
+												<span className="font-mono text-[11px] text-muted-foreground">
+													{ticket.id}
+												</span>
+												<span
+													className={cn(
+														"rounded-full px-1.5 py-0.5 text-[10px] font-semibold uppercase",
+														priorityClasses[ticket.priority],
+													)}
+												>
+													{ticket.priority}
+												</span>
+											</div>
+											<p className="mt-1 truncate text-sm font-medium text-foreground">
+												{ticket.subject}
 											</p>
-											<p className="mt-1 text-lg font-semibold tabular-nums text-foreground">
-												{kpi.value}
-											</p>
-										</div>
+											<div className="mt-1.5 flex items-center justify-between gap-2">
+												<span className="truncate text-[11px] text-muted-foreground">
+													{ticket.school}
+												</span>
+												<span
+													className={cn(
+														"rounded-full px-1.5 py-0.5 text-[10px] font-medium capitalize",
+														stateClasses[ticket.state],
+													)}
+												>
+													{ticket.state}
+												</span>
+											</div>
+										</li>
 									))}
-								</div>
+								</ul>
 
-								<div className="mt-4 rounded-xl border border-border/60 p-3">
-									<p className="text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-										Fee collection by term
-									</p>
-									<div className="mt-3 flex h-24 items-end gap-2">
-										{collectionBars.map((height) => (
-											<div
-												key={height}
-												className="flex-1 rounded-t-md bg-primary/80"
-												style={{ height: `${height}%` }}
-											/>
-										))}
-									</div>
+								<div className="mt-3 flex items-center justify-between rounded-xl border border-dashed border-border/70 px-3 py-2 text-[11px] text-muted-foreground">
+									<span>Avg. first response</span>
+									<span className="font-semibold text-foreground tabular-nums">
+										1h 42m
+									</span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</section>
 
-				{/* Stats */}
+				{/* Platform numbers */}
 				<section className="border-y border-border/60 bg-muted/30">
 					<div className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-6 px-4 py-8 sm:px-6 lg:grid-cols-4">
-						{homeStats.map((stat) => (
+						{platformStats.map((stat) => (
 							<div key={stat.id}>
 								<p className="text-2xl font-semibold tracking-tight tabular-nums text-foreground">
 									{stat.value}
@@ -240,52 +309,59 @@ export default function HomePage() {
 					</div>
 				</section>
 
-				{/* Features */}
+				{/* Modules */}
 				<section
-					id="features"
+					id="modules"
 					className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20"
 				>
 					<div className="max-w-2xl">
 						<h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-							Everything a school runs on, in one place
+							What lives in the console
 						</h2>
 						<p className="mt-3 text-muted-foreground">
-							Stop stitching together spreadsheets, WhatsApp groups and a fees
-							ledger. Each module below is included in the platform.
+							Eight modules cover the whole platform lifecycle — from onboarding
+							a school to closing its last ticket.
 						</p>
 					</div>
 
-					<div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						{homeFeatures.map((feature) => (
+					<div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+						{consoleModules.map((module) => (
 							<div
-								key={feature.id}
+								key={module.id}
 								className="rounded-2xl border border-border/70 bg-card p-5 transition-shadow hover:shadow-md"
 							>
 								<span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-inset ring-primary/15">
-									<feature.icon className="size-4.5" aria-hidden="true" />
+									<module.icon className="size-4.5" aria-hidden="true" />
 								</span>
 								<h3 className="mt-4 text-sm font-semibold text-foreground">
-									{feature.title}
+									{module.title}
 								</h3>
 								<p className="mt-1.5 text-sm leading-6 text-muted-foreground">
-									{feature.description}
+									{module.description}
 								</p>
 							</div>
 						))}
 					</div>
 				</section>
 
-				{/* How it works */}
+				{/* Support workflow */}
 				<section
-					id="how-it-works"
+					id="workflow"
 					className="border-y border-border/60 bg-muted/30"
 				>
 					<div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
-						<h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-							Live in three steps
-						</h2>
+						<div className="max-w-2xl">
+							<h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+								A day on the platform desk
+							</h2>
+							<p className="mt-3 text-muted-foreground">
+								The support queue is the front door of the platform. It is built
+								so the whole team can work it without stepping on each other.
+							</p>
+						</div>
+
 						<div className="mt-10 grid gap-4 md:grid-cols-3">
-							{homeSteps.map((step, index) => (
+							{deskSteps.map((step, index) => (
 								<div
 									key={step.id}
 									className="rounded-2xl border border-border/70 bg-card p-5"
@@ -305,80 +381,49 @@ export default function HomePage() {
 					</div>
 				</section>
 
-				{/* Pricing */}
+				{/* Access */}
 				<section
-					id="pricing"
+					id="access"
 					className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20"
 				>
 					<div className="max-w-2xl">
 						<h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-							Pricing that scales with enrolment
+							Three roles, one console
 						</h2>
 						<p className="mt-3 text-muted-foreground">
-							Every plan includes the full platform — you only pay for the
-							students you actually manage.
+							Access is granted per module through role permissions, so support
+							agents never need billing keys and finance never needs the desk.
 						</p>
 					</div>
 
-					<div className="mt-10 grid gap-4 lg:grid-cols-3">
-						{homePlans.map((plan) => (
+					<div className="mt-10 grid gap-4 md:grid-cols-3">
+						{accessRoles.map((role) => (
 							<div
-								key={plan.id}
-								className={cn(
-									"flex flex-col rounded-2xl border bg-card p-6",
-									plan.featured
-										? "border-primary/40 shadow-lg shadow-primary/5 ring-1 ring-primary/20"
-										: "border-border/70",
-								)}
+								key={role.id}
+								className="flex flex-col rounded-2xl border border-border/70 bg-card p-5"
 							>
 								<div className="flex items-center justify-between gap-2">
 									<h3 className="text-sm font-semibold text-foreground">
-										{plan.name}
+										{role.name}
 									</h3>
-									{plan.featured ? (
-										<span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-											Most popular
-										</span>
-									) : null}
+									<span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+										{role.scope}
+									</span>
 								</div>
-								<p className="mt-4 flex items-baseline gap-1">
-									<span className="text-3xl font-semibold tracking-tight tabular-nums">
-										{plan.price}
-									</span>
-									<span className="text-xs text-muted-foreground">
-										{plan.cadence}
-									</span>
-								</p>
-								<p className="mt-2 text-sm text-muted-foreground">
-									{plan.blurb}
-								</p>
-
-								<ul className="mt-5 space-y-2">
-									{plan.features.map((feature) => (
+								<ul className="mt-4 space-y-2">
+									{role.can.map((ability) => (
 										<li
-											key={feature}
+											key={ability}
 											className="flex items-start gap-2 text-sm text-muted-foreground"
 										>
 											<Check
 												className="mt-0.5 size-3.5 shrink-0 text-emerald-600 dark:text-emerald-400"
 												aria-hidden="true"
 											/>
-											{feature}
+											{ability}
 										</li>
 									))}
 								</ul>
-
-								<Button
-									className="mt-6 w-full"
-									variant={plan.featured ? "default" : "outline"}
-									asChild
-								>
-									<Link to={user ? "/dashboard" : "/sign-up"}>
-										{plan.id === "enterprise"
-											? APP_CONFIG.cta.secondary
-											: APP_CONFIG.cta.primary}
-									</Link>
-								</Button>
 							</div>
 						))}
 					</div>
@@ -393,16 +438,16 @@ export default function HomePage() {
 						/>
 						<div className="relative">
 							<h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-								Ready to run your school from one platform?
+								Sign in with your platform account
 							</h2>
 							<p className="mx-auto mt-3 max-w-xl text-sm text-slate-300 sm:text-base">
-								Start a 30-day trial with your real classes and students. No
-								card, no migration fees, cancel whenever.
+								Console access is provisioned by the platform team. If you need
+								a role or your permissions changed, ask in the support channel.
 							</p>
 							<div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
 								<Button size="lg" asChild>
-									<Link to={user ? "/dashboard" : "/sign-up"}>
-										{user ? "Open dashboard" : APP_CONFIG.cta.primary}
+									<Link to={user ? "/dashboard" : "/sign-in"}>
+										{user ? "Open console" : "Sign in"}
 										<ArrowRight className="size-4" aria-hidden="true" />
 									</Link>
 								</Button>
@@ -412,9 +457,7 @@ export default function HomePage() {
 									className="border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white"
 									asChild
 								>
-									<a href={APP_CONFIG.links.support}>
-										{APP_CONFIG.cta.secondary}
-									</a>
+									<a href={APP_CONFIG.links.support}>Request access</a>
 								</Button>
 							</div>
 						</div>
@@ -429,7 +472,7 @@ export default function HomePage() {
 							<GraduationCap className="size-3.5" aria-hidden="true" />
 						</span>
 						<span>
-							{APP_CONFIG.name} · {APP_CONFIG.copyright}
+							{APP_CONFIG.name} Platform Admin · {APP_CONFIG.copyright}
 						</span>
 					</div>
 					<nav
@@ -437,7 +480,7 @@ export default function HomePage() {
 						aria-label="Footer"
 					>
 						<a className="hover:text-foreground" href={APP_CONFIG.links.docs}>
-							Docs
+							Runbook
 						</a>
 						<a
 							className="hover:text-foreground"
