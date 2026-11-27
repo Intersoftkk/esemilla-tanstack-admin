@@ -27,7 +27,7 @@ interface PasswordStrengthProps {
 }
 
 /**
- * Four-segment strength meter plus the rule checklist, shared by the sign-up,
+ * Four-segment strength meter plus the rule checklist, shared by the
  * reset-password and change-password forms.
  */
 export function PasswordStrength({

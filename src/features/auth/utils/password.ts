@@ -20,7 +20,7 @@ const LABELS = ["Too weak", "Weak", "Fair", "Good", "Strong"] as const;
 
 /**
  * Scores a password against the same rule set the auth schemas enforce
- * (`sign-up`, `reset-password`, `change-password`) so the meter and the
+ * (`reset-password`, `change-password`) so the meter and the
  * server-side validation never disagree.
  */
 export function evaluatePassword(password: string): PasswordStrength {

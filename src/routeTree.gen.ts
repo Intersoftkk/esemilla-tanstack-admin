@@ -16,7 +16,6 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-pa
 import { Route as AuthOtpRouteImport } from './routes/_auth/otp'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
-import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthedAdminsRouteImport } from './routes/_authed/admins'
 import { Route as AuthedAuditLogsRouteImport } from './routes/_authed/audit-logs'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
@@ -70,11 +69,6 @@ const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthSignUpRoute = AuthSignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthedAdminsRoute = AuthedAdminsRouteImport.update({
@@ -193,7 +187,6 @@ export interface FileRoutesByFullPath {
   '/otp': typeof AuthOtpRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
-  '/sign-up': typeof AuthSignUpRoute
   '/admins': typeof AuthedAdminsRoute
   '/audit-logs': typeof AuthedAuditLogsRoute
   '/dashboard': typeof AuthedDashboardRoute
@@ -222,7 +215,6 @@ export interface FileRoutesByTo {
   '/otp': typeof AuthOtpRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
-  '/sign-up': typeof AuthSignUpRoute
   '/admins': typeof AuthedAdminsRoute
   '/audit-logs': typeof AuthedAuditLogsRoute
   '/dashboard': typeof AuthedDashboardRoute
@@ -254,7 +246,6 @@ export interface FileRoutesById {
   '/_auth/otp': typeof AuthOtpRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
-  '/_auth/sign-up': typeof AuthSignUpRoute
   '/_authed/admins': typeof AuthedAdminsRoute
   '/_authed/audit-logs': typeof AuthedAuditLogsRoute
   '/_authed/dashboard': typeof AuthedDashboardRoute
@@ -285,7 +276,6 @@ export interface FileRouteTypes {
     | '/otp'
     | '/reset-password'
     | '/sign-in'
-    | '/sign-up'
     | '/admins'
     | '/audit-logs'
     | '/dashboard'
@@ -314,7 +304,6 @@ export interface FileRouteTypes {
     | '/otp'
     | '/reset-password'
     | '/sign-in'
-    | '/sign-up'
     | '/admins'
     | '/audit-logs'
     | '/dashboard'
@@ -345,7 +334,6 @@ export interface FileRouteTypes {
     | '/_auth/otp'
     | '/_auth/reset-password'
     | '/_auth/sign-in'
-    | '/_auth/sign-up'
     | '/_authed/admins'
     | '/_authed/audit-logs'
     | '/_authed/dashboard'
@@ -424,13 +412,6 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof AuthSignInRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/sign-up': {
-      id: '/_auth/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof AuthSignUpRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_authed/admins': {
@@ -588,7 +569,6 @@ interface AuthRouteChildren {
   AuthOtpRoute: typeof AuthOtpRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSignInRoute: typeof AuthSignInRoute
-  AuthSignUpRoute: typeof AuthSignUpRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -596,7 +576,6 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthOtpRoute: AuthOtpRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSignInRoute: AuthSignInRoute,
-  AuthSignUpRoute: AuthSignUpRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

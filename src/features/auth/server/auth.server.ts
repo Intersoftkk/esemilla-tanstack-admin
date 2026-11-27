@@ -77,36 +77,6 @@ export async function loginRequest(
 }
 
 /**
- * Register user and update session
- */
-export async function registerRequest(payload: unknown) {
-	const res = await fetch(`${API_URL}/user/register`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(payload),
-	});
-
-	const result = await res.json();
-
-	if (!res.ok) {
-		const error: any = new Error(result.message);
-		error.errors = result.errors;
-		error.status = res.status;
-		throw error;
-	}
-
-	const session = await getAppSession();
-	session.token = result.data?.token ?? result.token;
-	session.userId = result.data?.user?.id ?? result.user?.id;
-	await session.save();
-
-	return result.data ?? result;
-}
-
-/**
  * Send password reset link
  */
 export async function forgotPasswordRequest(payload: unknown) {
