@@ -1,6 +1,6 @@
-// #/features/plans/types/features.ts
+// #/features/subscriptions/types/features.ts
 
-/** A feature that can be attached to a plan via the Laravel `features` resource. */
+/** A feature that can be attached to a subscription via the Laravel `features` resource. */
 export interface FeatureRecord {
     id: string
     name: string

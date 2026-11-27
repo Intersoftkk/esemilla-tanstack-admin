@@ -1,4 +1,4 @@
-// #/features/plans/components/dialogs/features-manager-dialog.tsx
+// #/features/invoices/components/dialogs/features-manager-dialog.tsx
 import { useState } from 'react'
 import { Loader, Pencil, Plus, Sparkles, Trash2 } from 'lucide-react'
 
@@ -22,15 +22,15 @@ import {
     useDeleteFeatureMutation,
     useFeaturesQuery,
     useUpdateFeatureMutation,
-} from '#/features/plans/queries/plan.queries.ts'
-import type { FeatureRecord } from '#/features/plans/types/features.ts'
+} from '#/features/invoices/queries/invoice.queries.ts'
+import type { FeatureRecord } from '#/features/invoices/types/features.ts'
 
 interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
 }
 
-/** Dialog for managing the shared feature catalog used by plans. */
+/** Dialog for managing the shared feature catalog used by invoices. */
 export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
@@ -79,7 +79,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                         </DialogTitle>
                         <DialogDescription>
                             Create and maintain the features that can be
-                            attached to plans.
+                            attached to invoices.
                         </DialogDescription>
                     </DialogHeader>
 
@@ -317,7 +317,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                 }}
                 isLoading={deleteMutation.isPending}
                 title="Delete feature"
-                desc={`Delete "${deleteTarget?.name}"? Plans using this feature will no longer have it.`}
+                desc={`Delete "${deleteTarget?.name}"? Invoices using this feature will no longer have it.`}
                 confirmText="Delete"
                 destructive
             />
