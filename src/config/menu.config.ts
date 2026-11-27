@@ -1,7 +1,6 @@
 // #/config/menu.config.ts
 
 import {
-	BellRing,
 	Building2,
 	CreditCard,
 	LayoutDashboard,
@@ -109,18 +108,13 @@ export const adminNavigation: Array<NavGroup> = [
 				description: "Support tickets from all tenants",
 				url: "/support",
 				icon: LifeBuoy,
+				permissions: [PLATFORM_PERMISSIONS.PlatformTicketView],
 			},
 		],
 	},
 	{
 		title: "System",
 		items: [
-			{
-				title: "Notifications",
-				description: "Email, SMS & in-app notification templates",
-				url: "/notifications",
-				icon: BellRing,
-			},
 			{
 				title: "Security",
 				description: "SSO, access policies, and compliance",
