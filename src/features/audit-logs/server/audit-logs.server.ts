@@ -8,9 +8,6 @@ import {
 import { asRecord, readText, unwrapPaginated } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for the audit trail. */
-const RESOURCE = "/v1/admin/audit-logs";
-
 /** Drops the PHP namespace so the UI can show `Tenant` instead of `App\\Models\\Tenant`. */
 function shortClassName(value: string | null): string | null {
 	if (!value) return null;
@@ -59,11 +56,11 @@ export function normalizeAuditLog(value: unknown): AuditLogRecord | null {
 	};
 }
 
-/** `GET /v1/admin/audit-logs` */
+/** `GET /admin/audit-logs` */
 export async function fetchAuditLogs(
 	params: AdminListParams,
 ): Promise<AdminListResult<AuditLogRecord>> {
-	const { data } = await api.get<unknown>(RESOURCE, {
+	const { data } = await api.get<unknown>("/admin/audit-logs", {
 		params: buildAdminListQuery(params),
 	});
 
@@ -71,13 +68,13 @@ export async function fetchAuditLogs(
 	return { items, meta };
 }
 
-/** `GET /v1/admin/audit-logs/record/{type}/{id}` */
+/** `GET /admin/audit-logs/record/{type}/{id}` */
 export async function fetchAuditLogsForRecord(
 	type: string,
 	id: string,
 ): Promise<Array<AuditLogRecord>> {
 	const { data } = await api.get<unknown>(
-		`${RESOURCE}/record/${encodeURIComponent(type)}/${encodeURIComponent(id)}`,
+		`/admin/audit-logs/record/${encodeURIComponent(type)}/${encodeURIComponent(id)}`,
 	);
 	const { items } = unwrapPaginated(data, normalizeAuditLog);
 	return items;

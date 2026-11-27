@@ -13,7 +13,7 @@ import { getOwnersFn } from "#/features/owners/server/owners.functions.ts";
 import type { OwnerRecord } from "#/features/owners/types/owners.type.ts";
 import { formatDate, formatNumber } from "#/lib/format.ts";
 
-/** Central owner accounts, from `/v1/admin/owners`. */
+/** Central owner accounts, from `/admin/owners`. */
 export function OwnersPage() {
 	const [page, setPage] = useState(1);
 	const [searchInput, setSearchInput] = useState("");

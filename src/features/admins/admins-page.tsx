@@ -13,7 +13,7 @@ import { getAdminsFn } from "#/features/admins/server/admins.functions.ts";
 import type { AdminRecord } from "#/features/admins/types/admins.type.ts";
 import { formatDate, formatRelative } from "#/lib/format.ts";
 
-/** Central admin accounts, from `/v1/admin/admins`. */
+/** Central admin accounts, from `/admin/admins`. */
 export function AdminsPage() {
 	const [page, setPage] = useState(1);
 	const [searchInput, setSearchInput] = useState("");

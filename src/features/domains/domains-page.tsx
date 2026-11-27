@@ -13,7 +13,7 @@ import { getDomainsFn } from "#/features/domains/server/domains.functions.ts";
 import type { DomainRecord } from "#/features/domains/types/domains.type.ts";
 import { formatDate } from "#/lib/format.ts";
 
-/** Custom domains attached to tenants, from `/v1/admin/domains`. */
+/** Custom domains attached to tenants, from `/admin/domains`. */
 export function DomainsPage() {
 	const [page, setPage] = useState(1);
 	const [searchInput, setSearchInput] = useState("");

@@ -39,7 +39,7 @@ function eventVariant(event: string) {
 	return EVENT_VARIANTS[event.toLowerCase()] ?? "outline";
 }
 
-/** Audit trail of every platform action, served by `/v1/admin/audit-logs`. */
+/** Audit trail of every platform action, served by `/admin/audit-logs`. */
 export function AuditLogsPage() {
 	const [page, setPage] = useState(1);
 	const [searchInput, setSearchInput] = useState("");

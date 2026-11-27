@@ -13,9 +13,6 @@ import {
 } from "#/lib/payload.ts";
 import { api } from "#/server/api.server.ts";
 
-/* Laravel API resource for platform settings. */
-const RESOURCE = "/v1/admin/settings";
-
 function toSettingValue(value: unknown): SettingValue {
 	if (typeof value === "boolean" || typeof value === "number") return value;
 	if (typeof value === "string") return value;
@@ -78,9 +75,9 @@ function normalizeGroup(value: unknown, index: number): SettingGroup | null {
 	};
 }
 
-/** `GET /v1/admin/settings/groups` */
+/** `GET /admin/settings/groups` */
 export async function fetchSettingGroups(): Promise<Array<SettingGroup>> {
-	const { data } = await api.get<unknown>(`${RESOURCE}/groups`);
+	const { data } = await api.get<unknown>("/admin/settings/groups");
 
 	// The endpoint answers with either a list of groups or a map of
 	// `{ group: [settings…] }`; both normalise into the same shape.
@@ -111,9 +108,9 @@ export async function fetchSettingGroups(): Promise<Array<SettingGroup>> {
 		.filter((group): group is SettingGroup => group !== null);
 }
 
-/** `PUT /v1/admin/settings/bulk` */
+/** `PUT /admin/settings/bulk` */
 export async function updateSettingsBulkRequest(
 	changes: Array<{ key: string; value: SettingValue }>,
 ): Promise<void> {
-	await api.put(`${RESOURCE}/bulk`, { settings: changes });
+	await api.put("/admin/settings/bulk", { settings: changes });
 }
