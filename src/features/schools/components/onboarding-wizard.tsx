@@ -56,11 +56,11 @@ import type {
 import {
 	buildOnboardingDefaults,
 	getPlan,
+	mapOnboardingErrorField,
 	monthlyEquivalent,
 	recommendPlan,
-	yearlySavingPercent,
-	mapOnboardingErrorField,
 	toOnboardPayload,
+	yearlySavingPercent,
 } from "#/features/schools/utils/onboarding.utils.ts";
 import {
 	formatMoney,

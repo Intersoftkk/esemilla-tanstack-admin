@@ -12,12 +12,12 @@ import { SchoolCard } from "#/features/schools/components/school-card.tsx";
 import { SchoolsStats } from "#/features/schools/components/schools-stats.tsx";
 import { SchoolsTable } from "#/features/schools/components/schools-table.tsx";
 import { SchoolsToolbar } from "#/features/schools/components/schools-toolbar.tsx";
-import type { SchoolsSearch } from "#/features/schools/schema/schools-search.schema.ts";
 import {
 	useDeleteSchoolMutation,
 	useSchoolsQuery,
 	useUpdateSchoolStatusMutation,
 } from "#/features/schools/queries/school.queries.ts";
+import type { SchoolsSearch } from "#/features/schools/schema/schools-search.schema.ts";
 import type { School } from "#/features/schools/types/schools.type.ts";
 import {
 	downloadCsv,
