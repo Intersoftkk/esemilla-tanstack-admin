@@ -66,6 +66,9 @@ export const PLATFORM_PERMISSIONS = {
 	PlatformPaymentCreate: "platform.payment.create",
 	PlatformPaymentDelete: "platform.payment.delete",
 
+	// Support / ticket
+	PlatformTicketView: "platform.ticket.view",
+
 	// Impersonation
 	PlatformImpersonate: "platform.impersonate",
 
