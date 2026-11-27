@@ -9,34 +9,23 @@ export const APP_CONFIG = {
 	copyright: `© ${currentYear} Esemilla. All rights reserved.`,
 
 	meta: {
-		title: "Esemilla — School Management SaaS",
+		title: "Esemilla — Platform Admin",
 		description:
-			"All-in-one school management platform for admissions, academics, attendance, fees, communication, and reporting — built for modern schools.",
+			"Internal platform console for the Esemilla team: tenants, subscriptions, billing, and the support queue in one workspace.",
 		keywords:
-			"esemilla, school management system, school SaaS, student information system, attendance, fees, admissions, academic management, parent portal, teacher portal",
+			"esemilla, platform admin, tenant management, subscriptions, billing, support desk, audit log",
 		author: "Esemilla Team",
 	},
 
-	tagline: "Grow every school. Simply.",
-	headline: "Run Your Entire School from One Platform",
+	tagline: "Platform admin console",
+	headline: "The console behind every Esemilla school",
 	subheadline:
-		"Esemilla connects admissions, academics, attendance, fees, staff, and parents in one place — so your school runs smoother every day.",
-
-	features: [
-		"Student & Parent Management",
-		"Admissions & Onboarding",
-		"Attendance & Timetable",
-		"Fees & Invoicing",
-		"Grades, Exams & Report Cards",
-		"Staff & Role Management",
-		"Announcements & Communication",
-		"Insights & School Analytics",
-	],
+		"Tenants, subscriptions, invoices, and the support queue in one workspace — with an audit trail behind every administrative change.",
 
 	cta: {
-		primary: "Start Free Trial",
-		secondary: "Book a Demo",
-		login: "Sign In to Esemilla",
+		primary: "Sign in to the console",
+		secondary: "Contact platform team",
+		login: "Sign in",
 	},
 
 	links: {

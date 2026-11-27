@@ -1,163 +1,161 @@
 // #/features/home/data/home.data.ts
 import {
 	BarChart3,
-	CalendarCheck,
+	BellRing,
+	Building2,
 	CreditCard,
-	GraduationCap,
+	LifeBuoy,
 	type LucideIcon,
-	MessagesSquare,
+	Receipt,
 	ShieldCheck,
-	UserPlus,
 	Users,
 } from "lucide-react";
 
-export interface HomeStat {
+export interface PlatformStat {
 	id: string;
 	value: string;
 	label: string;
 }
 
-export interface HomeFeature {
+export interface ConsoleModule {
 	id: string;
 	icon: LucideIcon;
 	title: string;
 	description: string;
 }
 
-export interface HomeStep {
+export interface DeskStep {
 	id: string;
 	title: string;
 	description: string;
 }
 
-export interface HomePlan {
-	id: "starter" | "growth" | "enterprise";
+export interface AccessRole {
+	id: string;
 	name: string;
-	price: string;
-	cadence: string;
-	blurb: string;
-	features: Array<string>;
-	featured?: boolean;
+	scope: string;
+	can: Array<string>;
 }
 
-export const homeStats: Array<HomeStat> = [
-	{ id: "schools", value: "1,240+", label: "Schools onboarded" },
-	{ id: "students", value: "680k", label: "Students managed" },
-	{ id: "uptime", value: "99.98%", label: "Platform uptime" },
-	{ id: "countries", value: "12", label: "Countries served" },
+export const platformStats: Array<PlatformStat> = [
+	{ id: "tenants", value: "1,284", label: "Schools on the platform" },
+	{ id: "sla", value: "2h", label: "First-response SLA" },
+	{ id: "resolution", value: "96%", label: "Tickets resolved in SLA" },
+	{ id: "uptime", value: "99.98%", label: "Rolling 30-day uptime" },
 ];
 
-export const homeFeatures: Array<HomeFeature> = [
+export const consoleModules: Array<ConsoleModule> = [
 	{
-		id: "admissions",
-		icon: UserPlus,
-		title: "Admissions & onboarding",
-		description:
-			"Online applications, document checks and waitlists that turn into enrolled students without spreadsheets.",
-	},
-	{
-		id: "students",
-		icon: Users,
-		title: "Students & guardians",
-		description:
-			"One profile per learner with guardians, classes, buses and medical notes kept in sync.",
-	},
-	{
-		id: "attendance",
-		icon: CalendarCheck,
-		title: "Attendance & timetable",
-		description:
-			"Period-by-period registers, staff cover and clash-free timetables built in seconds.",
-	},
-	{
-		id: "fees",
-		icon: CreditCard,
-		title: "Fees & invoicing",
-		description:
-			"Invoices, part payments, scholarships and receipts with automatic reminders to guardians.",
-	},
-	{
-		id: "communication",
-		icon: MessagesSquare,
-		title: "Parent communication",
-		description:
-			"Announcements, SMS and email templates delivered to the right class, staff or guardian group.",
-	},
-	{
-		id: "analytics",
+		id: "dashboard",
 		icon: BarChart3,
-		title: "Insights & reporting",
+		title: "Platform overview",
 		description:
-			"Enrolment, collection and performance dashboards your leadership team can actually read.",
+			"Tenants, MRR, subscriptions and the open ticket count on one screen — with the numbers that need action first.",
+	},
+	{
+		id: "tenants",
+		icon: Building2,
+		title: "Tenants",
+		description:
+			"Onboard schools, assign plans, suspend or reactivate access, and see each campus's status history.",
+	},
+	{
+		id: "billing",
+		icon: CreditCard,
+		title: "Plans & subscriptions",
+		description:
+			"Publish plans, move tenants between tiers and track trials, renewals and cancellations.",
+	},
+	{
+		id: "invoices",
+		icon: Receipt,
+		title: "Invoices & payments",
+		description:
+			"Chase overdue invoices, reconcile payments and export billing history per tenant.",
+	},
+	{
+		id: "support",
+		icon: LifeBuoy,
+		title: "Support desk",
+		description:
+			"Tickets from every tenant in one queue: priority, status, assignee and the full conversation thread.",
+	},
+	{
+		id: "users",
+		icon: Users,
+		title: "Users & roles",
+		description:
+			"Invite the platform team, grant role permissions per module and revoke access the moment someone leaves.",
+	},
+	{
+		id: "notifications",
+		icon: BellRing,
+		title: "Notifications",
+		description:
+			"Email, SMS and in-app templates that go out to tenants and guardians, with delivery history.",
+	},
+	{
+		id: "security",
+		icon: ShieldCheck,
+		title: "Security & audit",
+		description:
+			"SSO, session policy, impersonation rules and an audit trail behind every administrative change.",
 	},
 ];
 
-export const homeSteps: Array<HomeStep> = [
+export const deskSteps: Array<DeskStep> = [
 	{
-		id: "import",
-		title: "Import your school",
+		id: "triage",
+		title: "Triage the queue",
 		description:
-			"Bring classes, staff and students across from Excel or your previous system in a guided onboarding.",
+			"New tickets land in one queue with tenant, priority and SLA clock already attached — no inbox archaeology.",
 	},
 	{
-		id: "configure",
-		title: "Set terms and fees",
+		id: "resolve",
+		title: "Resolve with context",
 		description:
-			"Define academic sessions, grade bands, fee structures and the roles that can see each of them.",
+			"Open the tenant's plan, invoices and history right next to the ticket before you answer.",
 	},
 	{
-		id: "run",
-		title: "Run day-to-day operations",
+		id: "record",
+		title: "Everything is logged",
 		description:
-			"Registers, invoices and messages go out from one console — with parents on the receiving end.",
+			"Status changes, impersonations and permission edits are recorded, so handovers and audits are painless.",
 	},
 ];
 
-export const homePlans: Array<HomePlan> = [
+export const accessRoles: Array<AccessRole> = [
 	{
-		id: "starter",
-		name: "Starter",
-		price: "$1.50",
-		cadence: "per student / month",
-		blurb: "For single-campus schools finding their feet.",
-		features: [
-			"Up to 300 students",
-			"Admissions & records",
-			"Attendance registers",
-			"Guardian portal",
+		id: "owner",
+		name: "Platform owner",
+		scope: "Full console",
+		can: [
+			"Manage tenants and plans",
+			"Grant or revoke roles",
+			"Impersonate tenants",
+			"Read the audit log",
 		],
 	},
 	{
-		id: "growth",
-		name: "Growth",
-		price: "$2.80",
-		cadence: "per student / month",
-		blurb: "For growing groups that bill and report at scale.",
-		features: [
-			"Unlimited students",
-			"Fees, invoices & receipts",
-			"SMS + email templates",
-			"Collection analytics",
-			"Multi-campus reporting",
+		id: "support",
+		name: "Support agent",
+		scope: "Desk & tenants",
+		can: [
+			"Work the ticket queue",
+			"View tenant details",
+			"Read invoices",
+			"Update ticket status",
 		],
-		featured: true,
 	},
 	{
-		id: "enterprise",
-		name: "Enterprise",
-		price: "Custom",
-		cadence: "volume pricing",
-		blurb: "For ministries and large networks with SLAs.",
-		features: [
-			"Everything in Growth",
-			"SSO & audit trail",
-			"Dedicated success manager",
-			"99.98% uptime SLA",
+		id: "billing",
+		name: "Billing admin",
+		scope: "Revenue only",
+		can: [
+			"Manage plans and subscriptions",
+			"Issue and void invoices",
+			"Reconcile payments",
+			"Export financial reports",
 		],
 	},
-];
-
-export const homeHighlights: Array<{ icon: LucideIcon; label: string }> = [
-	{ icon: ShieldCheck, label: "Role-based access for every campus" },
-	{ icon: GraduationCap, label: "Built with schools, not around them" },
 ];
