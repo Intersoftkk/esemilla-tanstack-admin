@@ -1,24 +1,29 @@
 // #/features/support/types/support.ts
 
-export type SupportStatus = 'draft' | 'active' | 'completed' | 'archived'
+export type TicketStatus = 'open' | 'pending' | 'resolved' | 'closed'
+
+export type TicketPriority = 'low' | 'normal' | 'high' | 'urgent'
 
 export interface CompanyRecord {
     id: string | number
     name?: string | null
 }
 
-export interface SupportRecord {
-    id: string
-    company_id: string
-    company?: CompanyRecord | null
-    name: string
-    description?: string | null
-    start_date?: string | null
-    end_date?: string | null
-    status: SupportStatus
-}
-
 export interface CompanyOption {
     id: string | number
     name?: string | null
+}
+
+/** A support ticket raised by a tenant school. */
+export interface SupportRecord {
+    id: string
+    subject: string
+    description?: string | null
+    company_id?: string | null
+    company?: CompanyRecord | null
+    priority: TicketPriority
+    status: TicketStatus
+    opened_at?: string | null
+    closed_at?: string | null
+    assignee?: string | null
 }

@@ -23,7 +23,7 @@ import { Route as AuthedInvoicesRouteImport } from './routes/_authed/invoices'
 import { Route as AuthedSchoolsRouteImport } from './routes/_authed/schools'
 import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
 import { Route as AuthedBackupsIndexRouteImport } from './routes/_authed/backups.index'
-import { Route as AuthedNotificationIndexRouteImport } from './routes/_authed/notification.index'
+import { Route as AuthedNotificationsIndexRouteImport } from './routes/_authed/notifications.index'
 import { Route as AuthedPaymentsIndexRouteImport } from './routes/_authed/payments.index'
 import { Route as AuthedPlansIndexRouteImport } from './routes/_authed/plans.index'
 import { Route as AuthedProfileIndexRouteImport } from './routes/_authed/profile.index'
@@ -104,11 +104,12 @@ const AuthedBackupsIndexRoute = AuthedBackupsIndexRouteImport.update({
   path: '/backups/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedNotificationIndexRoute = AuthedNotificationIndexRouteImport.update({
-  id: '/notification/',
-  path: '/notification/',
-  getParentRoute: () => AuthedRoute,
-} as any)
+const AuthedNotificationsIndexRoute =
+  AuthedNotificationsIndexRouteImport.update({
+    id: '/notifications/',
+    path: '/notifications/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
 const AuthedPaymentsIndexRoute = AuthedPaymentsIndexRouteImport.update({
   id: '/payments/',
   path: '/payments/',
@@ -184,7 +185,7 @@ export interface FileRoutesByFullPath {
   '/schools/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/schools/new': typeof AuthedSchoolsNewRoute
   '/backups/': typeof AuthedBackupsIndexRoute
-  '/notification/': typeof AuthedNotificationIndexRoute
+  '/notifications/': typeof AuthedNotificationsIndexRoute
   '/payments/': typeof AuthedPaymentsIndexRoute
   '/plans/': typeof AuthedPlansIndexRoute
   '/profile/': typeof AuthedProfileIndexRoute
@@ -210,7 +211,7 @@ export interface FileRoutesByTo {
   '/schools/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/schools/new': typeof AuthedSchoolsNewRoute
   '/backups': typeof AuthedBackupsIndexRoute
-  '/notification': typeof AuthedNotificationIndexRoute
+  '/notifications': typeof AuthedNotificationsIndexRoute
   '/payments': typeof AuthedPaymentsIndexRoute
   '/plans': typeof AuthedPlansIndexRoute
   '/profile': typeof AuthedProfileIndexRoute
@@ -239,7 +240,7 @@ export interface FileRoutesById {
   '/_authed/schools_/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/_authed/schools_/new': typeof AuthedSchoolsNewRoute
   '/_authed/backups/': typeof AuthedBackupsIndexRoute
-  '/_authed/notification/': typeof AuthedNotificationIndexRoute
+  '/_authed/notifications/': typeof AuthedNotificationsIndexRoute
   '/_authed/payments/': typeof AuthedPaymentsIndexRoute
   '/_authed/plans/': typeof AuthedPlansIndexRoute
   '/_authed/profile/': typeof AuthedProfileIndexRoute
@@ -267,7 +268,7 @@ export interface FileRouteTypes {
     | '/schools/$schoolId'
     | '/schools/new'
     | '/backups/'
-    | '/notification/'
+    | '/notifications/'
     | '/payments/'
     | '/plans/'
     | '/profile/'
@@ -293,7 +294,7 @@ export interface FileRouteTypes {
     | '/schools/$schoolId'
     | '/schools/new'
     | '/backups'
-    | '/notification'
+    | '/notifications'
     | '/payments'
     | '/plans'
     | '/profile'
@@ -321,7 +322,7 @@ export interface FileRouteTypes {
     | '/_authed/schools_/$schoolId'
     | '/_authed/schools_/new'
     | '/_authed/backups/'
-    | '/_authed/notification/'
+    | '/_authed/notifications/'
     | '/_authed/payments/'
     | '/_authed/plans/'
     | '/_authed/profile/'
@@ -438,11 +439,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedBackupsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/_authed/notification/': {
-      id: '/_authed/notification/'
-      path: '/notification'
-      fullPath: '/notification/'
-      preLoaderRoute: typeof AuthedNotificationIndexRouteImport
+    '/_authed/notifications/': {
+      id: '/_authed/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications/'
+      preLoaderRoute: typeof AuthedNotificationsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/payments/': {
@@ -553,7 +554,7 @@ interface AuthedRouteChildren {
   AuthedSchoolsSchoolIdRoute: typeof AuthedSchoolsSchoolIdRoute
   AuthedSchoolsNewRoute: typeof AuthedSchoolsNewRoute
   AuthedBackupsIndexRoute: typeof AuthedBackupsIndexRoute
-  AuthedNotificationIndexRoute: typeof AuthedNotificationIndexRoute
+  AuthedNotificationsIndexRoute: typeof AuthedNotificationsIndexRoute
   AuthedPaymentsIndexRoute: typeof AuthedPaymentsIndexRoute
   AuthedPlansIndexRoute: typeof AuthedPlansIndexRoute
   AuthedProfileIndexRoute: typeof AuthedProfileIndexRoute
@@ -574,7 +575,7 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedSchoolsSchoolIdRoute: AuthedSchoolsSchoolIdRoute,
   AuthedSchoolsNewRoute: AuthedSchoolsNewRoute,
   AuthedBackupsIndexRoute: AuthedBackupsIndexRoute,
-  AuthedNotificationIndexRoute: AuthedNotificationIndexRoute,
+  AuthedNotificationsIndexRoute: AuthedNotificationsIndexRoute,
   AuthedPaymentsIndexRoute: AuthedPaymentsIndexRoute,
   AuthedPlansIndexRoute: AuthedPlansIndexRoute,
   AuthedProfileIndexRoute: AuthedProfileIndexRoute,

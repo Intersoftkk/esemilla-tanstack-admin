@@ -1,6 +1,6 @@
 // #/features/support/components/dialogs/support-view-dialog.tsx
 import { format, isValid, parseISO } from 'date-fns'
-import { CalendarRange, Eye } from 'lucide-react'
+import { CalendarRange, Eye, UserRound } from 'lucide-react'
 
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
@@ -13,8 +13,15 @@ import {
     DialogHeader,
     DialogTitle,
 } from '#/components/ui/dialog'
-import { supportStatusOptions } from '#/features/support/data/support.constant'
-import type { SupportRecord } from '#/features/support/types/support.ts'
+import {
+    supportPriorityOptions,
+    supportStatusOptions,
+} from '#/features/support/data/support.constant'
+import type {
+    SupportRecord,
+    TicketPriority,
+    TicketStatus,
+} from '#/features/support/types/support.ts'
 
 interface Props {
     currentRow: SupportRecord | null
@@ -29,25 +36,42 @@ function formatDate(value?: string | null): string {
     return isValid(date) ? format(date, 'dd MMM yyyy') : value
 }
 
-/** Renders the badge for a support status. */
-function getStatusBadge(status: SupportRecord['status']) {
-    if (status === 'active') {
-        return (
-            <Badge className="bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/10 dark:text-emerald-400">
-                Active
-            </Badge>
-        )
-    }
-
+/** Renders the badge for a ticket status. */
+function getStatusBadge(status: TicketStatus) {
     const label =
         supportStatusOptions.find((option) => option.value === status)?.label ??
         status
 
-    if (status === 'archived') return <Badge variant="secondary">{label}</Badge>
+    if (status === 'resolved') {
+        return (
+            <Badge className="bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/10 dark:text-emerald-400">
+                {label}
+            </Badge>
+        )
+    }
+
+    if (status === 'closed') return <Badge variant="secondary">{label}</Badge>
     return <Badge variant="outline">{label}</Badge>
 }
 
-/** Read-only dialog showing the full support record. */
+/** Renders the badge for a ticket priority. */
+function getPriorityBadge(priority: TicketPriority) {
+    const label =
+        supportPriorityOptions.find((option) => option.value === priority)
+            ?.label ?? priority
+
+    if (priority === 'urgent' || priority === 'high') {
+        return (
+            <Badge className="bg-rose-500/10 text-rose-700 hover:bg-rose-500/10 dark:text-rose-400">
+                {label}
+            </Badge>
+        )
+    }
+
+    return <Badge variant="outline">{label}</Badge>
+}
+
+/** Read-only dialog showing the full support ticket. */
 export function SupportViewDialog({ currentRow, open, onOpenChange }: Props) {
     if (!currentRow) return null
 
@@ -59,10 +83,10 @@ export function SupportViewDialog({ currentRow, open, onOpenChange }: Props) {
                         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-inset ring-primary/15">
                             <Eye className="h-4 w-4 text-primary" />
                         </span>
-                        Support Details
+                        Ticket Details
                     </DialogTitle>
                     <DialogDescription>
-                        View complete information about this support.
+                        View complete information about this support ticket.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -72,16 +96,19 @@ export function SupportViewDialog({ currentRow, open, onOpenChange }: Props) {
                         <div className="relative flex items-start justify-between gap-3">
                             <div className="min-w-0">
                                 <p className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-                                    Support name
+                                    Subject
                                 </p>
                                 <p className="mt-1 truncate text-lg font-semibold">
-                                    {currentRow.name}
+                                    {currentRow.subject}
                                 </p>
                                 <p className="mt-1 text-sm text-muted-foreground">
                                     {currentRow.company?.name || 'No company'}
                                 </p>
                             </div>
-                            {getStatusBadge(currentRow.status)}
+                            <div className="flex shrink-0 flex-col items-end gap-1.5">
+                                {getStatusBadge(currentRow.status)}
+                                {getPriorityBadge(currentRow.priority)}
+                            </div>
                         </div>
                     </div>
 
@@ -89,21 +116,31 @@ export function SupportViewDialog({ currentRow, open, onOpenChange }: Props) {
                         <div className="rounded-lg border bg-muted/20 p-3">
                             <p className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                                 <CalendarRange className="h-3 w-3" />
-                                Start date
+                                Opened
                             </p>
                             <p className="font-medium tabular-nums">
-                                {formatDate(currentRow.start_date)}
+                                {formatDate(currentRow.opened_at)}
                             </p>
                         </div>
                         <div className="rounded-lg border bg-muted/20 p-3">
                             <p className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                                 <CalendarRange className="h-3 w-3" />
-                                End date
+                                Closed
                             </p>
                             <p className="font-medium tabular-nums">
-                                {formatDate(currentRow.end_date)}
+                                {formatDate(currentRow.closed_at)}
                             </p>
                         </div>
+                    </div>
+
+                    <div className="rounded-lg border p-3">
+                        <p className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                            <UserRound className="h-3 w-3" />
+                            Assignee
+                        </p>
+                        <p className="text-sm text-foreground">
+                            {currentRow.assignee || 'Unassigned'}
+                        </p>
                     </div>
 
                     {currentRow.description && (
@@ -116,7 +153,6 @@ export function SupportViewDialog({ currentRow, open, onOpenChange }: Props) {
                             </p>
                         </div>
                     )}
-
                 </div>
 
                 <DialogFooter>

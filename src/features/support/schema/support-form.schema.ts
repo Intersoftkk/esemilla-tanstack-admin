@@ -4,18 +4,19 @@ import { z } from 'zod'
 export const supportSchema = z
     .object({
         company_id: z.string().min(1, 'Company is required'),
-        name: z.string().min(1, 'Support name is required'),
+        subject: z.string().min(1, 'Subject is required').max(255),
         description: z.string().optional(),
-        start_date: z.string().min(1, 'Start date is required'),
-        end_date: z.string().min(1, 'End date is required'),
-        status: z.enum(['draft', 'active', 'completed', 'archived']),
+        priority: z.enum(['low', 'normal', 'high', 'urgent']),
+        status: z.enum(['open', 'pending', 'resolved', 'closed']),
+        opened_at: z.string().min(1, 'Opened date is required'),
+        closed_at: z.string().optional(),
     })
     .superRefine((data, ctx) => {
-        if (data.end_date < data.start_date) {
+        if (data.closed_at && data.closed_at < data.opened_at) {
             ctx.addIssue({
                 code: 'custom',
-                path: ['end_date'],
-                message: 'End date must be on or after the start date',
+                path: ['closed_at'],
+                message: 'Closed date must be on or after the opened date',
             })
         }
     })

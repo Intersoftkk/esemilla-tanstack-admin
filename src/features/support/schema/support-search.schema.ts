@@ -1,21 +1,22 @@
 // #/features/support/schema/support-search.schema.ts
 import { z } from 'zod'
 
+const multiSelect = z
+    .array(z.string())
+    .catch([])
+    .transform((arr) => arr.map((s) => s.trim()).filter(Boolean))
+
 export const supportSearchSchema = z.object({
     search: z.string().catch('').transform((s) => s.trim()),
 
     pageIndex: z.coerce.number().catch(1),
     pageSize: z.coerce.number().catch(10),
 
-    created_by_ids: z
-        .array(z.string())
-        .catch([])
-        .transform((arr) => arr.map((s) => s.trim()).filter(Boolean)),
+    company_ids: multiSelect,
 
-    status: z
-        .array(z.string())
-        .catch([])
-        .transform((arr) => arr.map((s) => s.trim()).filter(Boolean)),
+    status: multiSelect,
+
+    priority: multiSelect,
 
     sort: z
         .union([z.string(), z.array(z.string())])
@@ -31,14 +32,16 @@ export type SupportSearch = z.infer<typeof supportSearchSchema>
 
 export type SupportFilters = {
     search: string
-    created_by_ids: string[]
+    company_ids: string[]
     status: string[]
+    priority: string[]
 }
 
 export const EMPTY_SUPPORT_FILTERS: SupportFilters = {
     search: '',
-    created_by_ids: [],
+    company_ids: [],
     status: [],
+    priority: [],
 }
 
 /** Payload accepted by the support list server function. */
@@ -49,8 +52,9 @@ export const supportListParamsSchema = z.object({
     filters: z
         .object({
             search: z.string().optional(),
-            created_by_ids: z.array(z.string()).optional(),
+            company_ids: z.array(z.string()).optional(),
             status: z.array(z.string()).optional(),
+            priority: z.array(z.string()).optional(),
         })
         .optional(),
     pagination: z
