@@ -1,4 +1,3 @@
-// #/server/admin-endpoints.ts
 /**
  * Single source of truth for the platform admin API routes.
  *
