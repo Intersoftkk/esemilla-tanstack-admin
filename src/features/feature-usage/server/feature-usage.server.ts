@@ -64,11 +64,11 @@ export function normalizeFeatureUsage(
 	};
 }
 
-/** `GET /v1/admin/feature-usage` */
+/** `GET /admin/feature-usage` */
 export async function fetchFeatureUsages(
 	params: AdminListParams,
 ): Promise<AdminListResult<FeatureUsageRecord>> {
-	const { data } = await api.get<unknown>("/v1/admin/feature-usage", {
+	const { data } = await api.get<unknown>("/admin/feature-usage", {
 		params: buildAdminListQuery(params),
 	});
 
@@ -76,7 +76,7 @@ export async function fetchFeatureUsages(
 	return { items, meta };
 }
 
-/** `POST /v1/admin/feature-usage/{featureUsage}/reset` */
+/** `POST /admin/feature-usage/{featureUsage}/reset` */
 export async function resetFeatureUsageRequest(id: string): Promise<void> {
-	await api.post(`/v1/admin/feature-usage/${encodeURIComponent(id)}/reset`);
+	await api.post(`/admin/feature-usage/${encodeURIComponent(id)}/reset`);
 }

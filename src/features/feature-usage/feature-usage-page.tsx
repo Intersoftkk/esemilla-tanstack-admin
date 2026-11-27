@@ -26,7 +26,7 @@ function usagePercent(row: FeatureUsageRecord): number {
 	return Math.min(100, Math.round((row.used / row.limit) * 100));
 }
 
-/** Consumption of each plan feature per tenant, from `/v1/admin/feature-usage`. */
+/** Consumption of each plan feature per tenant, from `/admin/feature-usage`. */
 export function FeatureUsagePage() {
 	const { hasPermission } = usePermission();
 	const canEdit = hasPermission(PLATFORM_PERMISSIONS.PlatformFeatureUsageEdit);

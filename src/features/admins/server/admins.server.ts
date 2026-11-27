@@ -38,11 +38,11 @@ export function normalizeAdmin(value: unknown): AdminRecord | null {
 	};
 }
 
-/** `GET /v1/admin/admins` */
+/** `GET /admin/admins` */
 export async function fetchAdmins(
 	params: AdminListParams,
 ): Promise<AdminListResult<AdminRecord>> {
-	const { data } = await api.get<unknown>("/v1/admin/admins", {
+	const { data } = await api.get<unknown>("/admin/admins", {
 		params: buildAdminListQuery(params),
 	});
 

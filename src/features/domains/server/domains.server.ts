@@ -42,11 +42,11 @@ export function normalizeDomain(value: unknown): DomainRecord | null {
 	};
 }
 
-/** `GET /v1/admin/domains` */
+/** `GET /admin/domains` */
 export async function fetchDomains(
 	params: AdminListParams,
 ): Promise<AdminListResult<DomainRecord>> {
-	const { data } = await api.get<unknown>("/v1/admin/domains", {
+	const { data } = await api.get<unknown>("/admin/domains", {
 		params: buildAdminListQuery(params),
 	});
 

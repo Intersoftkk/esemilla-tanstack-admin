@@ -41,11 +41,11 @@ export function normalizeOwner(value: unknown): OwnerRecord | null {
 	};
 }
 
-/** `GET /v1/admin/owners` */
+/** `GET /admin/owners` */
 export async function fetchOwners(
 	params: AdminListParams,
 ): Promise<AdminListResult<OwnerRecord>> {
-	const { data } = await api.get<unknown>("/v1/admin/owners", {
+	const { data } = await api.get<unknown>("/admin/owners", {
 		params: buildAdminListQuery(params),
 	});
 

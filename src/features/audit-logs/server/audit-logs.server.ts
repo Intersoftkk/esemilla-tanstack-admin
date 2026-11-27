@@ -56,11 +56,11 @@ export function normalizeAuditLog(value: unknown): AuditLogRecord | null {
 	};
 }
 
-/** `GET /v1/admin/audit-logs` */
+/** `GET /admin/audit-logs` */
 export async function fetchAuditLogs(
 	params: AdminListParams,
 ): Promise<AdminListResult<AuditLogRecord>> {
-	const { data } = await api.get<unknown>("/v1/admin/audit-logs", {
+	const { data } = await api.get<unknown>("/admin/audit-logs", {
 		params: buildAdminListQuery(params),
 	});
 
@@ -68,13 +68,13 @@ export async function fetchAuditLogs(
 	return { items, meta };
 }
 
-/** `GET /v1/admin/audit-logs/record/{type}/{id}` */
+/** `GET /admin/audit-logs/record/{type}/{id}` */
 export async function fetchAuditLogsForRecord(
 	type: string,
 	id: string,
 ): Promise<Array<AuditLogRecord>> {
 	const { data } = await api.get<unknown>(
-		`/v1/admin/audit-logs/record/${encodeURIComponent(type)}/${encodeURIComponent(id)}`,
+		`/admin/audit-logs/record/${encodeURIComponent(type)}/${encodeURIComponent(id)}`,
 	);
 	const { items } = unwrapPaginated(data, normalizeAuditLog);
 	return items;

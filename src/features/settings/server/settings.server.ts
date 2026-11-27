@@ -75,9 +75,9 @@ function normalizeGroup(value: unknown, index: number): SettingGroup | null {
 	};
 }
 
-/** `GET /v1/admin/settings/groups` */
+/** `GET /admin/settings/groups` */
 export async function fetchSettingGroups(): Promise<Array<SettingGroup>> {
-	const { data } = await api.get<unknown>("/v1/admin/settings/groups");
+	const { data } = await api.get<unknown>("/admin/settings/groups");
 
 	// The endpoint answers with either a list of groups or a map of
 	// `{ group: [settings…] }`; both normalise into the same shape.
@@ -108,9 +108,9 @@ export async function fetchSettingGroups(): Promise<Array<SettingGroup>> {
 		.filter((group): group is SettingGroup => group !== null);
 }
 
-/** `PUT /v1/admin/settings/bulk` */
+/** `PUT /admin/settings/bulk` */
 export async function updateSettingsBulkRequest(
 	changes: Array<{ key: string; value: SettingValue }>,
 ): Promise<void> {
-	await api.put("/v1/admin/settings/bulk", { settings: changes });
+	await api.put("/admin/settings/bulk", { settings: changes });
 }
