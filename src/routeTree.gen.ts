@@ -23,17 +23,18 @@ import { Route as AuthedInvoicesRouteImport } from './routes/_authed/invoices'
 import { Route as AuthedSchoolsRouteImport } from './routes/_authed/schools'
 import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
 import { Route as AuthedBackupsIndexRouteImport } from './routes/_authed/backups.index'
-import { Route as AuthedFeedbackIndexRouteImport } from './routes/_authed/feedback.index'
 import { Route as AuthedNotificationIndexRouteImport } from './routes/_authed/notification.index'
 import { Route as AuthedPaymentsIndexRouteImport } from './routes/_authed/payments.index'
 import { Route as AuthedPlansIndexRouteImport } from './routes/_authed/plans.index'
 import { Route as AuthedProfileIndexRouteImport } from './routes/_authed/profile.index'
 import { Route as AuthedProfileChangePasswordRouteImport } from './routes/_authed/profile.change-password'
+import { Route as AuthedRolePermissionsIndexRouteImport } from './routes/_authed/role-permissions.index'
 import { Route as AuthedSchoolsSchoolIdRouteImport } from './routes/_authed/schools_.$schoolId'
 import { Route as AuthedSchoolsNewRouteImport } from './routes/_authed/schools_.new'
 import { Route as AuthedSecurityIndexRouteImport } from './routes/_authed/security.index'
 import { Route as AuthedSubscriptionsIndexRouteImport } from './routes/_authed/subscriptions.index'
 import { Route as AuthedSupportIndexRouteImport } from './routes/_authed/support.index'
+import { Route as AuthedUsersIndexRouteImport } from './routes/_authed/users.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -103,11 +104,6 @@ const AuthedBackupsIndexRoute = AuthedBackupsIndexRouteImport.update({
   path: '/backups/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedFeedbackIndexRoute = AuthedFeedbackIndexRouteImport.update({
-  id: '/feedback/',
-  path: '/feedback/',
-  getParentRoute: () => AuthedRoute,
-} as any)
 const AuthedNotificationIndexRoute = AuthedNotificationIndexRouteImport.update({
   id: '/notification/',
   path: '/notification/',
@@ -132,6 +128,12 @@ const AuthedProfileChangePasswordRoute =
   AuthedProfileChangePasswordRouteImport.update({
     id: '/profile/change-password',
     path: '/profile/change-password',
+    getParentRoute: () => AuthedRoute,
+  } as any)
+const AuthedRolePermissionsIndexRoute =
+  AuthedRolePermissionsIndexRouteImport.update({
+    id: '/role-permissions/',
+    path: '/role-permissions/',
     getParentRoute: () => AuthedRoute,
   } as any)
 const AuthedSchoolsSchoolIdRoute = AuthedSchoolsSchoolIdRouteImport.update({
@@ -160,6 +162,11 @@ const AuthedSupportIndexRoute = AuthedSupportIndexRouteImport.update({
   path: '/support/',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedUsersIndexRoute = AuthedUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -177,14 +184,15 @@ export interface FileRoutesByFullPath {
   '/schools/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/schools/new': typeof AuthedSchoolsNewRoute
   '/backups/': typeof AuthedBackupsIndexRoute
-  '/feedback/': typeof AuthedFeedbackIndexRoute
   '/notification/': typeof AuthedNotificationIndexRoute
   '/payments/': typeof AuthedPaymentsIndexRoute
   '/plans/': typeof AuthedPlansIndexRoute
   '/profile/': typeof AuthedProfileIndexRoute
+  '/role-permissions/': typeof AuthedRolePermissionsIndexRoute
   '/security/': typeof AuthedSecurityIndexRoute
   '/subscriptions/': typeof AuthedSubscriptionsIndexRoute
   '/support/': typeof AuthedSupportIndexRoute
+  '/users/': typeof AuthedUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -202,14 +210,15 @@ export interface FileRoutesByTo {
   '/schools/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/schools/new': typeof AuthedSchoolsNewRoute
   '/backups': typeof AuthedBackupsIndexRoute
-  '/feedback': typeof AuthedFeedbackIndexRoute
   '/notification': typeof AuthedNotificationIndexRoute
   '/payments': typeof AuthedPaymentsIndexRoute
   '/plans': typeof AuthedPlansIndexRoute
   '/profile': typeof AuthedProfileIndexRoute
+  '/role-permissions': typeof AuthedRolePermissionsIndexRoute
   '/security': typeof AuthedSecurityIndexRoute
   '/subscriptions': typeof AuthedSubscriptionsIndexRoute
   '/support': typeof AuthedSupportIndexRoute
+  '/users': typeof AuthedUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -230,14 +239,15 @@ export interface FileRoutesById {
   '/_authed/schools_/$schoolId': typeof AuthedSchoolsSchoolIdRoute
   '/_authed/schools_/new': typeof AuthedSchoolsNewRoute
   '/_authed/backups/': typeof AuthedBackupsIndexRoute
-  '/_authed/feedback/': typeof AuthedFeedbackIndexRoute
   '/_authed/notification/': typeof AuthedNotificationIndexRoute
   '/_authed/payments/': typeof AuthedPaymentsIndexRoute
   '/_authed/plans/': typeof AuthedPlansIndexRoute
   '/_authed/profile/': typeof AuthedProfileIndexRoute
+  '/_authed/role-permissions/': typeof AuthedRolePermissionsIndexRoute
   '/_authed/security/': typeof AuthedSecurityIndexRoute
   '/_authed/subscriptions/': typeof AuthedSubscriptionsIndexRoute
   '/_authed/support/': typeof AuthedSupportIndexRoute
+  '/_authed/users/': typeof AuthedUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -257,14 +267,15 @@ export interface FileRouteTypes {
     | '/schools/$schoolId'
     | '/schools/new'
     | '/backups/'
-    | '/feedback/'
     | '/notification/'
     | '/payments/'
     | '/plans/'
     | '/profile/'
+    | '/role-permissions/'
     | '/security/'
     | '/subscriptions/'
     | '/support/'
+    | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -282,14 +293,15 @@ export interface FileRouteTypes {
     | '/schools/$schoolId'
     | '/schools/new'
     | '/backups'
-    | '/feedback'
     | '/notification'
     | '/payments'
     | '/plans'
     | '/profile'
+    | '/role-permissions'
     | '/security'
     | '/subscriptions'
     | '/support'
+    | '/users'
   id:
     | '__root__'
     | '/'
@@ -309,14 +321,15 @@ export interface FileRouteTypes {
     | '/_authed/schools_/$schoolId'
     | '/_authed/schools_/new'
     | '/_authed/backups/'
-    | '/_authed/feedback/'
     | '/_authed/notification/'
     | '/_authed/payments/'
     | '/_authed/plans/'
     | '/_authed/profile/'
+    | '/_authed/role-permissions/'
     | '/_authed/security/'
     | '/_authed/subscriptions/'
     | '/_authed/support/'
+    | '/_authed/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -425,13 +438,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedBackupsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/_authed/feedback/': {
-      id: '/_authed/feedback/'
-      path: '/feedback'
-      fullPath: '/feedback/'
-      preLoaderRoute: typeof AuthedFeedbackIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
     '/_authed/notification/': {
       id: '/_authed/notification/'
       path: '/notification'
@@ -465,6 +471,13 @@ declare module '@tanstack/react-router' {
       path: '/profile/change-password'
       fullPath: '/profile/change-password'
       preLoaderRoute: typeof AuthedProfileChangePasswordRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/role-permissions/': {
+      id: '/_authed/role-permissions/'
+      path: '/role-permissions'
+      fullPath: '/role-permissions/'
+      preLoaderRoute: typeof AuthedRolePermissionsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/schools_/$schoolId': {
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedSupportIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/users/': {
+      id: '/_authed/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof AuthedUsersIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
 
@@ -533,14 +553,15 @@ interface AuthedRouteChildren {
   AuthedSchoolsSchoolIdRoute: typeof AuthedSchoolsSchoolIdRoute
   AuthedSchoolsNewRoute: typeof AuthedSchoolsNewRoute
   AuthedBackupsIndexRoute: typeof AuthedBackupsIndexRoute
-  AuthedFeedbackIndexRoute: typeof AuthedFeedbackIndexRoute
   AuthedNotificationIndexRoute: typeof AuthedNotificationIndexRoute
   AuthedPaymentsIndexRoute: typeof AuthedPaymentsIndexRoute
   AuthedPlansIndexRoute: typeof AuthedPlansIndexRoute
   AuthedProfileIndexRoute: typeof AuthedProfileIndexRoute
+  AuthedRolePermissionsIndexRoute: typeof AuthedRolePermissionsIndexRoute
   AuthedSecurityIndexRoute: typeof AuthedSecurityIndexRoute
   AuthedSubscriptionsIndexRoute: typeof AuthedSubscriptionsIndexRoute
   AuthedSupportIndexRoute: typeof AuthedSupportIndexRoute
+  AuthedUsersIndexRoute: typeof AuthedUsersIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
@@ -553,14 +574,15 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedSchoolsSchoolIdRoute: AuthedSchoolsSchoolIdRoute,
   AuthedSchoolsNewRoute: AuthedSchoolsNewRoute,
   AuthedBackupsIndexRoute: AuthedBackupsIndexRoute,
-  AuthedFeedbackIndexRoute: AuthedFeedbackIndexRoute,
   AuthedNotificationIndexRoute: AuthedNotificationIndexRoute,
   AuthedPaymentsIndexRoute: AuthedPaymentsIndexRoute,
   AuthedPlansIndexRoute: AuthedPlansIndexRoute,
   AuthedProfileIndexRoute: AuthedProfileIndexRoute,
+  AuthedRolePermissionsIndexRoute: AuthedRolePermissionsIndexRoute,
   AuthedSecurityIndexRoute: AuthedSecurityIndexRoute,
   AuthedSubscriptionsIndexRoute: AuthedSubscriptionsIndexRoute,
   AuthedSupportIndexRoute: AuthedSupportIndexRoute,
+  AuthedUsersIndexRoute: AuthedUsersIndexRoute,
 }
 
 const AuthedRouteWithChildren =

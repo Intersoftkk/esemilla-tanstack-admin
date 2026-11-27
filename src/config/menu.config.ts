@@ -6,11 +6,11 @@ import {
 	CreditCard,
 	LayoutDashboard,
 	LifeBuoy,
-	Mail,
-	MessageSquare,
 	Package,
 	Receipt,
 	Shield,
+	ShieldCheck,
+	Users,
 	Wallet,
 } from "lucide-react";
 
@@ -46,6 +46,25 @@ export const adminNavigation: Array<NavGroup> = [
 				url: "/schools",
 				icon: Building2,
 				permissions: [PLATFORM_PERMISSIONS.PlatformTenantView],
+			},
+		],
+	},
+	{
+		title: "Access Control",
+		items: [
+			{
+				title: "Users",
+				description: "Platform users and their assigned roles",
+				url: "/users",
+				icon: Users,
+				permissions: [PLATFORM_PERMISSIONS.PlatformUserView],
+			},
+			{
+				title: "Role Permissions",
+				description: "Roles, permissions and their assignments",
+				url: "/role-permissions",
+				icon: ShieldCheck,
+				permissions: [PLATFORM_PERMISSIONS.PlatformRolePermissionView],
 			},
 		],
 	},
@@ -90,18 +109,6 @@ export const adminNavigation: Array<NavGroup> = [
 				description: "Support tickets from all tenants",
 				url: "/support",
 				icon: LifeBuoy,
-			},
-			{
-				title: "Feedback",
-				description: "Product feedback and feature requests",
-				url: "/feedback",
-				icon: MessageSquare,
-			},
-			{
-				title: "Announcements",
-				description: "Platform-wide notices to tenants",
-				url: "/announcements",
-				icon: Mail,
 			},
 		],
 	},
