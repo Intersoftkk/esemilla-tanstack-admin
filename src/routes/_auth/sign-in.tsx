@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+
 import SignInPage from "#/features/auth/sign-in.tsx";
+import { pageHead } from "#/lib/head";
 
 type SignInSearch = {
 	redirect?: string;
@@ -8,6 +10,7 @@ type SignInSearch = {
 
 export const Route = createFileRoute("/_auth/sign-in")({
 	ssr: "data-only",
+	head: () => pageHead("Sign in"),
 	validateSearch: (search: Record<string, unknown>): SignInSearch => ({
 		redirect: typeof search.redirect === "string" ? search.redirect : undefined,
 		reason: search.reason === "session_expired" ? "session_expired" : undefined,

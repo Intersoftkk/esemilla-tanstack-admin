@@ -1,9 +1,18 @@
+// #/features/auth/components/sign-in-form.tsx
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Eye, EyeOff, Loader, Lock, Mail } from "lucide-react";
-import type { ComponentProps } from "react";
+import {
+	AlertTriangle,
+	Clock,
+	Eye,
+	EyeOff,
+	Loader,
+	Lock,
+	Mail,
+} from "lucide-react";
+import type { ComponentProps, KeyboardEvent } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,7 +24,7 @@ import { signInFn } from "#/features/auth/server/auth.functions";
 import { cn } from "#/lib/utils";
 
 interface SignInFormProps extends ComponentProps<"div"> {
-	search?: { redirect?: string };
+	search?: { redirect?: string; reason?: "session_expired" };
 }
 
 function getSafeRedirectPath(redirect?: string) {
@@ -44,6 +53,9 @@ export function SignInForm({ search }: SignInFormProps) {
 	const login = useServerFn(signInFn);
 	const queryClient = useQueryClient();
 	const [showPassword, setShowPassword] = useState(false);
+	const [capsLock, setCapsLock] = useState(false);
+
+	const sessionExpired = search?.reason === "session_expired";
 
 	const form = useForm({
 		defaultValues: { email: "", password: "", remember: false },
@@ -56,13 +68,13 @@ export function SignInForm({ search }: SignInFormProps) {
 				}
 
 				queryClient.setQueryData(["auth", "session"], user);
-				toast.success("Welcome back!");
+				toast.success(`Welcome back${user.name ? `, ${user.name}` : ""}!`);
 				await router.invalidate();
 				await navigate({ to: getSafeRedirectPath(search?.redirect) });
 			} catch (error: unknown) {
 				const err = error as {
 					message?: string;
-					errors?: Record<string, string[]>;
+					errors?: Record<string, Array<string>>;
 				};
 				for (const field of ["email", "password"] as const) {
 					const message = err.errors?.[field]?.[0];
@@ -82,19 +94,34 @@ export function SignInForm({ search }: SignInFormProps) {
 		},
 	});
 
+	const handleCapsLock = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (typeof event.getModifierState === "function") {
+			setCapsLock(event.getModifierState("CapsLock"));
+		}
+	};
+
 	return (
 		<div className="flex flex-col justify-center">
-			<div className="mb-8">
+			<div className="mb-6">
 				<h1 className="text-2xl font-bold tracking-tight text-card-foreground">
 					Welcome back
 				</h1>
 				<p className="mt-1.5 text-[14px] text-muted-foreground">
-					Enter your credentials to access your dashboard
+					Sign in to manage your tenants, billing and support queue.
 				</p>
 			</div>
 
+			{sessionExpired ? (
+				<output className="mb-5 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/10 p-3 text-sm text-amber-800 dark:text-amber-300">
+					<Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+					<p>
+						Your session expired. Sign in again to pick up where you left off.
+					</p>
+				</output>
+			) : null}
+
 			<form
-				className="space-y-6"
+				className="space-y-5"
 				onSubmit={(event) => {
 					event.preventDefault();
 					event.stopPropagation();
@@ -104,7 +131,10 @@ export function SignInForm({ search }: SignInFormProps) {
 				<form.Subscribe selector={(state) => state.errorMap.onSubmit}>
 					{(error) =>
 						error ? (
-							<div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+							<div
+								role="alert"
+								className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive"
+							>
 								{typeof error === "string"
 									? error
 									: "Login failed. Please check your credentials."}
@@ -124,7 +154,10 @@ export function SignInForm({ search }: SignInFormProps) {
 									Email <span className="ml-1 text-destructive">*</span>
 								</FieldLabel>
 								<div className="relative">
-									<Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+									<Mail
+										className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+										aria-hidden="true"
+									/>
 									<Input
 										id={field.name}
 										name={field.name}
@@ -151,22 +184,39 @@ export function SignInForm({ search }: SignInFormProps) {
 							.find(Boolean);
 						return (
 							<Field data-invalid={message ? "true" : undefined}>
-								<FieldLabel htmlFor={field.name}>
-									Password <span className="ml-1 text-destructive">*</span>
-								</FieldLabel>
+								<div className="flex items-center justify-between gap-2">
+									<FieldLabel htmlFor={field.name}>
+										Password <span className="ml-1 text-destructive">*</span>
+									</FieldLabel>
+									<Link
+										to="/forgot-password"
+										className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+									>
+										Forgot password?
+									</Link>
+								</div>
 								<div className="relative">
-									<Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+									<Lock
+										className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+										aria-hidden="true"
+									/>
 									<Input
 										id={field.name}
 										name={field.name}
 										type={showPassword ? "text" : "password"}
 										autoComplete="current-password"
-										placeholder="********"
+										placeholder="Your password"
 										className="pl-10 pr-10"
 										value={field.state.value}
-										onBlur={field.handleBlur}
+										onBlur={() => {
+											setCapsLock(false);
+											field.handleBlur();
+										}}
 										onChange={(event) => field.handleChange(event.target.value)}
+										onKeyDown={handleCapsLock}
+										onKeyUp={handleCapsLock}
 										aria-invalid={!!message}
+										aria-describedby={capsLock ? "caps-lock-hint" : undefined}
 									/>
 									<button
 										type="button"
@@ -181,56 +231,80 @@ export function SignInForm({ search }: SignInFormProps) {
 										onClick={() => setShowPassword((value) => !value)}
 									>
 										{showPassword ? (
-											<EyeOff className="h-4 w-4" />
+											<EyeOff className="h-4 w-4" aria-hidden="true" />
 										) : (
-											<Eye className="h-4 w-4" />
+											<Eye className="h-4 w-4" aria-hidden="true" />
 										)}
 									</button>
 								</div>
+								{capsLock ? (
+									<p
+										id="caps-lock-hint"
+										className="flex items-center gap-1.5 text-[11px] font-medium text-amber-600 dark:text-amber-400"
+									>
+										<AlertTriangle className="h-3 w-3" aria-hidden="true" />
+										Caps Lock is on
+									</p>
+								) : null}
 								{message && <FieldError>{message}</FieldError>}
 							</Field>
 						);
 					}}
 				</form.Field>
 
-				<div className="flex items-center justify-between">
-					<form.Field name="remember">
-						{(field) => (
-							<label className="flex cursor-pointer select-none items-center gap-2 text-sm text-muted-foreground">
-								<input
-									type="checkbox"
-									className="h-4 w-4 rounded border-input accent-primary"
-									checked={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(event) => field.handleChange(event.target.checked)}
-								/>
-								Remember me
-							</label>
-						)}
-					</form.Field>
-					<Link
-						to="/forgot-password"
-						className="text-sm font-medium text-primary underline-offset-2 hover:underline"
-					>
-						Forgot your password?
-					</Link>
-				</div>
+				<form.Field name="remember">
+					{(field) => (
+						<label className="flex w-fit cursor-pointer select-none items-center gap-2 text-sm text-muted-foreground">
+							<input
+								type="checkbox"
+								className="h-4 w-4 rounded border-input accent-primary"
+								checked={field.state.value}
+								onBlur={field.handleBlur}
+								onChange={(event) => field.handleChange(event.target.checked)}
+							/>
+							Keep me signed in for 7 days
+						</label>
+					)}
+				</form.Field>
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" className="w-full" disabled={isSubmitting}>
 							{isSubmitting ? (
 								<>
-									<Loader className="mr-2 h-4 w-4 animate-spin" />
-									Logging in...
+									<Loader
+										className="mr-2 h-4 w-4 animate-spin"
+										aria-hidden="true"
+									/>
+									Signing in...
 								</>
 							) : (
-								"Login"
+								"Sign in"
 							)}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
+
+			<p className="mt-6 text-center text-sm text-muted-foreground">
+				New to Esemilla?{" "}
+				<Link
+					to="/sign-up"
+					className="font-medium text-primary underline-offset-2 hover:underline"
+				>
+					Create an account
+				</Link>
+			</p>
+
+			<p className="mt-3 text-center text-[11px] text-muted-foreground">
+				Trouble signing in?{" "}
+				<a
+					href="mailto:support@esemilla.com"
+					className="underline underline-offset-2 hover:text-foreground"
+				>
+					Contact support
+				</a>
+			</p>
 		</div>
 	);
 }

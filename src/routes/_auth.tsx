@@ -4,7 +4,7 @@ import {
 	Outlet,
 	redirect,
 } from "@tanstack/react-router";
-import { GraduationCap } from "lucide-react";
+import { ArrowLeft, GraduationCap } from "lucide-react";
 
 import { APP_CONFIG } from "#/config/app.config";
 
@@ -18,6 +18,13 @@ export const Route = createFileRoute("/_auth")({
 	component: GuestLayout,
 });
 
+const asideHighlights = [
+	"Tenant onboarding & campuses",
+	"Plans, subscriptions & billing",
+	"Invoices, receipts & payments",
+	"Support queue & ticket SLAs",
+];
+
 function GuestLayout() {
 	return (
 		<main className="grid min-h-dvh bg-background xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
@@ -30,7 +37,7 @@ function GuestLayout() {
 					<div className="absolute -bottom-28 -left-24 size-64 rounded-full bg-indigo-500/5 blur-3xl" />
 				</div>
 
-				<header className="relative z-10 mx-auto flex w-full max-w-md items-center">
+				<header className="relative z-10 mx-auto flex w-full max-w-md items-center justify-between gap-3">
 					<Link
 						to="/"
 						className="group inline-flex min-w-0 items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
@@ -48,6 +55,14 @@ function GuestLayout() {
 							</span>
 						</span>
 					</Link>
+
+					<Link
+						to="/"
+						className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+					>
+						<ArrowLeft className="size-3.5" aria-hidden="true" />
+						Back to home
+					</Link>
 				</header>
 
 				<div className="relative z-10 mx-auto flex w-full max-w-md flex-1 items-center py-8 sm:py-10">
@@ -56,8 +71,28 @@ function GuestLayout() {
 					</div>
 				</div>
 
-				<footer className="relative z-10 mx-auto w-full max-w-md text-center text-[11px] text-muted-foreground">
-					{APP_CONFIG.copyright}
+				<footer className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center gap-2 text-[11px] text-muted-foreground sm:flex-row sm:justify-between">
+					<span>{APP_CONFIG.copyright}</span>
+					<nav className="flex items-center gap-3" aria-label="Legal">
+						<a
+							className="hover:text-foreground"
+							href="https://esemilla.com/privacy"
+						>
+							Privacy
+						</a>
+						<a
+							className="hover:text-foreground"
+							href="https://esemilla.com/terms"
+						>
+							Terms
+						</a>
+						<a
+							className="hover:text-foreground"
+							href={APP_CONFIG.links.support}
+						>
+							Support
+						</a>
+					</nav>
 				</footer>
 			</section>
 
@@ -75,34 +110,43 @@ function GuestLayout() {
 					<div className="w-full max-w-2xl">
 						<div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-200 shadow-sm backdrop-blur">
 							<span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.75)]" />
-							School operations, connected
+							Platform console · all systems normal
 						</div>
 						<h1 className="max-w-xl text-4xl font-semibold leading-[1.12] tracking-tight text-white 2xl:text-5xl">
-							{APP_CONFIG.headline}
+							One console for every school you run
 						</h1>
 						<p className="mt-5 max-w-xl text-base leading-7 text-slate-300 2xl:text-lg 2xl:leading-8">
-							{APP_CONFIG.subheadline}
+							Tenants, subscriptions, invoices and the support queue — managed
+							from a single workspace, with an audit trail behind every change.
 						</p>
 
 						<div className="mt-10 grid max-w-xl grid-cols-2 gap-3">
-							{APP_CONFIG.features.slice(0, 4).map((feature) => (
+							{asideHighlights.map((item) => (
 								<div
-									key={feature}
+									key={item}
 									className="flex min-h-14 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.045] px-4 py-3 text-sm text-slate-200 shadow-sm backdrop-blur-sm"
 								>
 									<span
 										className="size-1.5 shrink-0 rounded-full bg-indigo-300"
 										aria-hidden="true"
 									/>
-									<span>{feature}</span>
+									<span>{item}</span>
 								</div>
 							))}
 						</div>
 					</div>
 				</div>
 
-				<footer className="relative z-10 border-t border-white/10 pt-5 text-xs text-slate-400">
-					{APP_CONFIG.copyright}
+				<footer className="relative z-10 flex items-center justify-between border-t border-white/10 pt-5 text-xs text-slate-400">
+					<span>{APP_CONFIG.copyright}</span>
+					<a
+						className="transition-colors hover:text-slate-200"
+						href={APP_CONFIG.links.docs}
+						target="_blank"
+						rel="noreferrer"
+					>
+						Documentation
+					</a>
 				</footer>
 			</aside>
 		</main>
