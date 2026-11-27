@@ -87,11 +87,6 @@ export function SettingsPage() {
                             enabled: true
                         },
                         {label: 'Security Alerts', desc: 'Login attempts and permission changes', enabled: true},
-                        {
-                            label: 'Platform Announcements',
-                            desc: 'Feature updates and maintenance windows',
-                            enabled: false
-                        },
                     ].map((pref, i) => (
                         <div key={i} className="flex items-center justify-between py-2">
                             <div>
