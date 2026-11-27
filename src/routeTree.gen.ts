@@ -17,8 +17,13 @@ import { Route as AuthOtpRouteImport } from './routes/_auth/otp'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
+import { Route as AuthedAdminsRouteImport } from './routes/_authed/admins'
+import { Route as AuthedAuditLogsRouteImport } from './routes/_authed/audit-logs'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
+import { Route as AuthedDomainsRouteImport } from './routes/_authed/domains'
+import { Route as AuthedFeatureUsageRouteImport } from './routes/_authed/feature-usage'
 import { Route as AuthedInvoicesRouteImport } from './routes/_authed/invoices'
+import { Route as AuthedOwnersRouteImport } from './routes/_authed/owners'
 import { Route as AuthedSchoolsRouteImport } from './routes/_authed/schools'
 import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
 import { Route as AuthedNotificationsIndexRouteImport } from './routes/_authed/notifications.index'
@@ -72,14 +77,39 @@ const AuthSignUpRoute = AuthSignUpRouteImport.update({
   path: '/sign-up',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthedAdminsRoute = AuthedAdminsRouteImport.update({
+  id: '/admins',
+  path: '/admins',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedAuditLogsRoute = AuthedAuditLogsRouteImport.update({
+  id: '/audit-logs',
+  path: '/audit-logs',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedDomainsRoute = AuthedDomainsRouteImport.update({
+  id: '/domains',
+  path: '/domains',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedFeatureUsageRoute = AuthedFeatureUsageRouteImport.update({
+  id: '/feature-usage',
+  path: '/feature-usage',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedInvoicesRoute = AuthedInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedOwnersRoute = AuthedOwnersRouteImport.update({
+  id: '/owners',
+  path: '/owners',
   getParentRoute: () => AuthedRoute,
 } as any)
 const AuthedSchoolsRoute = AuthedSchoolsRouteImport.update({
@@ -164,8 +194,13 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/admins': typeof AuthedAdminsRoute
+  '/audit-logs': typeof AuthedAuditLogsRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/domains': typeof AuthedDomainsRoute
+  '/feature-usage': typeof AuthedFeatureUsageRoute
   '/invoices': typeof AuthedInvoicesRoute
+  '/owners': typeof AuthedOwnersRoute
   '/schools': typeof AuthedSchoolsRoute
   '/settings': typeof AuthedSettingsRoute
   '/profile/change-password': typeof AuthedProfileChangePasswordRoute
@@ -188,8 +223,13 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/admins': typeof AuthedAdminsRoute
+  '/audit-logs': typeof AuthedAuditLogsRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/domains': typeof AuthedDomainsRoute
+  '/feature-usage': typeof AuthedFeatureUsageRoute
   '/invoices': typeof AuthedInvoicesRoute
+  '/owners': typeof AuthedOwnersRoute
   '/schools': typeof AuthedSchoolsRoute
   '/settings': typeof AuthedSettingsRoute
   '/profile/change-password': typeof AuthedProfileChangePasswordRoute
@@ -215,8 +255,13 @@ export interface FileRoutesById {
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_authed/admins': typeof AuthedAdminsRoute
+  '/_authed/audit-logs': typeof AuthedAuditLogsRoute
   '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/_authed/domains': typeof AuthedDomainsRoute
+  '/_authed/feature-usage': typeof AuthedFeatureUsageRoute
   '/_authed/invoices': typeof AuthedInvoicesRoute
+  '/_authed/owners': typeof AuthedOwnersRoute
   '/_authed/schools': typeof AuthedSchoolsRoute
   '/_authed/settings': typeof AuthedSettingsRoute
   '/_authed/profile/change-password': typeof AuthedProfileChangePasswordRoute
@@ -241,8 +286,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
+    | '/admins'
+    | '/audit-logs'
     | '/dashboard'
+    | '/domains'
+    | '/feature-usage'
     | '/invoices'
+    | '/owners'
     | '/schools'
     | '/settings'
     | '/profile/change-password'
@@ -265,8 +315,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
+    | '/admins'
+    | '/audit-logs'
     | '/dashboard'
+    | '/domains'
+    | '/feature-usage'
     | '/invoices'
+    | '/owners'
     | '/schools'
     | '/settings'
     | '/profile/change-password'
@@ -291,8 +346,13 @@ export interface FileRouteTypes {
     | '/_auth/reset-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
+    | '/_authed/admins'
+    | '/_authed/audit-logs'
     | '/_authed/dashboard'
+    | '/_authed/domains'
+    | '/_authed/feature-usage'
     | '/_authed/invoices'
+    | '/_authed/owners'
     | '/_authed/schools'
     | '/_authed/settings'
     | '/_authed/profile/change-password'
@@ -373,6 +433,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignUpRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_authed/admins': {
+      id: '/_authed/admins'
+      path: '/admins'
+      fullPath: '/admins'
+      preLoaderRoute: typeof AuthedAdminsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/audit-logs': {
+      id: '/_authed/audit-logs'
+      path: '/audit-logs'
+      fullPath: '/audit-logs'
+      preLoaderRoute: typeof AuthedAuditLogsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
       path: '/dashboard'
@@ -380,11 +454,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/domains': {
+      id: '/_authed/domains'
+      path: '/domains'
+      fullPath: '/domains'
+      preLoaderRoute: typeof AuthedDomainsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/feature-usage': {
+      id: '/_authed/feature-usage'
+      path: '/feature-usage'
+      fullPath: '/feature-usage'
+      preLoaderRoute: typeof AuthedFeatureUsageRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/invoices': {
       id: '/_authed/invoices'
       path: '/invoices'
       fullPath: '/invoices'
       preLoaderRoute: typeof AuthedInvoicesRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/owners': {
+      id: '/_authed/owners'
+      path: '/owners'
+      fullPath: '/owners'
+      preLoaderRoute: typeof AuthedOwnersRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/schools': {
@@ -507,8 +602,13 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthedRouteChildren {
+  AuthedAdminsRoute: typeof AuthedAdminsRoute
+  AuthedAuditLogsRoute: typeof AuthedAuditLogsRoute
   AuthedDashboardRoute: typeof AuthedDashboardRoute
+  AuthedDomainsRoute: typeof AuthedDomainsRoute
+  AuthedFeatureUsageRoute: typeof AuthedFeatureUsageRoute
   AuthedInvoicesRoute: typeof AuthedInvoicesRoute
+  AuthedOwnersRoute: typeof AuthedOwnersRoute
   AuthedSchoolsRoute: typeof AuthedSchoolsRoute
   AuthedSettingsRoute: typeof AuthedSettingsRoute
   AuthedProfileChangePasswordRoute: typeof AuthedProfileChangePasswordRoute
@@ -526,8 +626,13 @@ interface AuthedRouteChildren {
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedAdminsRoute: AuthedAdminsRoute,
+  AuthedAuditLogsRoute: AuthedAuditLogsRoute,
   AuthedDashboardRoute: AuthedDashboardRoute,
+  AuthedDomainsRoute: AuthedDomainsRoute,
+  AuthedFeatureUsageRoute: AuthedFeatureUsageRoute,
   AuthedInvoicesRoute: AuthedInvoicesRoute,
+  AuthedOwnersRoute: AuthedOwnersRoute,
   AuthedSchoolsRoute: AuthedSchoolsRoute,
   AuthedSettingsRoute: AuthedSettingsRoute,
   AuthedProfileChangePasswordRoute: AuthedProfileChangePasswordRoute,

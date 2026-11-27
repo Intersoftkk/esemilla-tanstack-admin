@@ -2,6 +2,7 @@ import type { SignInFormData } from "#/features/auth/schema/sign-in.schema.ts";
 import type { AuthSession } from "#/features/auth/types/auth.type";
 import type { User } from "#/features/auth/types/user.type.ts";
 import { getAppSession } from "#/features/auth/utils/session.ts";
+import { adminApi } from "#/server/admin-endpoints.ts";
 import { API_URL } from "#/server/api.server.ts";
 
 /**
@@ -16,7 +17,7 @@ export async function fetchSession(): Promise<User | null> {
 	}
 
 	try {
-		const res = await fetch(`${API_URL}/user/me`, {
+		const res = await fetch(`${API_URL}${adminApi.auth.me}`, {
 			headers: {
 				Accept: "application/json",
 				Authorization: `Bearer ${token}`,
@@ -46,7 +47,7 @@ export async function fetchSession(): Promise<User | null> {
 export async function loginRequest(
 	credentials: SignInFormData,
 ): Promise<AuthSession> {
-	const res = await fetch(`${API_URL}/user/login`, {
+	const res = await fetch(`${API_URL}${adminApi.auth.login}`, {
 		method: "POST",
 		headers: {
 			Accept: "application/json",
@@ -215,7 +216,7 @@ export async function logoutRequest() {
 		if (session.token) {
 			// Revoke the backend token when reachable, but always clear the local
 			// session even if the API is unavailable.
-			await fetch(`${API_URL}/user/logout`, {
+			await fetch(`${API_URL}${adminApi.auth.logout}`, {
 				method: "POST",
 				headers: {
 					Accept: "application/json",

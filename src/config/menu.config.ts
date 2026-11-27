@@ -3,12 +3,18 @@
 import {
 	Building2,
 	CreditCard,
+	Crown,
+	Gauge,
+	Globe,
 	LayoutDashboard,
 	LifeBuoy,
 	Package,
 	Receipt,
+	ScrollText,
+	Settings2,
 	Shield,
 	ShieldCheck,
+	UserCog,
 	Users,
 	Wallet,
 } from "lucide-react";
@@ -45,6 +51,20 @@ export const adminNavigation: Array<NavGroup> = [
 				icon: Building2,
 				permissions: [PLATFORM_PERMISSIONS.PlatformTenantView],
 			},
+			{
+				title: "Feature Usage",
+				description: "Consumption of each plan feature per tenant",
+				url: "/feature-usage",
+				icon: Gauge,
+				permissions: [PLATFORM_PERMISSIONS.PlatformFeatureUsageView],
+			},
+			{
+				title: "Domains",
+				description: "Custom hostnames attached to tenants",
+				url: "/domains",
+				icon: Globe,
+				permissions: [PLATFORM_PERMISSIONS.PlatformDomainView],
+			},
 		],
 	},
 	{
@@ -63,6 +83,20 @@ export const adminNavigation: Array<NavGroup> = [
 				url: "/role-permissions",
 				icon: ShieldCheck,
 				permissions: [PLATFORM_PERMISSIONS.PlatformRolePermissionView],
+			},
+			{
+				title: "Admins",
+				description: "Platform team members with console access",
+				url: "/admins",
+				icon: UserCog,
+				permissions: [PLATFORM_PERMISSIONS.PlatformAdminView],
+			},
+			{
+				title: "Owners",
+				description: "Central owner profiles and their tenants",
+				url: "/owners",
+				icon: Crown,
+				permissions: [PLATFORM_PERMISSIONS.PlatformOwnerView],
 			},
 		],
 	},
@@ -114,6 +148,20 @@ export const adminNavigation: Array<NavGroup> = [
 	{
 		title: "System",
 		items: [
+			{
+				title: "Settings",
+				description: "Platform-wide configuration",
+				url: "/settings",
+				icon: Settings2,
+				permissions: [PLATFORM_PERMISSIONS.PlatformSettingView],
+			},
+			{
+				title: "Audit Log",
+				description: "Every platform action and who performed it",
+				url: "/audit-logs",
+				icon: ScrollText,
+				permissions: [PLATFORM_PERMISSIONS.PlatformAuditLogView],
+			},
 			{
 				title: "Security",
 				description: "SSO, access policies, and compliance",

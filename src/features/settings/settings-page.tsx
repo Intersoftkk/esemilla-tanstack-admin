@@ -1,204 +1,289 @@
-import { Bell, Save, Shield, Trash2, User } from "lucide-react";
-import { Button } from "#/components/ui/button";
-import { usePermission } from "#/features/auth/hooks/use-permission";
+// #/features/settings/settings-page.tsx
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader2, Save, Settings2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
+import { PageHeader } from "#/components/page-header.tsx";
+import { Badge } from "#/components/ui/badge.tsx";
+import { Button } from "#/components/ui/button.tsx";
+import { Input } from "#/components/ui/input.tsx";
+import { Label } from "#/components/ui/label.tsx";
+import {
+	NativeSelect,
+	NativeSelectOption,
+} from "#/components/ui/native-select.tsx";
+import { Skeleton } from "#/components/ui/skeleton.tsx";
+import { Switch } from "#/components/ui/switch.tsx";
+import { PLATFORM_PERMISSIONS } from "#/config/permissions.config.ts";
+import { usePermission } from "#/features/auth/hooks/use-permission.ts";
+import {
+	getSettingGroupsFn,
+	updateSettingsBulkFn,
+} from "#/features/settings/server/settings.functions.ts";
+import type {
+	SettingChange,
+	SettingField,
+	SettingGroup,
+	SettingValue,
+} from "#/features/settings/types/settings.type.ts";
+
+/** Stable keys for the loading skeleton cards. */
+const SKELETON_CARD_KEYS = ["one", "two", "three", "four"] as const;
+
+/** Platform settings, grouped by section, persisted through the admin API. */
 export function SettingsPage() {
-	const { user } = usePermission();
+	const { hasPermission } = usePermission();
+	const canEdit = hasPermission(PLATFORM_PERMISSIONS.PlatformSettingEdit);
+	const queryClient = useQueryClient();
+
+	const { data, isLoading, error } = useQuery({
+		queryKey: ["settings", "groups"],
+		queryFn: () => getSettingGroupsFn(),
+	});
+
+	const [draft, setDraft] = useState<Record<string, SettingValue>>({});
+
+	useEffect(() => {
+		if (!data) return;
+		setDraft(
+			Object.fromEntries(
+				data.flatMap((group) =>
+					group.fields.map((field) => [field.key, field.value]),
+				),
+			),
+		);
+	}, [data]);
+
+	const changes = useMemo<Array<SettingChange>>(() => {
+		if (!data) return [];
+		return data
+			.flatMap((group) => group.fields)
+			.filter(
+				(field) =>
+					draft[field.key] !== undefined && draft[field.key] !== field.value,
+			)
+			.map((field) => ({ key: field.key, value: draft[field.key] }));
+	}, [data, draft]);
+
+	const saveMutation = useMutation({
+		mutationFn: (payload: Array<SettingChange>) =>
+			updateSettingsBulkFn({ data: { changes: payload } }),
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ["settings", "groups"] });
+			toast.success("Platform settings saved");
+		},
+		onError: (mutationError: unknown) => {
+			toast.error(
+				mutationError instanceof Error
+					? mutationError.message
+					: "Could not save the settings",
+			);
+		},
+	});
+
+	const updateField = (key: string, value: SettingValue) => {
+		setDraft((current) => ({ ...current, [key]: value }));
+	};
 
 	return (
-		<div className="max-w-3xl mx-auto space-y-8">
+		<div className="space-y-6">
+			<PageHeader
+				title="Platform settings"
+				description="Global configuration used across every tenant."
+				icon={Settings2}
+				badge={<Badge variant="secondary">Platform-wide</Badge>}
+				actions={
+					canEdit ? (
+						<Button
+							onClick={() => saveMutation.mutate(changes)}
+							disabled={changes.length === 0 || saveMutation.isPending}
+						>
+							{saveMutation.isPending ? (
+								<Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+							) : (
+								<Save className="size-3.5" aria-hidden="true" />
+							)}
+							Save changes
+							{changes.length > 0 && (
+								<span className="rounded-full bg-primary-foreground/20 px-1.5 text-[10px] tabular-nums">
+									{changes.length}
+								</span>
+							)}
+						</Button>
+					) : null
+				}
+			/>
+
+			{isLoading && (
+				<div className="grid gap-4 lg:grid-cols-2">
+					{SKELETON_CARD_KEYS.map((key) => (
+						<Skeleton key={`setting-skeleton-${key}`} className="h-40 w-full" />
+					))}
+				</div>
+			)}
+
+			{!isLoading && error && (
+				<div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+					{error instanceof Error
+						? error.message
+						: "Could not load the settings."}
+				</div>
+			)}
+
+			{!isLoading && !error && (data?.length ?? 0) === 0 && (
+				<div className="rounded-xl border border-dashed border-border/70 p-8 text-center text-sm text-muted-foreground">
+					No platform settings have been defined yet.
+				</div>
+			)}
+
+			<div className="grid gap-4 lg:grid-cols-2">
+				{data?.map((group) => (
+					<SettingGroupCard
+						key={group.key}
+						group={group}
+						draft={draft}
+						disabled={!canEdit}
+						onChange={updateField}
+					/>
+				))}
+			</div>
+		</div>
+	);
+}
+
+interface SettingGroupCardProps {
+	group: SettingGroup;
+	draft: Record<string, SettingValue>;
+	disabled: boolean;
+	onChange: (key: string, value: SettingValue) => void;
+}
+
+/** One settings section with its fields. */
+function SettingGroupCard({
+	group,
+	draft,
+	disabled,
+	onChange,
+}: SettingGroupCardProps) {
+	return (
+		<section className="rounded-2xl border border-border/70 bg-card p-5">
+			<header>
+				<h2 className="text-sm font-semibold capitalize text-foreground">
+					{group.label}
+				</h2>
+				{group.description && (
+					<p className="mt-1 text-xs text-muted-foreground">
+						{group.description}
+					</p>
+				)}
+			</header>
+
+			<div className="mt-4 space-y-4">
+				{group.fields.length === 0 && (
+					<p className="text-xs text-muted-foreground">
+						This section is empty.
+					</p>
+				)}
+
+				{group.fields.map((field) => (
+					<SettingFieldControl
+						key={field.key}
+						field={field}
+						value={draft[field.key] ?? field.value}
+						disabled={disabled}
+						onChange={(value) => onChange(field.key, value)}
+					/>
+				))}
+			</div>
+		</section>
+	);
+}
+
+interface SettingFieldControlProps {
+	field: SettingField;
+	value: SettingValue;
+	disabled: boolean;
+	onChange: (value: SettingValue) => void;
+}
+
+/** Renders the right control for a setting's declared type. */
+function SettingFieldControl({
+	field,
+	value,
+	disabled,
+	onChange,
+}: SettingFieldControlProps) {
+	const inputId = `setting-${field.key.replace(/[^a-zA-Z0-9]+/g, "-")}`;
+	const description = field.description ? (
+		<p className="mt-1 text-[11px] text-muted-foreground">
+			{field.description}
+		</p>
+	) : null;
+
+	if (field.type === "boolean") {
+		return (
+			<div className="flex items-start justify-between gap-4">
+				<div className="min-w-0">
+					<Label htmlFor={inputId} className="text-xs font-medium capitalize">
+						{field.label}
+					</Label>
+					{description}
+				</div>
+				<Switch
+					id={inputId}
+					checked={Boolean(value)}
+					disabled={disabled}
+					onCheckedChange={(checked) => onChange(checked)}
+				/>
+			</div>
+		);
+	}
+
+	if (field.type === "select" && field.options.length > 0) {
+		return (
 			<div>
-				<h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-					Account Settings
-				</h1>
-				<p className="text-sm text-muted-foreground mt-1">
-					Manage your owner profile, security, and notification preferences
-				</p>
-			</div>
-
-			{/* Profile Section */}
-			<div className="bg-white border border-zinc-200/80 rounded-2xl p-6 space-y-6">
-				<h3 className="text-base font-bold text-foreground flex items-center gap-2">
-					<User className="w-4.5 h-4.5 text-primary" /> Profile Information
-				</h3>
-				<div className="grid sm:grid-cols-2 gap-4">
-					<div>
-						<label
-							htmlFor="settings-full-name"
-							className="text-xs font-semibold text-foreground mb-1.5 block"
-						>
-							Full Name
-						</label>
-						<input
-							id="settings-full-name"
-							type="text"
-							defaultValue={user?.name || "James Mitchell"}
-							className="w-full h-10 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
-						/>
-					</div>
-					<div>
-						<label
-							htmlFor="settings-email"
-							className="text-xs font-semibold text-foreground mb-1.5 block"
-						>
-							Email Address
-						</label>
-						<input
-							id="settings-email"
-							type="email"
-							defaultValue={user?.email || "james@oakridge.edu"}
-							className="w-full h-10 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
-						/>
-					</div>
-					<div>
-						<label
-							htmlFor="settings-organization"
-							className="text-xs font-semibold text-foreground mb-1.5 block"
-						>
-							Organization Name
-						</label>
-						<input
-							id="settings-organization"
-							type="text"
-							defaultValue="Oakridge Education Group"
-							className="w-full h-10 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
-						/>
-					</div>
-					<div>
-						<label
-							htmlFor="settings-phone"
-							className="text-xs font-semibold text-foreground mb-1.5 block"
-						>
-							Phone Number
-						</label>
-						<input
-							id="settings-phone"
-							type="tel"
-							defaultValue="+1 (555) 234-5678"
-							className="w-full h-10 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
-						/>
-					</div>
-				</div>
-			</div>
-
-			{/* Security Section */}
-			<div className="bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl p-6 space-y-5">
-				<h3 className="text-base font-bold text-foreground flex items-center gap-2">
-					<Shield className="w-4.5 h-4.5 text-primary" /> Security
-				</h3>
-				<div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
-					{[
-						{
-							label: "Change Password",
-							desc: "Last changed 45 days ago",
-							action: "Update",
-						},
-						{
-							label: "Two-Factor Authentication",
-							desc: "Authenticator app enabled",
-							action: "Manage",
-						},
-						{
-							label: "Active Sessions",
-							desc: "3 devices currently logged in",
-							action: "Review",
-						},
-					].map((item) => (
-						<div
-							key={item.label}
-							className="py-4 flex items-center justify-between first:pt-0 last:pb-0"
-						>
-							<div>
-								<p className="text-sm font-semibold text-foreground">
-									{item.label}
-								</p>
-								<p className="text-[11px] text-muted-foreground mt-0.5">
-									{item.desc}
-								</p>
-							</div>
-							<Button
-								variant="outline"
-								size="sm"
-								className="rounded-xl text-xs font-semibold h-8"
-							>
-								{item.action}
-							</Button>
-						</div>
-					))}
-				</div>
-			</div>
-
-			{/* Notifications */}
-			<div className="bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl p-6 space-y-5">
-				<h3 className="text-base font-bold text-foreground flex items-center gap-2">
-					<Bell className="w-4.5 h-4.5 text-primary" /> Notification Preferences
-				</h3>
-				<div className="space-y-4">
-					{[
-						{
-							label: "Billing & Invoice Alerts",
-							desc: "Payment confirmations and renewal reminders",
-							enabled: true,
-						},
-						{
-							label: "School Onboarding Updates",
-							desc: "New school registration status changes",
-							enabled: true,
-						},
-						{
-							label: "Security Alerts",
-							desc: "Login attempts and permission changes",
-							enabled: true,
-						},
-					].map((pref) => (
-						<div
-							key={pref.label}
-							className="flex items-center justify-between py-2"
-						>
-							<div>
-								<p className="text-sm font-semibold text-foreground">
-									{pref.label}
-								</p>
-								<p className="text-[11px] text-muted-foreground mt-0.5">
-									{pref.desc}
-								</p>
-							</div>
-							<div
-								className={`w-11 h-6 rounded-full p-0.5 cursor-pointer transition-colors ${pref.enabled ? "bg-primary" : "bg-zinc-300 dark:bg-zinc-600"}`}
-							>
-								<div
-									className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${pref.enabled ? "translate-x-5" : "translate-x-0"}`}
-								/>
-							</div>
-						</div>
-					))}
-				</div>
-			</div>
-
-			{/* Danger Zone */}
-			<div className="bg-white dark:bg-zinc-900 border-2 border-rose-200 dark:border-rose-900/40 rounded-2xl p-6 space-y-4">
-				<h3 className="text-base font-bold text-rose-600 flex items-center gap-2">
-					<Trash2 className="w-4.5 h-4.5" /> Danger Zone
-				</h3>
-				<p className="text-xs text-muted-foreground">
-					Permanently delete your organization and all associated school data.
-					This action is irreversible.
-				</p>
-				<Button
-					variant="outline"
-					size="sm"
-					className="rounded-xl text-xs font-semibold h-9 text-rose-600 border-rose-300 dark:border-rose-800 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+				<Label htmlFor={inputId} className="text-xs font-medium capitalize">
+					{field.label}
+				</Label>
+				<NativeSelect
+					id={inputId}
+					className="mt-1.5 w-full"
+					value={String(value)}
+					disabled={disabled}
+					onChange={(event) => onChange(event.target.value)}
 				>
-					Delete Organization
-				</Button>
+					{field.options.map((option) => (
+						<NativeSelectOption key={option} value={option}>
+							{option}
+						</NativeSelectOption>
+					))}
+				</NativeSelect>
+				{description}
 			</div>
+		);
+	}
 
-			{/* Save Button */}
-			<div className="flex justify-end">
-				<Button className="rounded-xl font-semibold h-10 px-8 bg-gradient-to-r from-primary to-indigo-600 shadow-lg shadow-primary/25 gap-2">
-					<Save className="w-4 h-4" /> Save All Changes
-				</Button>
-			</div>
+	return (
+		<div>
+			<Label htmlFor={inputId} className="text-xs font-medium capitalize">
+				{field.label}
+			</Label>
+			<Input
+				id={inputId}
+				className="mt-1.5"
+				type={field.type === "number" ? "number" : "text"}
+				value={String(value)}
+				disabled={disabled}
+				onChange={(event) =>
+					onChange(
+						field.type === "number"
+							? Number(event.target.value)
+							: event.target.value,
+					)
+				}
+			/>
+			{description}
 		</div>
 	);
 }
