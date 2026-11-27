@@ -32,7 +32,7 @@ import { Route as AuthedProfileChangePasswordRouteImport } from './routes/_authe
 import { Route as AuthedSchoolsSchoolIdRouteImport } from './routes/_authed/schools_.$schoolId'
 import { Route as AuthedSchoolsNewRouteImport } from './routes/_authed/schools_.new'
 import { Route as AuthedSecurityIndexRouteImport } from './routes/_authed/security.index'
-import { Route as AuthedSubscriptionIndexRouteImport } from './routes/_authed/subscription.index'
+import { Route as AuthedSubscriptionsIndexRouteImport } from './routes/_authed/subscriptions.index'
 import { Route as AuthedSupportIndexRouteImport } from './routes/_authed/support.index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -149,11 +149,12 @@ const AuthedSecurityIndexRoute = AuthedSecurityIndexRouteImport.update({
   path: '/security/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedSubscriptionIndexRoute = AuthedSubscriptionIndexRouteImport.update({
-  id: '/subscription/',
-  path: '/subscription/',
-  getParentRoute: () => AuthedRoute,
-} as any)
+const AuthedSubscriptionsIndexRoute =
+  AuthedSubscriptionsIndexRouteImport.update({
+    id: '/subscriptions/',
+    path: '/subscriptions/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
 const AuthedSupportIndexRoute = AuthedSupportIndexRouteImport.update({
   id: '/support/',
   path: '/support/',
@@ -182,7 +183,7 @@ export interface FileRoutesByFullPath {
   '/plans/': typeof AuthedPlansIndexRoute
   '/profile/': typeof AuthedProfileIndexRoute
   '/security/': typeof AuthedSecurityIndexRoute
-  '/subscription/': typeof AuthedSubscriptionIndexRoute
+  '/subscriptions/': typeof AuthedSubscriptionsIndexRoute
   '/support/': typeof AuthedSupportIndexRoute
 }
 export interface FileRoutesByTo {
@@ -207,7 +208,7 @@ export interface FileRoutesByTo {
   '/plans': typeof AuthedPlansIndexRoute
   '/profile': typeof AuthedProfileIndexRoute
   '/security': typeof AuthedSecurityIndexRoute
-  '/subscription': typeof AuthedSubscriptionIndexRoute
+  '/subscriptions': typeof AuthedSubscriptionsIndexRoute
   '/support': typeof AuthedSupportIndexRoute
 }
 export interface FileRoutesById {
@@ -235,7 +236,7 @@ export interface FileRoutesById {
   '/_authed/plans/': typeof AuthedPlansIndexRoute
   '/_authed/profile/': typeof AuthedProfileIndexRoute
   '/_authed/security/': typeof AuthedSecurityIndexRoute
-  '/_authed/subscription/': typeof AuthedSubscriptionIndexRoute
+  '/_authed/subscriptions/': typeof AuthedSubscriptionsIndexRoute
   '/_authed/support/': typeof AuthedSupportIndexRoute
 }
 export interface FileRouteTypes {
@@ -262,7 +263,7 @@ export interface FileRouteTypes {
     | '/plans/'
     | '/profile/'
     | '/security/'
-    | '/subscription/'
+    | '/subscriptions/'
     | '/support/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -287,7 +288,7 @@ export interface FileRouteTypes {
     | '/plans'
     | '/profile'
     | '/security'
-    | '/subscription'
+    | '/subscriptions'
     | '/support'
   id:
     | '__root__'
@@ -314,7 +315,7 @@ export interface FileRouteTypes {
     | '/_authed/plans/'
     | '/_authed/profile/'
     | '/_authed/security/'
-    | '/_authed/subscription/'
+    | '/_authed/subscriptions/'
     | '/_authed/support/'
   fileRoutesById: FileRoutesById
 }
@@ -487,11 +488,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedSecurityIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/_authed/subscription/': {
-      id: '/_authed/subscription/'
-      path: '/subscription'
-      fullPath: '/subscription/'
-      preLoaderRoute: typeof AuthedSubscriptionIndexRouteImport
+    '/_authed/subscriptions/': {
+      id: '/_authed/subscriptions/'
+      path: '/subscriptions'
+      fullPath: '/subscriptions/'
+      preLoaderRoute: typeof AuthedSubscriptionsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/support/': {
@@ -538,7 +539,7 @@ interface AuthedRouteChildren {
   AuthedPlansIndexRoute: typeof AuthedPlansIndexRoute
   AuthedProfileIndexRoute: typeof AuthedProfileIndexRoute
   AuthedSecurityIndexRoute: typeof AuthedSecurityIndexRoute
-  AuthedSubscriptionIndexRoute: typeof AuthedSubscriptionIndexRoute
+  AuthedSubscriptionsIndexRoute: typeof AuthedSubscriptionsIndexRoute
   AuthedSupportIndexRoute: typeof AuthedSupportIndexRoute
 }
 
@@ -558,7 +559,7 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedPlansIndexRoute: AuthedPlansIndexRoute,
   AuthedProfileIndexRoute: AuthedProfileIndexRoute,
   AuthedSecurityIndexRoute: AuthedSecurityIndexRoute,
-  AuthedSubscriptionIndexRoute: AuthedSubscriptionIndexRoute,
+  AuthedSubscriptionsIndexRoute: AuthedSubscriptionsIndexRoute,
   AuthedSupportIndexRoute: AuthedSupportIndexRoute,
 }
 
@@ -573,12 +574,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

@@ -1,9 +1,21 @@
+// #/routes/_authed/support.index.tsx
 import { createFileRoute } from '@tanstack/react-router'
 
+import SupportPage from '#/features/support/support-page.tsx'
+import { supportSearchSchema } from '#/features/support/schema/support-search.schema.ts'
+import type { NavigateFn } from '#/hooks/use-table-url-state'
+import { pageHead } from '#/lib/head'
+
 export const Route = createFileRoute('/_authed/support/')({
-  component: RouteComponent,
+    head: () => pageHead('Support'),
+    validateSearch: supportSearchSchema,
+    component: SupportRoute,
 })
 
-function RouteComponent() {
-  return <div>Hello "/_authed/notification/"!</div>
+/** Route component for the support page. */
+function SupportRoute() {
+    const search = Route.useSearch()
+    const navigate = Route.useNavigate() as unknown as NavigateFn
+
+    return <SupportPage search={search} navigate={navigate} />
 }

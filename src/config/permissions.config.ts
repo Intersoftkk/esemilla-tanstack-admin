@@ -1,67 +1,105 @@
 // #/config/permissions.config.ts
 
 /**
- * Permissions used by this admin project. Names mirror the backend permission
- * strings; anything unrelated to the admin dashboard is intentionally omitted.
+ * Platform permissions used by this admin dashboard.
+ *
+ * This mirrors the backend `App\Enum\PlatformPermissionEnum` (PHP) one-to-one:
+ * keys match the enum case names and values match the enum backing values.
+ * Keep this file in sync with the backend whenever a case is added, renamed or
+ * removed — the strings are the contract the API authorises against.
  */
-export const PERMISSIONS = {
-    // Dashboard
-    ViewDashboard: 'can-view-dashboard',
+export const PLATFORM_PERMISSIONS = {
+	// Dashboard
+	PlatformDashboardView: "platform.dashboard.view",
 
-    // Tenants / schools
-    ViewSchool: 'can-view-school',
-    CreateSchool: 'can-add-school',
-    EditSchool: 'can-edit-school',
-    DeleteSchool: 'can-delete-school',
-    ExportSchool: 'can-export-school',
+	// Tenant
+	PlatformTenantView: "platform.tenant.view",
+	PlatformTenantCreate: "platform.tenant.create",
+	PlatformTenantEdit: "platform.tenant.edit",
+	PlatformTenantDelete: "platform.tenant.delete",
+	PlatformTenantSuspend: "platform.tenant.suspend",
+	PlatformTenantActivate: "platform.tenant.activate",
 
-    // Plans
-    ViewPlan: 'can-view-plan',
-    CreatePlan: 'can-add-plan',
-    EditPlan: 'can-edit-plan',
-    DeletePlan: 'can-delete-plan',
-    ManagePlanFeatures: 'can-manage-plan-features',
+	// Plan
+	PlatformPlanView: "platform.plan.view",
+	PlatformPlanCreate: "platform.plan.create",
+	PlatformPlanEdit: "platform.plan.edit",
+	PlatformPlanDelete: "platform.plan.delete",
 
-    // Features
-    ViewFeature: 'can-view-feature',
-    CreateFeature: 'can-add-feature',
-    EditFeature: 'can-edit-feature',
-    DeleteFeature: 'can-delete-feature',
+	// Feature
+	PlatformFeatureView: "platform.feature.view",
+	PlatformFeatureCreate: "platform.feature.create",
+	PlatformFeatureEdit: "platform.feature.edit",
+	PlatformFeatureDelete: "platform.feature.delete",
 
-    // Billing
-    ViewSubscription: 'can-view-subscription',
-    ViewInvoice: 'can-view-invoice',
-    ViewPayment: 'can-view-payment',
-    ManageBilling: 'can-manage-billing',
+	// Subscription
+	PlatformSubscriptionView: "platform.subscription.view",
+	PlatformSubscriptionCreate: "platform.subscription.create",
+	PlatformSubscriptionEdit: "platform.subscription.edit",
+	PlatformSubscriptionCancel: "platform.subscription.cancel",
 
-    // Support
-    ViewTicket: 'can-view-ticket',
-    ManageTicket: 'can-manage-ticket',
-    ViewFeedback: 'can-view-feedback',
-    ViewAnnouncement: 'can-view-announcement',
-    ManageAnnouncement: 'can-manage-announcement',
+	// Feature usage
+	PlatformFeatureUsageView: "platform.feature-usage.view",
+	PlatformFeatureUsageEdit: "platform.feature-usage.edit",
 
-    // Notifications & system
-    ViewNotification: 'can-view-notification',
-    ManageNotification: 'can-manage-notification',
-    ViewBackup: 'can-view-backup',
-    ManageBackup: 'can-manage-backup',
-    ViewSystemSettings: 'can-view-system-settings',
-    EditSystemSettings: 'can-edit-system-settings',
-    ViewSecuritySettings: 'can-view-security-settings',
-    ManageSecuritySettings: 'can-manage-security-settings',
+	// User (platform / central users)
+	PlatformUserView: "platform.user.view",
+	PlatformUserCreate: "platform.user.create",
+	PlatformUserEdit: "platform.user.edit",
+	PlatformUserDelete: "platform.user.delete",
 
-    // Access control
-    ViewRole: 'can-view-role',
-    CreateRole: 'can-add-role',
-    EditRole: 'can-edit-role',
-    ViewUser: 'can-view-user',
-    CreateUser: 'can-add-user',
-    EditUser: 'can-edit-user',
-    ViewPermission: 'can-view-permission',
-} as const
+	// Access control (roles, permissions and their assignments)
+	PlatformRoleView: "platform.role.view",
+	PlatformRoleCreate: "platform.role.create",
+	PlatformRoleEdit: "platform.role.edit",
+	PlatformRoleDelete: "platform.role.delete",
+	PlatformPermissionView: "platform.permission.view",
+	PlatformUserRoleView: "platform.user-role.view",
+	PlatformUserRoleAssign: "platform.user-role.assign",
+	PlatformUserPermissionView: "platform.user-permission.view",
+	PlatformUserPermissionAssign: "platform.user-permission.assign",
+	PlatformRolePermissionView: "platform.role-permission.view",
+	PlatformRolePermissionAssign: "platform.role-permission.assign",
 
-/** Portal-level access checks used by the admin shell. */
-export const PORTAL_PERMISSIONS = {
-    ADMIN: 'can-access-admin-portal',
-} as const
+	// Payments / settlement
+	PlatformPaymentView: "platform.payment.view",
+	PlatformPaymentCreate: "platform.payment.create",
+	PlatformPaymentDelete: "platform.payment.delete",
+
+	// Impersonation
+	PlatformImpersonate: "platform.impersonate",
+
+	// Audit log
+	PlatformAuditLogView: "platform.audit-log.view",
+
+	// Admin profile
+	PlatformAdminView: "platform.admin.view",
+	PlatformAdminCreate: "platform.admin.create",
+	PlatformAdminEdit: "platform.admin.edit",
+	PlatformAdminDelete: "platform.admin.delete",
+
+	// Owner profile
+	PlatformOwnerView: "platform.owner.view",
+	PlatformOwnerCreate: "platform.owner.create",
+	PlatformOwnerEdit: "platform.owner.edit",
+	PlatformOwnerDelete: "platform.owner.delete",
+
+	// Invoice / billing
+	PlatformInvoiceView: "platform.invoice.view",
+	PlatformInvoiceCreate: "platform.invoice.create",
+	PlatformInvoiceEdit: "platform.invoice.edit",
+	PlatformInvoiceDelete: "platform.invoice.delete",
+	PlatformInvoiceExport: "platform.invoice.export",
+
+	// Domain
+	PlatformDomainView: "platform.domain.view",
+	PlatformDomainCreate: "platform.domain.create",
+	PlatformDomainEdit: "platform.domain.edit",
+	PlatformDomainDelete: "platform.domain.delete",
+
+	// Setting
+	PlatformSettingView: "platform.setting.view",
+	PlatformSettingCreate: "platform.setting.create",
+	PlatformSettingEdit: "platform.setting.edit",
+	PlatformSettingDelete: "platform.setting.delete",
+} as const;

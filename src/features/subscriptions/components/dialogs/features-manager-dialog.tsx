@@ -1,4 +1,4 @@
-// #/features/plans/components/dialogs/features-manager-dialog.tsx
+// #/features/subscriptions/components/dialogs/features-manager-dialog.tsx
 import { useState } from 'react'
 import { Loader, Pencil, Plus, Sparkles, Trash2 } from 'lucide-react'
 
@@ -15,22 +15,22 @@ import {
 } from '#/components/ui/dialog.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
-import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config.ts'
 import { PermissionGuard } from '#/features/auth/components/permission-guard.tsx'
 import {
     useCreateFeatureMutation,
     useDeleteFeatureMutation,
     useFeaturesQuery,
     useUpdateFeatureMutation,
-} from '#/features/plans/queries/plan.queries.ts'
-import type { FeatureRecord } from '#/features/plans/types/features.ts'
+} from '#/features/subscriptions/queries/subscription.queries.ts'
+import type { FeatureRecord } from '#/features/subscriptions/types/features.ts'
 
 interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
 }
 
-/** Dialog for managing the shared feature catalog used by plans. */
+/** Dialog for managing the shared feature catalog used by subscriptions. */
 export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
@@ -79,13 +79,13 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                         </DialogTitle>
                         <DialogDescription>
                             Create and maintain the features that can be
-                            attached to plans.
+                            attached to subscriptions.
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4">
                         <PermissionGuard
-                            permissions={[PERMISSIONS.CreateFeature]}
+                            permissions={[PLATFORM_PERMISSIONS.PlatformFeatureCreate]}
                         >
                             <div className="grid gap-2 rounded-lg border bg-muted/30 p-3 sm:grid-cols-[1fr_1fr_auto]">
                                 <Input
@@ -249,7 +249,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                                                 <div className="flex gap-1">
                                                     <PermissionGuard
                                                         permissions={[
-                                                            PERMISSIONS.EditFeature,
+                                                            PLATFORM_PERMISSIONS.PlatformFeatureEdit,
                                                         ]}
                                                     >
                                                         <Button
@@ -268,7 +268,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                                                     </PermissionGuard>
                                                     <PermissionGuard
                                                         permissions={[
-                                                            PERMISSIONS.DeleteFeature,
+                                                            PLATFORM_PERMISSIONS.PlatformFeatureDelete,
                                                         ]}
                                                     >
                                                         <Button
@@ -317,7 +317,7 @@ export function FeaturesManagerDialog({ open, onOpenChange }: Props) {
                 }}
                 isLoading={deleteMutation.isPending}
                 title="Delete feature"
-                desc={`Delete "${deleteTarget?.name}"? Plans using this feature will no longer have it.`}
+                desc={`Delete "${deleteTarget?.name}"? Subscriptions using this feature will no longer have it.`}
                 confirmText="Delete"
                 destructive
             />

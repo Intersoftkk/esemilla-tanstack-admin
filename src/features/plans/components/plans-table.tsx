@@ -31,7 +31,7 @@ import {
     TableHeader,
     TableRow,
 } from '#/components/ui/table.tsx'
-import { PERMISSIONS } from '#/config/permissions.config.ts'
+import { PLATFORM_PERMISSIONS } from '#/config/permissions.config.ts'
 import { PermissionGuard } from '#/features/auth/components/permission-guard.tsx'
 import { PlansBulkActions } from '#/features/plans/components/plans-bulk-actions.tsx'
 import { columns } from '#/features/plans/components/plans-table-columns.tsx'
@@ -232,7 +232,7 @@ export function PlansTable({ search, navigate }: Props) {
                             </Button>
                         ) : (
                             <PermissionGuard
-                                permissions={[PERMISSIONS.CreatePlan]}
+                                permissions={[PLATFORM_PERMISSIONS.PlatformPlanCreate]}
                             >
                                 <Button size="sm" onClick={() => setOpen('add')}>
                                     <Plus className="mr-1.5 h-3.5 w-3.5" />
